@@ -886,17 +886,6 @@
       color: var(--taupe);
     }
 
-    /* ─── GRASS CANVAS ─── */
-    #grassCanvas {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 180px;
-      pointer-events: none;
-      z-index: 2;
-    }
-
     /* ─── RESPONSIVE ─── */
     @media (max-width: 900px) {
       #about {
@@ -988,7 +977,6 @@
       <div class="hero-scroll-line"></div>
       Scroll to explore
     </div>
-    <canvas id="grassCanvas"></canvas>
   </section>
 
   <!-- ── PHOTOSHOOT OFFER ── -->
@@ -1343,166 +1331,6 @@
       btn.disabled = true;
     }
 
-    // ── COASTAL GRASS ANIMATION ──
-    (function () {
-      const canvas = document.getElementById('grassCanvas');
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-
-      const GRASS = ['#8B9B6A','#A3A87E','#B8C496','#C4B882','#CDBF94','#9EA876','#D4C9A0','#B0A888','#BFC8A0'];
-      const FLOWERS = ['#C4A8B4','#B8A8C0','#D4B8C4'];
-
-      let W, H, dpr, blades = [];
-
-      function init() {
-        dpr = window.devicePixelRatio || 1;
-        const rect = canvas.parentElement.getBoundingClientRect();
-        W = rect.width;
-        H = 180;
-        canvas.style.height = H + 'px';
-        canvas.width  = Math.floor(W * dpr);
-        canvas.height = Math.floor(H * dpr);
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        buildBlades();
-      }
-
-      function buildBlades() {
-        blades = [];
-        const count = Math.floor(W / 4.5);
-        for (let i = 0; i < count; i++) {
-          const layer   = Math.random();
-          const isFlower = Math.random() < 0.04;
-          blades.push({
-            x:     Math.random() * W,
-            h:     layer < 0.4 ? 28 + Math.random() * 35 : 55 + Math.random() * 85,
-            w:     0.7 + Math.random() * 1.7,
-            color: isFlower ? FLOWERS[Math.floor(Math.random() * FLOWERS.length)]
-                            : GRASS[Math.floor(Math.random()   * GRASS.length)],
-            phase: Math.random() * Math.PI * 2,
-            freq:  0.28 + Math.random() * 0.45,
-            wind:  0.55 + Math.random() * 0.9,
-            alpha: layer < 0.4 ? 0.28 + Math.random() * 0.28 : 0.5 + Math.random() * 0.42,
-            layer,
-          });
-        }
-        blades.sort((a, b) => a.layer - b.layer);
-      }
-
-      function drawBlade(b, t) {
-        const gw   = Math.sin(t * 0.55 + b.x * 0.013) * 11;
-        const lw   = Math.sin(t * b.freq + b.phase) * 9;
-        const sway = (gw + lw) * b.wind;
-
-        ctx.beginPath();
-        ctx.moveTo(b.x, H);
-        ctx.bezierCurveTo(
-          b.x + sway * 0.18, H - b.h * 0.36,
-          b.x + sway * 0.62, H - b.h * 0.70,
-          b.x + sway,        H - b.h
-        );
-        ctx.strokeStyle = b.color;
-        ctx.lineWidth   = b.w;
-        ctx.lineCap     = 'round';
-        ctx.globalAlpha = b.alpha;
-        ctx.stroke();
-      }
-
-      let t = 0;
-      function frame() {
-        ctx.clearRect(0, 0, W, H);
-        t += 0.011;
-        ctx.globalAlpha = 1;
-        blades.forEach(b => drawBlade(b, t));
-
-        // Fade top edge smoothly into hero cream background
-        const fade = ctx.createLinearGradient(0, 0, 0, H * 0.68);
-        fade.addColorStop(0,   '#F8F3EC');
-        fade.addColorStop(1,   'rgba(248,243,236,0)');
-        ctx.globalAlpha = 1;
-        ctx.fillStyle   = fade;
-        ctx.fillRect(0, 0, W, H * 0.68);
-
-        requestAnimationFrame(frame);
-      }
-
-      let resizeTimer;
-      window.addEventListener('resize', () => {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(init, 150);
-      });
-
-      init();
-      frame();
-    })();
-
-    // ── BIRDS ANIMATION ──
-    (function () {
-      const hero = document.getElementById('hero');
-      if (!hero) return;
-
-      function makeBird() {
-        const ns  = 'http://www.w3.org/2000/svg';
-        const svg = document.createElementNS(ns, 'svg');
-        const sc  = 0.55 + Math.random() * 1.1;
-        svg.setAttribute('viewBox', '0 0 22 9');
-        svg.setAttribute('width',  Math.round(22 * sc));
-        svg.setAttribute('height', Math.round(9  * sc));
-        svg.style.cssText = 'position:absolute;pointer-events:none;z-index:3;opacity:0;';
-
-        const p = document.createElementNS(ns, 'path');
-        p.setAttribute('d', 'M 0,5 C 3.5,0.8 8,0.8 11,5 C 14,0.8 18.5,0.8 22,5');
-        p.setAttribute('fill', 'none');
-        p.setAttribute('stroke', 'rgba(42,36,32,0.72)');
-        p.setAttribute('stroke-width', '1.5');
-        p.setAttribute('stroke-linecap', 'round');
-        p.setAttribute('stroke-linejoin', 'round');
-        svg.appendChild(p);
-        hero.appendChild(svg);
-        return svg;
-      }
-
-      function flyBird(bird) {
-        const goRight  = Math.random() > 0.5;
-        const vw       = window.innerWidth;
-        const startX   = goRight ? -80 : vw + 80;
-        const endX     = goRight ? vw + 80 : -80;
-        const topPct   = 8 + Math.random() * 52;
-        const duration = 24000 + Math.random() * 22000;
-        const drift    = (Math.random() - 0.5) * 50;
-        const delay    = Math.random() * 14000;
-
-        bird.style.top       = topPct + '%';
-        bird.style.left      = '0px';
-        bird.style.transform = `translateX(${startX}px) scaleX(${goRight ? 1 : -1})`;
-        bird.style.opacity   = '0';
-
-        setTimeout(() => {
-          const t0 = performance.now();
-          function tick(now) {
-            const p    = Math.min((now - t0) / duration, 1);
-            const x    = startX + (endX - startX) * p;
-            const y    = Math.sin(p * Math.PI) * drift;
-            const flap = Math.sin(p * duration / 280) * 1.8;   // subtle flutter
-            const fade = Math.min(p * 8, 1, (1 - p) * 8);
-
-            bird.style.transform = `translateX(${x}px) translateY(${y + flap}px) scaleX(${goRight ? 1 : -1})`;
-            bird.style.opacity   = (0.6 * fade).toFixed(3);
-
-            if (p < 1) {
-              requestAnimationFrame(tick);
-            } else {
-              bird.style.opacity = '0';
-              setTimeout(() => flyBird(bird), 1500 + Math.random() * 9000);
-            }
-          }
-          requestAnimationFrame(tick);
-        }, delay);
-      }
-
-      setTimeout(() => {
-        for (let i = 0; i < 7; i++) flyBird(makeBird());
-      }, 600);
-    })();
   </script>
 </body>
 </html>
