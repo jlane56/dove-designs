@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 128" width="320" height="128">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&amp;display=swap');
+      .bs { fill: none; stroke: #2A2420; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+      .bw { fill: #FDFCF9; stroke: #2A2420; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+      .ws { fill: none; stroke: #8EA4A8; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+      .ht { fill: none; stroke: #8EA4A8; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+      .br { fill: none; stroke: #2A2420; stroke-width: 1.8; stroke-linecap: round; }
+    </style>
+  </defs>
+
+  <!-- ═══ LEFT BIRD (facing right) ═══ -->
+  <!-- Body -->
+  <path class="bw" d="
+    M 50,76
+    C 46,70 48,62 53,58
+    C 58,54 68,54 76,58
+    C 84,62 90,68 88,75
+    C 86,80 78,84 68,84
+    C 58,84 52,80 50,76 Z
+  "/>
+  <!-- Head -->
+  <path class="bw" d="
+    M 82,62
+    C 80,54 88,46 96,48
+    C 103,50 105,58 101,64
+    C 97,68 84,67 82,62 Z
+  "/>
+  <!-- Eye -->
+  <circle cx="97" cy="54" r="2.2" fill="#2A2420"/>
+  <circle cx="97.6" cy="53.4" r="0.7" fill="#FDFCF9"/>
+  <!-- Beak -->
+  <path fill="#C5A87E" stroke="none" d="M 105,55 L 115,54 L 105,58 Z"/>
+  <!-- Wing detail (dusty blue) -->
+  <path class="ws" d="M 56,72 C 64,62 76,60 86,65"/>
+  <path class="ws" d="M 58,76 C 65,70 74,67 83,69" opacity="0.5"/>
+  <!-- Tail feathers -->
+  <path class="bs" d="M 52,74 C 42,70 32,62 26,55"/>
+  <path class="bs" d="M 52,77 C 42,75 32,70 26,64"/>
+  <path class="bs" d="M 52,80 C 42,80 32,78 26,74"/>
+  <!-- Feet -->
+  <path class="bs" d="M 68,84 L 67,91 M 67,91 L 63,94 M 67,91 L 71,94"/>
+  <path class="bs" d="M 78,84 L 77,91 M 77,91 L 73,94 M 77,91 L 81,94"/>
+
+  <!-- ═══ RIGHT BIRD (facing left) ═══ -->
+  <!-- Body -->
+  <path class="bw" d="
+    M 270,76
+    C 274,70 272,62 267,58
+    C 262,54 252,54 244,58
+    C 236,62 230,68 232,75
+    C 234,80 242,84 252,84
+    C 262,84 268,80 270,76 Z
+  "/>
+  <!-- Head -->
+  <path class="bw" d="
+    M 238,62
+    C 240,54 232,46 224,48
+    C 217,50 215,58 219,64
+    C 223,68 236,67 238,62 Z
+  "/>
+  <!-- Eye -->
+  <circle cx="223" cy="54" r="2.2" fill="#2A2420"/>
+  <circle cx="222.4" cy="53.4" r="0.7" fill="#FDFCF9"/>
+  <!-- Beak -->
+  <path fill="#C5A87E" stroke="none" d="M 215,55 L 205,54 L 215,58 Z"/>
+  <!-- Wing detail (dusty blue) -->
+  <path class="ws" d="M 264,72 C 256,62 244,60 234,65"/>
+  <path class="ws" d="M 262,76 C 255,70 246,67 237,69" opacity="0.5"/>
+  <!-- Tail feathers -->
+  <path class="bs" d="M 268,74 C 278,70 288,62 294,55"/>
+  <path class="bs" d="M 268,77 C 278,75 288,70 294,64"/>
+  <path class="bs" d="M 268,80 C 278,80 288,78 294,74"/>
+  <!-- Feet -->
+  <path class="bs" d="M 252,84 L 253,91 M 253,91 L 249,94 M 253,91 L 257,94"/>
+  <path class="bs" d="M 242,84 L 243,91 M 243,91 L 239,94 M 243,91 L 247,94"/>
+
+  <!-- ═══ HEART between birds ═══ -->
+  <path class="ht" d="
+    M 160,46
+    C 160,43 157,39 153,41
+    C 149,43 149,48 153,53
+    L 160,60
+    L 167,53
+    C 171,48 171,43 167,41
+    C 163,39 160,43 160,46 Z
+  "/>
+
+  <!-- ═══ BRANCH ═══ -->
+  <path class="br" d="M 26,91 C 80,95 240,95 294,91"/>
+  <!-- Branch end curls -->
+  <path class="br" d="M 26,91 C 20,89 16,84 19,79" stroke-width="1.4"/>
+  <path class="br" d="M 294,91 C 300,89 304,84 301,79" stroke-width="1.4"/>
+  <!-- Small leaf buds on branch -->
+  <path fill="none" stroke="#2A2420" stroke-width="1.1" stroke-linecap="round" d="M 44,90 C 42,84 48,82 48,88"/>
+  <path fill="none" stroke="#2A2420" stroke-width="1.1" stroke-linecap="round" d="M 48,90 C 50,84 44,82 44,88"/>
+  <path fill="none" stroke="#2A2420" stroke-width="1.1" stroke-linecap="round" d="M 272,90 C 270,84 276,82 276,88"/>
+  <path fill="none" stroke="#2A2420" stroke-width="1.1" stroke-linecap="round" d="M 276,90 C 278,84 272,82 272,88"/>
+
+  <!-- ═══ DIVIDER ═══ -->
+  <line x1="126" y1="97" x2="155" y2="97" stroke="#E8E0D5" stroke-width="0.8"/>
+  <circle cx="160" cy="97" r="1.8" fill="#8EA4A8"/>
+  <line x1="165" y1="97" x2="194" y2="97" stroke="#E8E0D5" stroke-width="0.8"/>
+
+  <!-- ═══ WORDMARK ═══ -->
+  <text
+    text-anchor="middle" x="160" y="112"
+    font-family="'Cormorant Garamond', 'Garamond', Georgia, serif"
+    font-size="22" font-weight="400" fill="#2A2420" letter-spacing="5"
+  >DOVE</text>
+  <text
+    text-anchor="middle" x="162" y="124"
+    font-family="'Jost', 'Helvetica Neue', Arial, sans-serif"
+    font-size="8" font-weight="300" fill="#8EA4A8" letter-spacing="7"
+  >DESIGNS</text>
+</svg>
