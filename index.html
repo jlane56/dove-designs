@@ -886,6 +886,55 @@
       color: var(--taupe);
     }
 
+    /* ── PAINTING TEXTURE ── */
+
+    /* Subtle canvas grain across the entire page */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.032;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)'/%3E%3C/svg%3E");
+      mix-blend-mode: multiply;
+    }
+
+    /* Hero — soft watercolor blobs */
+    .paint-wash {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 65% 50% at 88% 18%, rgba(142,164,168,0.16) 0%, transparent 68%),
+        radial-gradient(ellipse 55% 65% at 5%  78%, rgba(197,168,126,0.11) 0%, transparent 65%),
+        radial-gradient(ellipse 42% 42% at 52% 90%, rgba(155,139,126,0.08) 0%, transparent 68%),
+        radial-gradient(ellipse 72% 38% at 28%  4%, rgba(142,164,168,0.08) 0%, transparent 72%),
+        radial-gradient(ellipse 35% 55% at 74%  55%, rgba(197,168,126,0.06) 0%, transparent 60%);
+    }
+
+    /* Hero — watercolor paper weave */
+    .paint-paper {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+      opacity: 0.6;
+      background-image:
+        repeating-linear-gradient(  0deg, transparent, transparent 2px, rgba(42,36,32,0.014) 2px, rgba(42,36,32,0.014) 3px),
+        repeating-linear-gradient( 90deg, transparent, transparent 2px, rgba(42,36,32,0.009) 2px, rgba(42,36,32,0.009) 3px);
+    }
+
+    /* Hero — vignette, edges slightly darker like a framed painting */
+    .paint-vignette {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 3;
+      background: radial-gradient(ellipse 92% 88% at 50% 50%, transparent 52%, rgba(42,36,32,0.09) 100%);
+    }
+
     /* ─── RESPONSIVE ─── */
     @media (max-width: 900px) {
       #about {
@@ -977,6 +1026,9 @@
       <div class="hero-scroll-line"></div>
       Scroll to explore
     </div>
+    <div class="paint-wash"></div>
+    <div class="paint-paper"></div>
+    <div class="paint-vignette"></div>
   </section>
 
   <!-- ── PHOTOSHOOT OFFER ── -->
