@@ -12,13 +12,13 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --cream:        #EDE6D8;
-      --white:        #F7F2E8;
-      --charcoal:     #1C2028;
-      --taupe:        #8C8478;
-      --dusty-blue:   #5B8FA8;
+      --cream:        #EDE0D6;
+      --white:        #F8F0EB;
+      --charcoal:     #221820;
+      --taupe:        #9A8880;
+      --dusty-blue:   #BC8878;
       --warm-gold:    #C8884A;
-      --light-border: #D8CEBC;
+      --light-border: #DCCFC8;
     }
 
     html { scroll-behavior: smooth; }
@@ -189,9 +189,12 @@
     }
 
     .section-eyebrow {
-      font-size: 0.68rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-style: italic;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      text-transform: none;
       color: var(--taupe);
       margin-bottom: 1rem;
     }
@@ -239,16 +242,16 @@
       position: absolute;
       inset: 0;
       background:
-        linear-gradient(160deg, rgba(18,22,28,0.62) 0%, rgba(18,22,28,0.18) 50%, rgba(18,22,28,0.05) 100%),
-        linear-gradient(to top, rgba(18,22,28,0.58) 0%, rgba(18,22,28,0.10) 45%, transparent 70%);
+        linear-gradient(160deg, rgba(24,16,18,0.60) 0%, rgba(24,16,18,0.16) 52%, rgba(24,16,18,0.04) 100%),
+        linear-gradient(to top, rgba(24,16,18,0.55) 0%, rgba(24,16,18,0.08) 45%, transparent 68%);
       z-index: 0;
     }
 
     /* Hero text — white over the photo */
     #hero .hero-inner          { position: relative; z-index: 1; }
-    #hero .section-eyebrow     { color: rgba(238,232,220,0.72); }
+    #hero .section-eyebrow     { color: rgba(240,220,210,0.75); }
     #hero h1                   { color: #EEE8DC; }
-    #hero h1 em                { color: #7DC4CC; }
+    #hero h1 em                { color: #E8B8A8; }
     #hero .hero-sub            { color: rgba(238,232,220,0.78); }
     #hero .hero-stats          { border-color: rgba(238,232,220,0.18); }
     #hero .stat-num            { color: #EEE8DC; }
