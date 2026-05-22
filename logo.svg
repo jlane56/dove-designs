@@ -105,13 +105,18 @@
 
   <!-- ═══ WORDMARK ═══ -->
   <text
-    text-anchor="middle" x="160" y="112"
+    text-anchor="middle" x="160" y="104"
+    font-family="'Jost', 'Helvetica Neue', Arial, sans-serif"
+    font-size="6.5" font-weight="300" fill="#9A8880" letter-spacing="7"
+  >THE</text>
+  <text
+    text-anchor="middle" x="160" y="116"
     font-family="'Cormorant Garamond', 'Garamond', Georgia, serif"
     font-size="22" font-weight="400" fill="#2A2420" letter-spacing="5"
   >DOVE</text>
   <text
-    text-anchor="middle" x="162" y="124"
+    text-anchor="middle" x="162" y="126"
     font-family="'Jost', 'Helvetica Neue', Arial, sans-serif"
-    font-size="8" font-weight="300" fill="#8EA4A8" letter-spacing="7"
-  >DESIGNS</text>
+    font-size="7" font-weight="300" fill="#BC8878" letter-spacing="8"
+  >CO.</text>
 </svg>
