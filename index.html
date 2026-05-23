@@ -239,58 +239,102 @@
     .btn-outline:hover { background: var(--charcoal); color: var(--white); border-color: var(--charcoal); }
 
     /* ─── HERO ─── */
+    #hero-wrapper {
+      height: 220vh;
+    }
+
     #hero {
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: 42% 58%;
-      padding-top: 72px;
-      background: var(--white);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      background: #12161a;
       overflow: hidden;
     }
 
-    .hero-left {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 4rem 3rem 4rem 5rem;
-      position: relative;
-    }
-
-    .hero-dots {
+    .hero-bg {
       position: absolute;
-      top: 5rem;
-      left: 3.5rem;
-      width: 90px;
-      height: 90px;
-      background-image: radial-gradient(circle, var(--light-border) 1.5px, transparent 1.5px);
-      background-size: 14px 14px;
+      inset: 0;
+      z-index: 0;
+      background-image: url('images/4231204011-R1-046-21A.JPG');
+      background-size: cover;
+      background-position: center 15%;
     }
 
-    .hero-left .section-eyebrow { text-align: left; margin-bottom: 1.25rem; }
-    .hero-left h1 { font-size: clamp(2.6rem, 4vw, 4rem); margin-bottom: 1.5rem; }
-
-    .hero-sub {
-      font-size: 0.95rem;
-      color: var(--taupe);
-      line-height: 1.8;
-      max-width: 400px;
-      margin-bottom: 2.5rem;
+    @media (max-width: 768px) {
+      .hero-bg {
+        background-image: url('images/vacationfilm-35.JPG');
+        background-position: center 30%;
+      }
     }
+
+    #hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(to right, rgba(18,22,26,0.55) 0%, rgba(18,22,26,0.15) 55%, transparent 100%),
+        rgba(18, 22, 26, 0.28);
+      z-index: 1;
+    }
+
+    .hero-logo-layer {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+
+    .hero-logo {
+      width: clamp(260px, 36vw, 460px);
+    }
+
+    .hero-text-layer {
+      position: absolute;
+      left: 5%;
+      top: 50%;
+      transform: translateY(-50%);
+      max-width: 600px;
+      padding-top: 4rem;
+      z-index: 2;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .hero-text-layer .section-eyebrow { color: rgba(240,220,210,0.75); text-align: left; }
+    .hero-text-layer h1               { color: #EEE8DC; }
+    .hero-text-layer h1 em            { color: #D4B483; }
+    .hero-text-layer .hero-sub        { color: rgba(238,232,220,0.78); max-width: 500px; margin-bottom: 2.5rem; }
+    .hero-text-layer .hero-stats      { border-top: 1px solid rgba(238,232,220,0.18); padding-top: 2rem; margin-top: 3.5rem; display:flex; gap:3rem; flex-wrap:wrap; }
+    .hero-text-layer .stat-num        { font-family:'freight-display-pro',serif; font-size:2.2rem; font-weight:300; color:#EEE8DC; line-height:1; }
+    .hero-text-layer .stat-label      { font-size:0.72rem; color:rgba(238,232,220,0.62); letter-spacing:0.08em; }
+    .hero-text-layer .btn-outline     { color:#EEE8DC; border-color:rgba(238,232,220,0.55); }
+    .hero-text-layer .btn-outline:hover { background:rgba(238,232,220,0.15); color:#EEE8DC; border-color:#EEE8DC; }
 
     .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
 
-    .hero-right {
-      position: relative;
-      padding: 2.5rem 2.5rem 0 0;
-      overflow: hidden;
+    .hero-scroll {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.64rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(248,240,221,0.45);
+      z-index: 2;
+      white-space: nowrap;
     }
 
-    .hero-right img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center 20%;
-      display: block;
+    .hero-scroll-line {
+      width: 1px;
+      height: 36px;
+      background: rgba(248,240,221,0.35);
     }
 
     /* ─── PHOTOSHOOT OFFER ─── */
@@ -437,11 +481,9 @@
     @media (max-width: 900px) {
       nav { padding: 0.4rem 2rem; }
       nav.scrolled { padding: 0.3rem 2rem; }
-      #hero { grid-template-columns: 46% 54%; }
-      .hero-left { padding: 3rem 2rem 3rem 3rem; }
-      .hero-dots { left: 2rem; top: 4rem; }
-      .hero-right { padding: 2rem 2rem 0 0; }
       #services-teaser { padding: 5rem 2rem; }
+      #photoshoot { padding: 4rem 2rem !important; }
+      #photoshoot > div { grid-template-columns: 1fr !important; gap: 2.5rem !important; }
       #cta-banner { padding: 4rem 2rem; }
       footer { padding: 2rem 2rem; }
     }
@@ -451,13 +493,13 @@
       nav.scrolled { padding: 0.3rem 1.5rem; }
       .nav-links { display: none; }
       .nav-hamburger { display: flex; }
-      #hero { grid-template-columns: 1fr; grid-template-rows: 60vw auto; min-height: auto; padding-top: 64px; }
-      .hero-right { order: -1; padding: 0; height: 60vw; }
-      .hero-left { padding: 2.5rem 1.5rem 3rem; }
-      .hero-dots { display: none; }
-      .hero-left h1 { font-size: clamp(2.2rem, 9vw, 3rem); }
-      .hero-sub { max-width: 100%; }
+      #hero-wrapper { height: 150vh; }
+      .hero-text-layer { left: 1.5rem; right: 1.5rem; max-width: 100%; padding-top: 5rem; }
+      h1 { font-size: clamp(2.2rem, 9vw, 3rem); }
+      .hero-text-layer .hero-stats { gap: 1.5rem; margin-top: 2rem; padding-top: 1.5rem; }
       #services-teaser { padding: 5rem 1.5rem; }
+      #photoshoot { padding: 4rem 1.5rem !important; }
+      #photoshoot > div { grid-template-columns: 1fr !important; gap: 2rem !important; }
       #cta-banner { padding: 4rem 1.5rem; }
       footer { padding: 2rem 1.5rem; flex-direction: column; text-align: center; }
       .footer-links { justify-content: center; flex-wrap: wrap; gap: 1rem; }
@@ -496,21 +538,49 @@
   </div>
 
   <!-- ── HERO ── -->
-  <section id="hero">
-    <div class="hero-left">
-      <div class="hero-dots"></div>
-      <p class="section-eyebrow">The Dove Design Co.</p>
-      <h1>Your business is<br>too good for a<br><em>template site.</em></h1>
-      <p class="hero-sub">I'm Justin. I hand-code every website from scratch — no page builders, no cookie-cutter themes. Just a fast, custom site built around your business and nobody else's.</p>
-      <div class="hero-ctas">
-        <a href="contact.html" class="btn-primary">Book a Discovery Call</a>
-        <a href="portfolio.html" class="btn-outline">See Our Work</a>
+  <div id="hero-wrapper">
+    <section id="hero">
+
+      <div class="hero-bg"></div>
+
+      <!-- Layer 1: centered logo (visible at top, fades out on scroll) -->
+      <div class="hero-logo-layer" id="heroLogoLayer">
+        <img src="images/TDDC_Logo1.png" class="hero-logo" alt="The Dove Design Co.">
       </div>
-    </div>
-    <div class="hero-right">
-      <img src="images/4231204011-R1-046-21A.JPG" alt="The Dove Design Co.">
-    </div>
-  </section>
+
+      <!-- Layer 2: left-aligned text (hidden at top, fades in on scroll) -->
+      <div class="hero-text-layer" id="heroTextLayer">
+        <p class="section-eyebrow">Custom Web Design &amp; Development</p>
+        <h1>Websites built<br><em>beautifully</em>,<br>built to last.</h1>
+        <p class="hero-sub">I design and build custom-coded websites for small businesses — clean, fast, and made to grow with you. No templates. No confusion. Just results.</p>
+        <div class="hero-ctas">
+          <a href="contact.html" class="btn-primary">Book a Discovery Call</a>
+          <a href="contact.html" class="btn-outline">Get a Free Quote</a>
+        </div>
+        <div class="hero-stats">
+          <div>
+            <div class="stat-num">100%</div>
+            <div class="stat-label">Custom coded</div>
+          </div>
+          <div>
+            <div class="stat-num">No</div>
+            <div class="stat-label">Templates or page builders</div>
+          </div>
+          <div>
+            <div class="stat-num">24hr</div>
+            <div class="stat-label">Quote turnaround</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scroll hint -->
+      <div class="hero-scroll" id="heroScrollHint">
+        <div class="hero-scroll-line"></div>
+        Scroll to explore
+      </div>
+
+    </section>
+  </div>
 
   <!-- ── SERVICES TEASER ── -->
   <section id="services-teaser">
@@ -558,6 +628,27 @@
   </footer>
 
   <script>
+    // Hero scroll transition
+    const heroLogoLayer  = document.getElementById('heroLogoLayer');
+    const heroTextLayer  = document.getElementById('heroTextLayer');
+    const heroScrollHint = document.getElementById('heroScrollHint');
+
+    function updateHero() {
+      const scrollY = window.scrollY;
+      const zone = window.innerHeight * 0.60;
+      const p = Math.min(Math.max(scrollY / zone, 0), 1);
+
+      if (heroLogoLayer)  heroLogoLayer.style.opacity  = 1 - p;
+      if (heroScrollHint) heroScrollHint.style.opacity = Math.max(0, 1 - p * 2.5);
+      if (heroTextLayer) {
+        heroTextLayer.style.opacity       = p;
+        heroTextLayer.style.pointerEvents = p > 0.3 ? 'auto' : 'none';
+      }
+    }
+
+    window.addEventListener('scroll', updateHero, { passive: true });
+    updateHero();
+
     // Nav scroll shrink
     const navbar = document.getElementById('navbar');
     window.addEventListener('scroll', () => {
