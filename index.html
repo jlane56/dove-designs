@@ -232,10 +232,25 @@
       position: sticky;
       top: 0;
       height: 100vh;
-      background-image: url('images/4231204011-R1-046-21A.JPG');
-      background-size: cover;
-      background-position: center 45%;
+      background: #12161a; /* fallback while image loads */
       overflow: hidden;
+    }
+
+    /* Background photo — extended beyond edges to create a zoomed-out look */
+    .hero-bg {
+      position: absolute;
+      inset: -8%;
+      z-index: 0;
+    }
+    .hero-bg-img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 45%;
+    }
+    @media (max-width: 768px) {
+      .hero-bg-img { object-position: center 30%; }
     }
 
     /* Base dark overlay */
@@ -245,7 +260,7 @@
       background:
         linear-gradient(to right, rgba(18,22,26,0.55) 0%, rgba(18,22,26,0.15) 55%, transparent 100%),
         rgba(18, 22, 26, 0.28);
-      z-index: 0;
+      z-index: 1;
     }
 
     /* Logo — centered, fades out on scroll */
@@ -308,10 +323,9 @@
       background: rgba(248,240,221,0.35);
     }
 
-    /* Mobile: warm golden film photo */
+    /* Mobile adjustments */
     @media (max-width: 768px) {
       #hero-wrapper { height: 200vh; }
-      #hero { background-image: url('images/vacationfilm-35.JPG'); background-position: center 30%; }
       .hero-text-layer { left: 1.5rem; right: 1.5rem; max-width: 100%; padding-top: 5rem; }
     }
 
@@ -884,7 +898,7 @@
   <!-- ── NAVIGATION ── -->
   <nav id="navbar">
     <a href="#" class="nav-logo">
-      <img src="images/TDDC_Logo1.png" alt="The Dove Design Co." height="96" style="display:block;filter:brightness(0);opacity:0.82;">
+      <img src="images/DoveSketch_Cream.png" alt="The Dove Design Co." height="72" style="display:block;filter:brightness(0);opacity:0.82;">
     </a>
     <ul class="nav-links">
       <li><a href="#services">Services</a></li>
@@ -913,6 +927,14 @@
   <!-- ── HERO ── -->
   <div id="hero-wrapper">
     <section id="hero">
+
+      <!-- Background photo (zoomed out via extended inset) -->
+      <div class="hero-bg">
+        <picture>
+          <source media="(max-width: 768px)" srcset="images/vacationfilm-35.JPG">
+          <img src="images/4231204011-R1-046-21A.JPG" class="hero-bg-img" alt="">
+        </picture>
+      </div>
 
       <!-- Layer 1: centered logo (visible at top, fades out on scroll) -->
       <div class="hero-logo-layer" id="heroLogoLayer">
