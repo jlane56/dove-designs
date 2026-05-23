@@ -262,6 +262,25 @@
     #hero .btn-outline         { color: #EEE8DC; border-color: rgba(238,232,220,0.65); }
     #hero .btn-outline:hover   { background: rgba(238,232,220,0.15); color: #EEE8DC; border-color: #EEE8DC; }
 
+    #hero .dove-sketch {
+      position: absolute;
+      right: 4%;
+      bottom: 6%;
+      width: 38%;
+      max-width: 480px;
+      opacity: 0.09;
+      mix-blend-mode: screen;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @media (max-width: 900px) {
+      #hero .dove-sketch { width: 55%; opacity: 0.07; }
+    }
+    @media (max-width: 700px) {
+      #hero .dove-sketch { display: none; }
+    }
+
     .hero-inner {
       max-width: 700px;
       position: relative;
@@ -858,6 +877,7 @@
 
   <!-- ── HERO ── -->
   <section id="hero">
+    <img src="images/DoveSketch_Cream.png" class="dove-sketch" alt="">
     <div class="hero-inner">
       <p class="section-eyebrow">Custom Web Design &amp; Development</p>
       <h1>Websites built<br><em>beautifully</em>,<br>built to last.</h1>
