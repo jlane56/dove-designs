@@ -90,7 +90,7 @@
     .project-row {
       display: grid;
       grid-template-columns: 58% 42%;
-      min-height: 560px;
+      min-height: 640px;
       border-bottom: 1px solid var(--light-border);
     }
     .project-row:nth-child(even) .project-visual { order: 2; }
@@ -106,6 +106,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      object-position: top center;
       display: block;
       transition: transform 0.6s ease;
     }
@@ -276,7 +277,7 @@
       <li><a href="about.html">About</a></li>
       <li><a href="contact.html">Contact</a></li>
       <li><a href="proof.html">The Proof</a></li>
-      <li><a href="contact.html" class="btn-primary" style="padding:0.6rem 1.4rem;">Get a Quote</a></li>
+      <li><a href="contact.html" class="btn-primary" style="padding:0.6rem 1.4rem;">Book a Call</a></li>
     </ul>
     <button class="nav-hamburger" id="menuBtn" aria-label="Open menu">
       <span></span><span></span><span></span>
@@ -291,7 +292,7 @@
     <a href="about.html" onclick="closeMobile()">About</a>
     <a href="contact.html" onclick="closeMobile()">Contact</a>
     <a href="proof.html" onclick="closeMobile()">The Proof</a>
-    <a href="contact.html" onclick="closeMobile()" style="color:var(--dusty-blue);">Get a Quote</a>
+    <a href="contact.html" onclick="closeMobile()" style="color:var(--dusty-blue);">Book a Call</a>
   </div>
 
   <!-- ── PAGE HERO ── -->
