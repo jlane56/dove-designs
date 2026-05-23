@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — The Dove Design Co.</title>
+  <meta name="description" content="Learn about Justin and The Dove Design Co. — custom-coded websites for small businesses that are fast, beautiful, and built to last.">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Dove Design">
+  <meta name="theme-color" content="#535344">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&family=Special+Elite&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:        #F8F0DD;
+      --white:        #FCF8EE;
+      --charcoal:     #535344;
+      --taupe:        #98A091;
+      --dusty-blue:   #AB8552;
+      --warm-gold:    #B7BEC0;
+      --light-border: #DDD5C0;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Jost', sans-serif; background: var(--white); color: var(--charcoal); font-weight: 300; line-height: 1.7; overflow-x: hidden; }
+
+    /* Grain overlay */
+    body::after { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9999; opacity: 0.018; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)'/%3E%3C/svg%3E"); mix-blend-mode: multiply; }
+
+    /* Nav */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 0.4rem 4rem; background: rgba(253,252,249,0.94); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--light-border); transition: padding 0.4s; }
+    nav.scrolled { padding: 0.3rem 4rem; }
+    .nav-logo { display: flex; align-items: center; text-decoration: none; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
+    .nav-links a { font-family: 'Jost', sans-serif; font-size: 0.72rem; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase; color: var(--taupe); text-decoration: none; transition: color 0.25s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--charcoal); }
+    .nav-hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px; }
+    .nav-hamburger span { display: block; width: 22px; height: 1.5px; background: var(--charcoal); transition: 0.3s; }
+    .mobile-nav { position: fixed; top: 0; right: -100%; width: min(320px, 85vw); height: 100vh; background: var(--white); z-index: 200; padding: 5rem 2.5rem 3rem; display: flex; flex-direction: column; transition: right 0.4s cubic-bezier(0.4,0,0.2,1); border-left: 1px solid var(--light-border); }
+    .mobile-nav.open { right: 0; }
+    .mobile-nav a { font-family: 'Jost', sans-serif; font-size: 0.85rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--taupe); text-decoration: none; padding: 1rem 0; border-bottom: 1px solid var(--light-border); transition: color 0.25s; }
+    .mobile-nav a:hover { color: var(--charcoal); }
+    .mobile-nav-close { position: absolute; top: 1.4rem; right: 1.5rem; background: none; border: none; font-size: 1.4rem; color: var(--taupe); cursor: pointer; }
+
+    /* Typography */
+    h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.8rem, 5vw, 4.2rem); font-weight: 400; line-height: 1.2; }
+    h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 3.5vw, 2.8rem); font-weight: 400; line-height: 1.2; text-align: center; }
+    h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 500; }
+    h2 em, h1 em { font-style: italic; color: var(--dusty-blue); }
+    .section-eyebrow { font-family: 'Special Elite', 'Courier New', serif; font-size: 0.82rem; font-weight: 400; letter-spacing: 0.08em; color: var(--taupe); margin-bottom: 1rem; display: block; text-align: center; }
+    .ornament { display: flex; align-items: center; gap: 0.75rem; justify-content: center; margin-bottom: 1.5rem; }
+    .ornament-line { height: 1px; width: 48px; background: var(--light-border); }
+    .ornament-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--dusty-blue); }
+    .section-header { text-align: center; margin-bottom: 3.5rem; }
+
+    /* Buttons */
+    .btn-primary { display: inline-block; padding: 0.85rem 2rem; background: var(--charcoal); color: var(--cream); font-family: 'Jost', sans-serif; font-size: 0.78rem; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; border: 1px solid var(--charcoal); transition: background 0.3s, color 0.3s, border-color 0.3s; cursor: pointer; }
+    .btn-primary:hover { background: var(--dusty-blue); border-color: var(--dusty-blue); color: var(--white); }
+    .btn-outline { display: inline-block; padding: 0.85rem 2rem; background: transparent; color: var(--charcoal); font-family: 'Jost', sans-serif; font-size: 0.78rem; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; border: 1px solid var(--light-border); transition: background 0.3s, color 0.3s, border-color 0.3s; cursor: pointer; }
+    .btn-outline:hover { background: var(--charcoal); color: var(--white); border-color: var(--charcoal); }
+
+    /* Page hero */
+    .page-hero { padding: 10rem 4rem 5rem; background: var(--charcoal); text-align: center; position: relative; overflow: hidden; }
+    .page-hero .section-eyebrow { color: rgba(248,240,221,0.5); }
+    .page-hero h1 { color: var(--cream); font-size: clamp(2.6rem, 5vw, 3.8rem); margin-bottom: 1rem; }
+    .page-hero h1 em { color: #D4B483; font-style: italic; }
+    .page-hero p { font-size: 1rem; color: rgba(248,240,221,0.6); max-width: 520px; margin: 0 auto; line-height: 1.8; }
+    .page-hero .ornament-line { background: rgba(248,240,221,0.15); }
+
+    /* Footer */
+    footer { background: var(--charcoal); padding: 2.5rem 4rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; }
+    .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 400; color: var(--cream); letter-spacing: 0.04em; text-decoration: none; }
+    .footer-logo span { color: var(--dusty-blue); }
+    .footer-links { display: flex; gap: 2rem; list-style: none; }
+    .footer-links a { font-family: 'Jost', sans-serif; font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--taupe); text-decoration: none; transition: color 0.25s; }
+    .footer-links a:hover { color: var(--cream); }
+    .footer-copy { font-size: 0.72rem; color: var(--taupe); }
+
+    /* ─── ABOUT ─── */
+    #about {
+      padding: 7rem 4rem;
+      background: var(--cream);
+    }
+
+    .about-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .about-text h2 { text-align: left; margin-bottom: 1.5rem; }
+    .about-text .section-eyebrow { text-align: left; }
+    .about-text .ornament { justify-content: flex-start; }
+
+    .about-text p {
+      font-size: 0.95rem;
+      color: var(--taupe);
+      margin-bottom: 1.25rem;
+      line-height: 1.8;
+    }
+
+    .about-text p strong { color: var(--charcoal); font-weight: 500; }
+
+    .about-text .btn-primary { margin-top: 1rem; }
+
+    .about-visual { position: relative; }
+
+    .about-frame {
+      background: var(--charcoal);
+      aspect-ratio: 4/5;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .about-frame-inner {
+      text-align: center;
+      padding: 3rem;
+    }
+
+    .about-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-weight: 300;
+      font-style: italic;
+      color: var(--cream);
+      line-height: 1.4;
+      margin-bottom: 1.5rem;
+    }
+
+    .about-quote-attr {
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--dusty-blue);
+    }
+
+    .about-frame-accent {
+      position: absolute;
+      bottom: -20px;
+      right: -20px;
+      width: 80%;
+      height: 80%;
+      border: 1px solid var(--light-border);
+      z-index: -1;
+    }
+
+    /* ─── FAQ ─── */
+    #faq {
+      padding: 7rem 4rem;
+      background: var(--white);
+    }
+
+    .faq-list {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--light-border);
+    }
+
+    .faq-question {
+      width: 100%;
+      background: none;
+      border: none;
+      text-align: left;
+      padding: 1.5rem 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: var(--charcoal);
+      gap: 1rem;
+    }
+
+    .faq-icon {
+      font-family: 'Jost', sans-serif;
+      font-size: 1.2rem;
+      color: var(--dusty-blue);
+      font-weight: 300;
+      flex-shrink: 0;
+      transition: transform 0.3s;
+    }
+
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+
+    .faq-answer {
+      font-size: 0.88rem;
+      color: var(--taupe);
+      line-height: 1.8;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s;
+    }
+
+    .faq-item.open .faq-answer {
+      max-height: 300px;
+      padding-bottom: 1.5rem;
+    }
+
+    /* ─── CTA BANNER ─── */
+    #cta-banner {
+      background: var(--charcoal);
+      padding: 5rem 4rem;
+      text-align: center;
+    }
+
+    #cta-banner h2 { color: var(--cream); margin-bottom: 1rem; }
+    #cta-banner h2 em { color: #D4B483; }
+    #cta-banner p { font-size: 0.95rem; color: rgba(248,240,221,0.6); max-width: 480px; margin: 0 auto 2.5rem; line-height: 1.8; }
+    #cta-banner .ornament-line { background: rgba(248,240,221,0.15); }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      nav { padding: 0.4rem 2rem; }
+      .page-hero { padding: 9rem 2rem 4rem; }
+      #about { padding: 5rem 2rem; }
+      .about-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .about-visual { display: none; }
+      #faq { padding: 5rem 2rem; }
+      #cta-banner { padding: 4rem 2rem; }
+      footer { padding: 2rem 2rem; }
+    }
+    @media (max-width: 768px) {
+      nav { padding: 0.4rem 1.5rem; }
+      .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
+      .page-hero { padding: 8rem 1.5rem 4rem; }
+      h2 { font-size: 1.9rem; }
+      #about { padding: 5rem 1.5rem; }
+      #faq { padding: 5rem 1.5rem; }
+      #cta-banner { padding: 4rem 1.5rem; }
+      footer { padding: 2rem 1.5rem; flex-direction: column; text-align: center; }
+      .footer-links { justify-content: center; flex-wrap: wrap; gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAVIGATION ── -->
+  <nav id="navbar">
+    <a href="index.html" class="nav-logo">
+      <img src="images/DoveSketch_Cream.png?v=2" alt="The Dove Design Co." height="56" style="display:block;filter:brightness(0);opacity:0.82;">
+    </a>
+    <ul class="nav-links">
+      <li><a href="services.html">Services</a></li>
+      <li><a href="process.html">Process</a></li>
+      <li><a href="about.html" class="active">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="contact.html" class="btn-primary" style="padding:0.6rem 1.4rem;">Get a Quote</a></li>
+    </ul>
+    <button class="nav-hamburger" id="menuBtn" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-nav" id="mobileNav">
+    <button class="mobile-nav-close" id="menuClose">×</button>
+    <a href="services.html" onclick="closeMobile()">Services</a>
+    <a href="process.html" onclick="closeMobile()">Process</a>
+    <a href="about.html" onclick="closeMobile()">About</a>
+    <a href="contact.html" onclick="closeMobile()">Contact</a>
+    <a href="contact.html" onclick="closeMobile()" style="color:var(--dusty-blue);">Get a Quote</a>
+  </div>
+
+  <!-- ── PAGE HERO ── -->
+  <div class="page-hero">
+    <p class="section-eyebrow">About</p>
+    <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot"></div><div class="ornament-line"></div></div>
+    <h1>Hi, I'm <em>Justin</em>.</h1>
+    <p>I build custom websites for small businesses that are fast, beautiful, and built to last.</p>
+  </div>
+
+  <!-- ── ABOUT ── -->
+  <section id="about">
+    <div class="about-inner">
+      <div class="about-text">
+        <p class="section-eyebrow">About</p>
+        <div class="ornament" style="justify-content:flex-start;"><div class="ornament-line"></div><div class="ornament-dot"></div></div>
+        <h2>Hi, I'm <em>Justin</em>.</h2>
+        <p>I started The Dove Design Co. because I believe every small business deserves a website that <strong>actually works</strong> — one that looks professional, loads fast, and helps you land real clients.</p>
+        <p>I build everything custom-coded, from scratch. That means your site is faster, more flexible, and built around your goals — not whatever a template was designed for.</p>
+        <p>I keep things <strong>simple and honest</strong>: real communication, transparent proposals, and no disappearing act after launch. You'll always know what's happening and why.</p>
+        <a href="contact.html" class="btn-primary">Work With Me</a>
+      </div>
+      <div class="about-visual">
+        <div class="about-frame">
+          <div class="about-frame-inner">
+            <div class="about-quote">"Your business deserves a site that works as hard as you do."</div>
+            <div class="about-quote-attr">— Justin, The Dove Design Co.</div>
+          </div>
+        </div>
+        <div class="about-frame-accent"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FAQ ── -->
+  <section id="faq">
+    <div class="section-header">
+      <p class="section-eyebrow">Questions</p>
+      <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot"></div><div class="ornament-line"></div></div>
+      <h2>Things people<br><em>usually ask.</em></h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-question">How long does it take to build a website?<span class="faq-icon">+</span></button>
+        <div class="faq-answer">Most Starter sites take 2–3 weeks. Standard sites take 3–5 weeks. Timelines depend on how quickly we finalize content and how many revision rounds we go through. I'll give you a clear timeline before we start.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">Do I need to provide content and images?<span class="faq-icon">+</span></button>
+        <div class="faq-answer">Yes — you'll need to provide the text for your pages and any photos of your business or team. I can help you structure and polish the copy, and I can recommend where to source professional stock photos if needed.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">What if I need changes after my site is live?<span class="faq-icon">+</span></button>
+        <div class="faq-answer">Small tweaks (text updates, new images) are included in the first month. For ongoing changes, I offer monthly maintenance plans starting at $75/month — or I can handle one-off requests at an hourly rate.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">Do I need to know how to code to work with you?<span class="faq-icon">+</span></button>
+        <div class="faq-answer">Not at all. I handle everything technical. You focus on your business and tell me what you need — I'll translate that into a great website without burying you in jargon.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">What do I need to get started?<span class="faq-icon">+</span></button>
+        <div class="faq-answer">Just fill out the contact form with a bit about your project. From there, we'll hop on a quick call to talk through your goals, and I'll send you a custom quote. No commitment required for that first conversation.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">Do you offer payment plans?<span class="faq-icon">+</span></button>
+        <div class="faq-answer">Yes. I typically split projects into two payments: 50% upfront to kick things off, and 50% on launch. For larger projects, we can discuss a payment schedule that works for you.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA BANNER ── -->
+  <section id="cta-banner">
+    <div class="ornament"><div class="ornament-line" style="background:rgba(232,224,213,0.2);"></div><div class="ornament-dot"></div><div class="ornament-line" style="background:rgba(232,224,213,0.2);"></div></div>
+    <h2>Ready to build something <em>beautiful</em>?</h2>
+    <p>Fill out the form and I'll get back to you within 24 hours. No sales pitch — just a real conversation about your project.</p>
+    <a href="contact.html" class="btn-primary" style="background:var(--dusty-blue);border-color:var(--dusty-blue);">Get a Free Quote</a>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <a href="index.html" class="footer-logo">The Dove <span>Design</span> Co.</a>
+    <ul class="footer-links">
+      <li><a href="services.html">Services</a></li>
+      <li><a href="process.html">Process</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <p class="footer-copy">© 2025 The Dove Design Co.</p>
+  </footer>
+
+  <script>
+    // Nav scroll shrink
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 50);
+    }, { passive: true });
+
+    // Hamburger
+    const menuBtn   = document.getElementById('menuBtn');
+    const mobileNav = document.getElementById('mobileNav');
+    const menuClose = document.getElementById('menuClose');
+    function openMobile()  { mobileNav.classList.add('open');    document.body.style.overflow = 'hidden'; }
+    function closeMobile() { mobileNav.classList.remove('open'); document.body.style.overflow = ''; }
+    if (menuBtn)   menuBtn.addEventListener('click', openMobile);
+    if (menuClose) menuClose.addEventListener('click', closeMobile);
+
+    // FAQ accordion
+    document.querySelectorAll('.faq-question').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.parentElement;
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+        if (!isOpen) item.classList.add('open');
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — The Dove Design Co.</title>
+  <meta name="description" content="Get in touch with The Dove Design Co. Fill out the form for a free quote or book a discovery call to talk about your project.">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Dove Design">
+  <meta name="theme-color" content="#535344">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&family=Special+Elite&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:        #F8F0DD;
+      --white:        #FCF8EE;
+      --charcoal:     #535344;
+      --taupe:        #98A091;
+      --dusty-blue:   #AB8552;
+      --warm-gold:    #B7BEC0;
+      --light-border: #DDD5C0;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Jost', sans-serif; background: var(--white); color: var(--charcoal); font-weight: 300; line-height: 1.7; overflow-x: hidden; }
+
+    /* Grain overlay */
+    body::after { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9999; opacity: 0.018; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)'/%3E%3C/svg%3E"); mix-blend-mode: multiply; }
+
+    /* Nav */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 0.4rem 4rem; background: rgba(253,252,249,0.94); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--light-border); transition: padding 0.4s; }
+    nav.scrolled { padding: 0.3rem 4rem; }
+    .nav-logo { display: flex; align-items: center; text-decoration: none; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
+    .nav-links a { font-family: 'Jost', sans-serif; font-size: 0.72rem; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase; color: var(--taupe); text-decoration: none; transition: color 0.25s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--charcoal); }
+    .nav-hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px; }
+    .nav-hamburger span { display: block; width: 22px; height: 1.5px; background: var(--charcoal); transition: 0.3s; }
+    .mobile-nav { position: fixed; top: 0; right: -100%; width: min(320px, 85vw); height: 100vh; background: var(--white); z-index: 200; padding: 5rem 2.5rem 3rem; display: flex; flex-direction: column; transition: right 0.4s cubic-bezier(0.4,0,0.2,1); border-left: 1px solid var(--light-border); }
+    .mobile-nav.open { right: 0; }
+    .mobile-nav a { font-family: 'Jost', sans-serif; font-size: 0.85rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--taupe); text-decoration: none; padding: 1rem 0; border-bottom: 1px solid var(--light-border); transition: color 0.25s; }
+    .mobile-nav a:hover { color: var(--charcoal); }
+    .mobile-nav-close { position: absolute; top: 1.4rem; right: 1.5rem; background: none; border: none; font-size: 1.4rem; color: var(--taupe); cursor: pointer; }
+
+    /* Typography */
+    h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.8rem, 5vw, 4.2rem); font-weight: 400; line-height: 1.2; }
+    h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 3.5vw, 2.8rem); font-weight: 400; line-height: 1.2; text-align: center; }
+    h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 500; }
+    h2 em, h1 em { font-style: italic; color: var(--dusty-blue); }
+    .section-eyebrow { font-family: 'Special Elite', 'Courier New', serif; font-size: 0.82rem; font-weight: 400; letter-spacing: 0.08em; color: var(--taupe); margin-bottom: 1rem; display: block; text-align: center; }
+    .ornament { display: flex; align-items: center; gap: 0.75rem; justify-content: center; margin-bottom: 1.5rem; }
+    .ornament-line { height: 1px; width: 48px; background: var(--light-border); }
+    .ornament-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--dusty-blue); }
+    .section-header { text-align: center; margin-bottom: 3.5rem; }
+
+    /* Buttons */
+    .btn-primary { display: inline-block; padding: 0.85rem 2rem; background: var(--charcoal); color: var(--cream); font-family: 'Jost', sans-serif; font-size: 0.78rem; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; border: 1px solid var(--charcoal); transition: background 0.3s, color 0.3s, border-color 0.3s; cursor: pointer; }
+    .btn-primary:hover { background: var(--dusty-blue); border-color: var(--dusty-blue); color: var(--white); }
+    .btn-outline { display: inline-block; padding: 0.85rem 2rem; background: transparent; color: var(--charcoal); font-family: 'Jost', sans-serif; font-size: 0.78rem; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; border: 1px solid var(--light-border); transition: background 0.3s, color 0.3s, border-color 0.3s; cursor: pointer; }
+    .btn-outline:hover { background: var(--charcoal); color: var(--white); border-color: var(--charcoal); }
+
+    /* Page hero */
+    .page-hero { padding: 10rem 4rem 5rem; background: var(--charcoal); text-align: center; position: relative; overflow: hidden; }
+    .page-hero .section-eyebrow { color: rgba(248,240,221,0.5); }
+    .page-hero h1 { color: var(--cream); font-size: clamp(2.6rem, 5vw, 3.8rem); margin-bottom: 1rem; }
+    .page-hero h1 em { color: #D4B483; font-style: italic; }
+    .page-hero p { font-size: 1rem; color: rgba(248,240,221,0.6); max-width: 520px; margin: 0 auto; line-height: 1.8; }
+    .page-hero .ornament-line { background: rgba(248,240,221,0.15); }
+
+    /* Footer */
+    footer { background: var(--charcoal); padding: 2.5rem 4rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; }
+    .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 400; color: var(--cream); letter-spacing: 0.04em; text-decoration: none; }
+    .footer-logo span { color: var(--dusty-blue); }
+    .footer-links { display: flex; gap: 2rem; list-style: none; }
+    .footer-links a { font-family: 'Jost', sans-serif; font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--taupe); text-decoration: none; transition: color 0.25s; }
+    .footer-links a:hover { color: var(--cream); }
+    .footer-copy { font-size: 0.72rem; color: var(--taupe); }
+
+    /* ─── CONTACT ─── */
+    #contact {
+      padding: 7rem 4rem;
+      background: var(--charcoal);
+      text-align: center;
+    }
+
+    #contact h2 { color: var(--cream); }
+    #contact .section-eyebrow { color: var(--dusty-blue); }
+    #contact .ornament-line { background: rgba(232,224,213,0.2); }
+
+    .contact-sub {
+      font-size: 0.95rem;
+      color: var(--taupe);
+      max-width: 480px;
+      margin: 0 auto 3rem;
+    }
+
+    .contact-form {
+      max-width: 560px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .contact-form input,
+    .contact-form textarea,
+    .contact-form select {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 300;
+      color: var(--cream);
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(232,224,213,0.2);
+      padding: 0.9rem 1.1rem;
+      width: 100%;
+      outline: none;
+      transition: border-color 0.3s;
+      -webkit-appearance: none;
+    }
+
+    .contact-form input::placeholder,
+    .contact-form textarea::placeholder {
+      color: rgba(248,243,236,0.35);
+    }
+
+    .contact-form input:focus,
+    .contact-form textarea:focus,
+    .contact-form select:focus { border-color: var(--dusty-blue); }
+
+    .contact-form select {
+      color: rgba(248,243,236,0.5);
+      cursor: pointer;
+    }
+
+    .contact-form textarea { resize: vertical; min-height: 130px; }
+
+    .contact-form .btn-accent {
+      display: inline-block;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--white);
+      background: var(--dusty-blue);
+      padding: 0.9rem 3rem;
+      border: 1px solid var(--dusty-blue);
+      transition: background 0.3s, border-color 0.3s, color 0.3s;
+      cursor: pointer;
+      align-self: center;
+    }
+
+    .contact-form .btn-accent:hover {
+      background: var(--cream);
+      border-color: var(--cream);
+      color: var(--charcoal);
+    }
+
+    /* Discovery call reminder box */
+    .discovery-reminder {
+      max-width: 560px;
+      margin: 3rem auto 0;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(232,224,213,0.15);
+      padding: 2rem 2.5rem;
+      text-align: left;
+    }
+
+    .discovery-reminder p {
+      font-size: 0.88rem;
+      color: var(--taupe);
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+
+    .discovery-reminder a {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--dusty-blue);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(171,133,82,0.4);
+      padding-bottom: 2px;
+      transition: color 0.25s, border-color 0.25s;
+    }
+
+    .discovery-reminder a:hover { color: var(--cream); border-color: rgba(252,248,238,0.4); }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      nav { padding: 0.4rem 2rem; }
+      .page-hero { padding: 9rem 2rem 4rem; }
+      #contact { padding: 5rem 2rem; }
+      footer { padding: 2rem 2rem; }
+    }
+    @media (max-width: 768px) {
+      nav { padding: 0.4rem 1.5rem; }
+      .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
+      .page-hero { padding: 8rem 1.5rem 4rem; }
+      h2 { font-size: 1.9rem; }
+      #contact { padding: 5rem 1.5rem; }
+      .form-row { grid-template-columns: 1fr; }
+      footer { padding: 2rem 1.5rem; flex-direction: column; text-align: center; }
+      .footer-links { justify-content: center; flex-wrap: wrap; gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAVIGATION ── -->
+  <nav id="navbar">
+    <a href="index.html" class="nav-logo">
+      <img src="images/DoveSketch_Cream.png?v=2" alt="The Dove Design Co." height="56" style="display:block;filter:brightness(0);opacity:0.82;">
+    </a>
+    <ul class="nav-links">
+      <li><a href="services.html">Services</a></li>
+      <li><a href="process.html">Process</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html" class="active">Contact</a></li>
+      <li><a href="contact.html" class="btn-primary" style="padding:0.6rem 1.4rem;">Get a Quote</a></li>
+    </ul>
+    <button class="nav-hamburger" id="menuBtn" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-nav" id="mobileNav">
+    <button class="mobile-nav-close" id="menuClose">×</button>
+    <a href="services.html" onclick="closeMobile()">Services</a>
+    <a href="process.html" onclick="closeMobile()">Process</a>
+    <a href="about.html" onclick="closeMobile()">About</a>
+    <a href="contact.html" onclick="closeMobile()">Contact</a>
+    <a href="contact.html" onclick="closeMobile()" style="color:var(--dusty-blue);">Get a Quote</a>
+  </div>
+
+  <!-- ── PAGE HERO ── -->
+  <div class="page-hero">
+    <p class="section-eyebrow">Get In Touch</p>
+    <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot"></div><div class="ornament-line"></div></div>
+    <h1>Let's build something <em>beautiful</em>.</h1>
+    <p>Fill out the form and I'll get back to you within 24 hours.</p>
+  </div>
+
+  <!-- ── CONTACT ── -->
+  <section id="contact">
+    <div class="section-header">
+      <p class="section-eyebrow">Get In Touch</p>
+      <div class="ornament"><div class="ornament-line" style="background:rgba(232,224,213,0.2);"></div><div class="ornament-dot"></div><div class="ornament-line" style="background:rgba(232,224,213,0.2);"></div></div>
+      <h2>Ready to build something <em>beautiful</em>?</h2>
+    </div>
+    <p class="contact-sub">Fill out the form and I'll get back to you within 24 hours. No sales pitch — just a real conversation about your project.</p>
+    <form class="contact-form" onsubmit="handleSubmit(event)">
+      <div class="form-row">
+        <input type="text" placeholder="Your Name" required>
+        <input type="email" placeholder="Email Address" required>
+      </div>
+      <input type="text" placeholder="Business Name (optional)">
+      <select>
+        <option value="" disabled selected>What are you looking for?</option>
+        <option>New Website Build — Starter ($800)</option>
+        <option>New Website Build — Standard ($1,800)</option>
+        <option>Website Redesign</option>
+        <option>Custom / Complex Build</option>
+        <option>Ongoing Maintenance</option>
+        <option>SEO Services</option>
+        <option>Not sure yet — let's talk</option>
+      </select>
+      <textarea placeholder="Tell me a bit about your business and what you're looking for..."></textarea>
+      <button type="submit" class="btn-accent">Send Message</button>
+    </form>
+
+    <!-- Discovery call reminder box -->
+    <div class="discovery-reminder">
+      <p>Not ready to fill out a form? Book a free 30-min discovery call instead.</p>
+      <a href="process.html#discovery">Book a Free Discovery Call &rarr;</a>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <a href="index.html" class="footer-logo">The Dove <span>Design</span> Co.</a>
+    <ul class="footer-links">
+      <li><a href="services.html">Services</a></li>
+      <li><a href="process.html">Process</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <p class="footer-copy">© 2025 The Dove Design Co.</p>
+  </footer>
+
+  <script>
+    // Nav scroll shrink
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 50);
+    }, { passive: true });
+
+    // Hamburger
+    const menuBtn   = document.getElementById('menuBtn');
+    const mobileNav = document.getElementById('mobileNav');
+    const menuClose = document.getElementById('menuClose');
+    function openMobile()  { mobileNav.classList.add('open');    document.body.style.overflow = 'hidden'; }
+    function closeMobile() { mobileNav.classList.remove('open'); document.body.style.overflow = ''; }
+    if (menuBtn)   menuBtn.addEventListener('click', openMobile);
+    if (menuClose) menuClose.addEventListener('click', closeMobile);
+
+    // Contact form feedback
+    function handleSubmit(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('button[type="submit"]');
+      btn.textContent = 'Message Sent ✓';
+      btn.style.background = 'var(--dusty-blue)';
+      btn.disabled = true;
+    }
+  </script>
+</body>
+</html>
