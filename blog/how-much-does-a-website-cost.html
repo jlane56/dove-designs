@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How Much Does a Website Cost in 2025? | The Dove Design Co.</title>
+  <meta name="description" content="The honest answer to web design pricing in 2025 — from DIY builders to custom-coded sites. A Peoria, IL web designer breaks down what you're actually paying for.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.typekit.net/kei0jhu.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream: #F8F0DD; --white: #FCF8EE; --charcoal: #535344;
+      --taupe: #98A091; --dusty-blue: #AB8552; --light-border: #DDD5C0;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Jost', sans-serif; background: var(--white); color: var(--charcoal); font-weight: 300; line-height: 1.7; overflow-x: hidden; }
+    body::after { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9999; opacity: 0.018; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)'/%3E%3C/svg%3E"); mix-blend-mode: multiply; }
+
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 0.4rem 4rem; background: rgba(253,252,249,0.94); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--light-border); transition: padding 0.4s; }
+    nav.scrolled { padding: 0.3rem 4rem; }
+    .nav-logo { display: flex; align-items: center; text-decoration: none; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
+    .nav-links a { font-family: 'Jost', sans-serif; font-size: 0.72rem; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase; color: var(--taupe); text-decoration: none; transition: color 0.25s; }
+    .nav-links a:hover { color: var(--charcoal); }
+    .nav-hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px; }
+    .nav-hamburger span { display: block; width: 22px; height: 1.5px; background: var(--charcoal); transition: 0.3s; }
+    .mobile-nav { position: fixed; top: 0; right: -100%; width: min(320px, 85vw); height: 100vh; background: var(--white); z-index: 200; padding: 5rem 2.5rem 3rem; display: flex; flex-direction: column; transition: right 0.4s cubic-bezier(0.4,0,0.2,1); border-left: 1px solid var(--light-border); }
+    .mobile-nav.open { right: 0; }
+    .mobile-nav a { font-family: 'Jost', sans-serif; font-size: 0.85rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--taupe); text-decoration: none; padding: 1rem 0; border-bottom: 1px solid var(--light-border); transition: color 0.25s; }
+    .mobile-nav a:hover { color: var(--charcoal); }
+    .mobile-nav-close { position: absolute; top: 1.4rem; right: 1.5rem; background: none; border: none; font-size: 1.4rem; color: var(--taupe); cursor: pointer; }
+    .btn-primary { display: inline-block; padding: 0.85rem 2rem; background: var(--charcoal); color: var(--cream); font-family: 'Jost', sans-serif; font-size: 0.78rem; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; border: 1px solid var(--charcoal); transition: background 0.3s, color 0.3s, border-color 0.3s; }
+    .btn-primary:hover { background: var(--dusty-blue); border-color: var(--dusty-blue); color: var(--white); }
+
+    .post-hero {
+      padding: 10rem 4rem 5rem;
+      background: var(--charcoal);
+      max-width: 100%;
+    }
+    .post-hero-inner { max-width: 760px; }
+    .post-tag { font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dusty-blue); display: block; margin-bottom: 1.25rem; }
+    .post-hero h1 { font-family: 'freight-display-pro', serif; font-size: clamp(2.2rem, 4vw, 3.2rem); font-weight: 400; color: var(--cream); line-height: 1.2; margin-bottom: 1.5rem; }
+    .post-hero h1 em { font-style: italic; color: #D4B483; }
+    .post-meta { font-size: 0.75rem; letter-spacing: 0.08em; color: rgba(248,240,221,0.4); }
+
+    .post-body {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 5rem 4rem;
+    }
+
+    .post-body h2 {
+      font-family: 'freight-display-pro', serif;
+      font-size: 1.7rem;
+      font-weight: 400;
+      color: var(--charcoal);
+      margin: 2.5rem 0 1rem;
+      text-align: left;
+    }
+    .post-body h2 em { font-style: italic; color: var(--dusty-blue); }
+
+    .post-body p {
+      font-size: 1rem;
+      color: var(--taupe);
+      line-height: 1.85;
+      margin-bottom: 1.5rem;
+    }
+    .post-body p strong { color: var(--charcoal); font-weight: 500; }
+
+    .post-body ul {
+      margin: 0 0 1.5rem 1.5rem;
+      color: var(--taupe);
+      font-size: 1rem;
+      line-height: 1.85;
+    }
+    .post-body ul li { margin-bottom: 0.5rem; }
+
+    .post-callout {
+      background: var(--cream);
+      border-left: 3px solid var(--dusty-blue);
+      padding: 1.5rem 2rem;
+      margin: 2.5rem 0;
+      font-size: 0.95rem;
+      color: var(--charcoal);
+      line-height: 1.8;
+    }
+
+    .post-cta {
+      background: var(--charcoal);
+      padding: 3rem;
+      text-align: center;
+      margin-top: 4rem;
+    }
+    .post-cta p { font-size: 0.95rem; color: rgba(248,240,221,0.6); margin-bottom: 1.5rem; line-height: 1.7; }
+    .post-cta h3 { font-family: 'freight-display-pro', serif; font-size: 1.6rem; font-weight: 400; color: var(--cream); margin-bottom: 0.75rem; }
+    .post-cta h3 em { font-style: italic; color: #D4B483; }
+
+    .post-back { display: inline-block; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--taupe); text-decoration: none; margin-bottom: 3rem; transition: color 0.2s; }
+    .post-back:hover { color: var(--charcoal); }
+
+    footer { background: var(--charcoal); padding: 2.5rem 4rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; }
+    .footer-logo { font-family: 'freight-display-pro', serif; font-size: 1.3rem; font-weight: 400; color: var(--cream); letter-spacing: 0.04em; text-decoration: none; }
+    .footer-logo span { color: var(--dusty-blue); }
+    .footer-links { display: flex; gap: 2rem; list-style: none; }
+    .footer-links a { font-family: 'Jost', sans-serif; font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--taupe); text-decoration: none; transition: color 0.25s; }
+    .footer-links a:hover { color: var(--cream); }
+    .footer-copy { font-size: 0.72rem; color: var(--taupe); }
+
+    @media (max-width: 768px) {
+      nav { padding: 0.4rem 1.5rem; }
+      .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
+      .post-hero { padding: 8rem 1.5rem 4rem; }
+      .post-body { padding: 3rem 1.5rem; }
+      footer { padding: 2rem 1.5rem; flex-direction: column; text-align: center; }
+      .footer-links { justify-content: center; flex-wrap: wrap; gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav id="navbar">
+    <a href="../index.html" class="nav-logo">
+      <img src="../images/DoveSketch_Cream.png?v=2" alt="The Dove Design Co." height="56" style="display:block;filter:brightness(0);opacity:0.82;">
+    </a>
+    <ul class="nav-links">
+      <li><a href="../services.html">Services</a></li>
+      <li><a href="../portfolio.html">Work</a></li>
+      <li><a href="../process.html">Process</a></li>
+      <li><a href="../about.html">About</a></li>
+      <li><a href="../contact.html">Contact</a></li>
+      <li><a href="../proof.html">The Proof</a></li>
+      <li><a href="../contact.html" class="btn-primary" style="padding:0.6rem 1.4rem;">Book a Call</a></li>
+    </ul>
+    <button class="nav-hamburger" id="menuBtn" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-nav" id="mobileNav">
+    <button class="mobile-nav-close" id="menuClose">×</button>
+    <a href="../services.html" onclick="closeMobile()">Services</a>
+    <a href="../portfolio.html" onclick="closeMobile()">Work</a>
+    <a href="../process.html" onclick="closeMobile()">Process</a>
+    <a href="../about.html" onclick="closeMobile()">About</a>
+    <a href="../contact.html" onclick="closeMobile()">Contact</a>
+    <a href="../proof.html" onclick="closeMobile()">The Proof</a>
+    <a href="../contact.html" onclick="closeMobile()" style="color:var(--dusty-blue);">Book a Call</a>
+  </div>
+
+  <div class="post-hero">
+    <div class="post-hero-inner">
+      <span class="post-tag">Web Design</span>
+      <h1>How Much Does a Website Cost in 2025?<br><em>The Honest Answer.</em></h1>
+      <div class="post-meta">By Justin Lane &nbsp;·&nbsp; May 2025 &nbsp;·&nbsp; 5 min read</div>
+    </div>
+  </div>
+
+  <div class="post-body">
+    <a href="index.html" class="post-back">← Back to Blog</a>
+
+    <p>The most common question I get from small business owners isn't "what does your process look like" or "can you show me your work." It's: <strong>"how much does a website cost?"</strong></p>
+
+    <p>The honest answer is: anywhere from $0 to $50,000. And that's not a cop-out — it's genuinely true. The price depends entirely on what you're buying. Let me break it down.</p>
+
+    <h2>The $0–$30/month Option: <em>DIY Builders</em></h2>
+
+    <p>Wix, Squarespace, Webflow — these are legitimate tools and there are situations where they make sense. If you're a sole proprietor just getting started, need something live this week, and have zero budget, a DIY builder is better than nothing.</p>
+
+    <p>The tradeoffs:</p>
+    <ul>
+      <li>You're renting, not owning — if the platform shuts down or raises prices, you're stuck</li>
+      <li>Every site on the platform looks vaguely the same</li>
+      <li>Performance suffers — bloated code means slower load times, which hurts SEO</li>
+      <li>You'll spend more time than you expect fighting the tool</li>
+    </ul>
+
+    <h2>The $500–$3,000 Range: <em>Freelancers & Templates</em></h2>
+
+    <p>This is the most dangerous zone. You'll find designers on Fiverr and Upwork offering "custom websites" in this range. What you're usually getting is a WordPress theme with your logo swapped in and your text copy-pasted onto it.</p>
+
+    <p>There's nothing wrong with WordPress — it powers 40% of the internet. But a templated WordPress site is not a custom website, and you should know the difference before you pay for one.</p>
+
+    <div class="post-callout">
+      <strong>How to tell if you're getting a template:</strong> Ask the designer to show you the theme they're using. If they can't or won't tell you, that's your answer.
+    </div>
+
+    <h2>The $3,000–$10,000 Range: <em>Custom Design</em></h2>
+
+    <p>This is where real custom work starts. A designer at this level is building your site from a genuine design process — understanding your brand, your customers, and your goals — not just filling in a template.</p>
+
+    <p>For most small businesses, this is the right investment. You get a site that's actually yours, loads fast, and is built to rank in search results.</p>
+
+    <p><strong>This is where I work.</strong> Every site I build is hand-coded from scratch. No WordPress, no page builders, no templates. Just clean HTML, CSS, and JavaScript built around your specific business.</p>
+
+    <h2>The $10,000+ Range: <em>Agencies & Complex Applications</em></h2>
+
+    <p>If you need a full e-commerce platform, a custom web application, or a site that integrates with complex backend systems, you're in agency territory. This is legitimate and sometimes necessary — but most small businesses in Peoria don't need it.</p>
+
+    <h2>So What Should <em>You</em> Pay?</h2>
+
+    <p>Here's my honest framework: spend what your website will earn back in a year. If you're a plumber who closes one job per week at $500, a $3,000 website pays for itself in six weeks if it brings in even one extra lead per month. That's not a stretch — it's math.</p>
+
+    <p>What I tell every business owner I talk to: don't buy the cheapest option and don't buy more than you need. Know what you're getting, ask hard questions, and work with someone who can show you real work they've built for real businesses.</p>
+
+    <div class="post-cta">
+      <h3>Ready to talk about <em>your</em> site?</h3>
+      <p>Book a free 15-minute discovery call. I'll tell you exactly what I think you need — even if that's not me.</p>
+      <a href="../contact.html" class="btn-primary">Book a Discovery Call</a>
+    </div>
+  </div>
+
+  <footer>
+    <a href="../index.html" class="footer-logo">The Dove <span>Design</span> Co.</a>
+    <ul class="footer-links">
+      <li><a href="../services.html">Services</a></li>
+      <li><a href="../portfolio.html">Work</a></li>
+      <li><a href="../process.html">Process</a></li>
+      <li><a href="../about.html">About</a></li>
+      <li><a href="../contact.html">Contact</a></li>
+      <li><a href="../proof.html">The Proof</a></li>
+    </ul>
+    <p class="footer-copy">© 2025 The Dove Design Co.</p>
+  </footer>
+
+  <script>
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => { navbar.classList.toggle('scrolled', window.scrollY > 50); }, { passive: true });
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileNav = document.getElementById('mobileNav');
+    const menuClose = document.getElementById('menuClose');
+    function openMobile()  { mobileNav.classList.add('open');    document.body.style.overflow = 'hidden'; }
+    function closeMobile() { mobileNav.classList.remove('open'); document.body.style.overflow = ''; }
+    if (menuBtn)   menuBtn.addEventListener('click', openMobile);
+    if (menuClose) menuClose.addEventListener('click', closeMobile);
+  </script>
+</body>
+</html>

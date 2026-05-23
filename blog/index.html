@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog | Web Design Tips & Insights — The Dove Design Co., Peoria IL</title>
+  <meta name="description" content="Web design tips, local business insights, and honest advice from Justin Lane — web designer and photographer based in Peoria, IL.">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.typekit.net/kei0jhu.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream: #F8F0DD; --white: #FCF8EE; --charcoal: #535344;
+      --taupe: #98A091; --dusty-blue: #AB8552; --light-border: #DDD5C0;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Jost', sans-serif; background: var(--white); color: var(--charcoal); font-weight: 300; line-height: 1.7; overflow-x: hidden; }
+    body::after { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9999; opacity: 0.018; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)'/%3E%3C/svg%3E"); mix-blend-mode: multiply; }
+
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 0.4rem 4rem; background: rgba(253,252,249,0.94); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--light-border); transition: padding 0.4s; }
+    nav.scrolled { padding: 0.3rem 4rem; }
+    .nav-logo { display: flex; align-items: center; text-decoration: none; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
+    .nav-links a { font-family: 'Jost', sans-serif; font-size: 0.72rem; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase; color: var(--taupe); text-decoration: none; transition: color 0.25s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--charcoal); }
+    .nav-hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px; }
+    .nav-hamburger span { display: block; width: 22px; height: 1.5px; background: var(--charcoal); transition: 0.3s; }
+    .mobile-nav { position: fixed; top: 0; right: -100%; width: min(320px, 85vw); height: 100vh; background: var(--white); z-index: 200; padding: 5rem 2.5rem 3rem; display: flex; flex-direction: column; transition: right 0.4s cubic-bezier(0.4,0,0.2,1); border-left: 1px solid var(--light-border); }
+    .mobile-nav.open { right: 0; }
+    .mobile-nav a { font-family: 'Jost', sans-serif; font-size: 0.85rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--taupe); text-decoration: none; padding: 1rem 0; border-bottom: 1px solid var(--light-border); transition: color 0.25s; }
+    .mobile-nav a:hover { color: var(--charcoal); }
+    .mobile-nav-close { position: absolute; top: 1.4rem; right: 1.5rem; background: none; border: none; font-size: 1.4rem; color: var(--taupe); cursor: pointer; }
+    .btn-primary { display: inline-block; padding: 0.85rem 2rem; background: var(--charcoal); color: var(--cream); font-family: 'Jost', sans-serif; font-size: 0.78rem; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; border: 1px solid var(--charcoal); transition: background 0.3s, color 0.3s, border-color 0.3s; cursor: pointer; }
+    .btn-primary:hover { background: var(--dusty-blue); border-color: var(--dusty-blue); color: var(--white); }
+
+    h1 { font-family: 'freight-display-pro', serif; font-size: clamp(2.8rem, 5vw, 4.2rem); font-weight: 400; line-height: 1.2; }
+    h2 { font-family: 'freight-display-pro', serif; font-size: clamp(2rem, 3.5vw, 2.8rem); font-weight: 400; line-height: 1.2; }
+    h2 em, h1 em { font-style: italic; color: var(--dusty-blue); }
+    .section-eyebrow { font-family: 'Jost', sans-serif; font-size: 0.82rem; font-weight: 400; letter-spacing: 0.08em; color: var(--taupe); margin-bottom: 1rem; display: block; }
+    .ornament { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; }
+    .ornament-line { height: 1px; width: 48px; background: var(--light-border); }
+    .ornament-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--dusty-blue); }
+
+    .page-hero { padding: 10rem 4rem 5rem; background: var(--charcoal); }
+    .page-hero .section-eyebrow { color: rgba(248,240,221,0.5); }
+    .page-hero h1 { color: var(--cream); font-size: clamp(2.6rem, 5vw, 3.8rem); margin-bottom: 1rem; }
+    .page-hero h1 em { color: #D4B483; }
+    .page-hero p { font-size: 1rem; color: rgba(248,240,221,0.55); max-width: 520px; line-height: 1.8; }
+    .page-hero .ornament-line { background: rgba(248,240,221,0.15); }
+
+    #blog-list { padding: 6rem 4rem; max-width: 860px; margin: 0 auto; }
+
+    .blog-post-card {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: start;
+      gap: 2rem;
+      padding: 2.5rem 0;
+      border-bottom: 1px solid var(--light-border);
+      text-decoration: none;
+      color: inherit;
+      transition: opacity 0.2s;
+    }
+    .blog-post-card:hover { opacity: 0.7; }
+    .blog-post-card:first-child { border-top: 1px solid var(--light-border); }
+
+    .blog-post-tag {
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--dusty-blue);
+      margin-bottom: 0.6rem;
+      display: block;
+    }
+    .blog-post-title {
+      font-family: 'freight-display-pro', serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: var(--charcoal);
+      line-height: 1.3;
+      margin-bottom: 0.75rem;
+    }
+    .blog-post-excerpt {
+      font-size: 0.88rem;
+      color: var(--taupe);
+      line-height: 1.75;
+      max-width: 580px;
+    }
+    .blog-post-date {
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      color: var(--taupe);
+      white-space: nowrap;
+      padding-top: 0.25rem;
+    }
+
+    .blog-empty {
+      padding: 4rem 0;
+      text-align: center;
+      color: var(--taupe);
+      font-size: 0.95rem;
+    }
+
+    footer { background: var(--charcoal); padding: 2.5rem 4rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; }
+    .footer-logo { font-family: 'freight-display-pro', serif; font-size: 1.3rem; font-weight: 400; color: var(--cream); letter-spacing: 0.04em; text-decoration: none; }
+    .footer-logo span { color: var(--dusty-blue); }
+    .footer-links { display: flex; gap: 2rem; list-style: none; }
+    .footer-links a { font-family: 'Jost', sans-serif; font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--taupe); text-decoration: none; transition: color 0.25s; }
+    .footer-links a:hover { color: var(--cream); }
+    .footer-copy { font-size: 0.72rem; color: var(--taupe); }
+
+    @media (max-width: 768px) {
+      nav { padding: 0.4rem 1.5rem; }
+      .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
+      .page-hero { padding: 8rem 1.5rem 4rem; }
+      #blog-list { padding: 4rem 1.5rem; }
+      .blog-post-card { grid-template-columns: 1fr; gap: 0.5rem; }
+      footer { padding: 2rem 1.5rem; flex-direction: column; text-align: center; }
+      .footer-links { justify-content: center; flex-wrap: wrap; gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav id="navbar">
+    <a href="../index.html" class="nav-logo">
+      <img src="../images/DoveSketch_Cream.png?v=2" alt="The Dove Design Co." height="56" style="display:block;filter:brightness(0);opacity:0.82;">
+    </a>
+    <ul class="nav-links">
+      <li><a href="../services.html">Services</a></li>
+      <li><a href="../portfolio.html">Work</a></li>
+      <li><a href="../process.html">Process</a></li>
+      <li><a href="../about.html">About</a></li>
+      <li><a href="../contact.html">Contact</a></li>
+      <li><a href="../proof.html">The Proof</a></li>
+      <li><a href="../contact.html" class="btn-primary" style="padding:0.6rem 1.4rem;">Book a Call</a></li>
+    </ul>
+    <button class="nav-hamburger" id="menuBtn" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="mobile-nav" id="mobileNav">
+    <button class="mobile-nav-close" id="menuClose">×</button>
+    <a href="../services.html" onclick="closeMobile()">Services</a>
+    <a href="../portfolio.html" onclick="closeMobile()">Work</a>
+    <a href="../process.html" onclick="closeMobile()">Process</a>
+    <a href="../about.html" onclick="closeMobile()">About</a>
+    <a href="../contact.html" onclick="closeMobile()">Contact</a>
+    <a href="../proof.html" onclick="closeMobile()">The Proof</a>
+    <a href="../contact.html" onclick="closeMobile()" style="color:var(--dusty-blue);">Book a Call</a>
+  </div>
+
+  <div class="page-hero">
+    <p class="section-eyebrow">From the desk of Justin Lane</p>
+    <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot"></div></div>
+    <h1>Thoughts on <em>design</em>,<br>business, and the web.</h1>
+    <p>Practical advice for small business owners — no fluff, no jargon. Just what I've learned building sites and shooting content in Central Illinois.</p>
+  </div>
+
+  <section id="blog-list">
+    <a href="how-much-does-a-website-cost.html" class="blog-post-card">
+      <div>
+        <span class="blog-post-tag">Web Design</span>
+        <div class="blog-post-title">How Much Does a Website Cost in 2025? (Honest Answer)</div>
+        <div class="blog-post-excerpt">The range is $0 to $50,000 and that's not a joke. Here's what actually determines the price — and what to watch out for when shopping for a web designer.</div>
+      </div>
+      <div class="blog-post-date">May 2025</div>
+    </a>
+    <a href="why-your-business-needs-professional-photos.html" class="blog-post-card">
+      <div>
+        <span class="blog-post-tag">Photography</span>
+        <div class="blog-post-title">Why Bad Photos Are Killing Your Website (And What to Do About It)</div>
+        <div class="blog-post-excerpt">After eight years of commercial photography and building websites for local businesses, I can tell you the #1 thing that separates a site that converts from one that doesn't — and it's not the design.</div>
+      </div>
+      <div class="blog-post-date">May 2025</div>
+    </a>
+    <a href="wordpress-vs-custom-website.html" class="blog-post-card">
+      <div>
+        <span class="blog-post-tag">Web Design</span>
+        <div class="blog-post-title">WordPress vs. Custom-Coded Website: Which One Does Your Business Actually Need?</div>
+        <div class="blog-post-excerpt">I'm going to give you the honest answer — not the one that benefits me most. Sometimes WordPress is the right call. Here's how to know which one fits your situation.</div>
+      </div>
+      <div class="blog-post-date">Coming Soon</div>
+    </a>
+  </section>
+
+  <footer>
+    <a href="../index.html" class="footer-logo">The Dove <span>Design</span> Co.</a>
+    <ul class="footer-links">
+      <li><a href="../services.html">Services</a></li>
+      <li><a href="../portfolio.html">Work</a></li>
+      <li><a href="../process.html">Process</a></li>
+      <li><a href="../about.html">About</a></li>
+      <li><a href="../contact.html">Contact</a></li>
+      <li><a href="../proof.html">The Proof</a></li>
+    </ul>
+    <p class="footer-copy">© 2025 The Dove Design Co.</p>
+  </footer>
+
+  <script>
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => { navbar.classList.toggle('scrolled', window.scrollY > 50); }, { passive: true });
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileNav = document.getElementById('mobileNav');
+    const menuClose = document.getElementById('menuClose');
+    function openMobile()  { mobileNav.classList.add('open');    document.body.style.overflow = 'hidden'; }
+    function closeMobile() { mobileNav.classList.remove('open'); document.body.style.overflow = ''; }
+    if (menuBtn)   menuBtn.addEventListener('click', openMobile);
+    if (menuClose) menuClose.addEventListener('click', closeMobile);
+  </script>
+</body>
+</html>
