@@ -515,6 +515,7 @@
     </a>
     <ul class="nav-links">
       <li><a href="services.html">Services</a></li>
+      <li><a href="portfolio.html">Work</a></li>
       <li><a href="process.html">Process</a></li>
       <li><a href="about.html">About</a></li>
       <li><a href="contact.html">Contact</a></li>
@@ -529,6 +530,7 @@
   <div class="mobile-nav" id="mobileNav">
     <button class="mobile-nav-close" id="menuClose">×</button>
     <a href="services.html" onclick="closeMobile()">Services</a>
+    <a href="portfolio.html" onclick="closeMobile()">Work</a>
     <a href="process.html" onclick="closeMobile()">Process</a>
     <a href="about.html" onclick="closeMobile()">About</a>
     <a href="contact.html" onclick="closeMobile()">Contact</a>
@@ -548,20 +550,20 @@
 
       <!-- Layer 2: left-aligned text (hidden at top, fades in on scroll) -->
       <div class="hero-text-layer" id="heroTextLayer">
-        <p class="section-eyebrow">Custom Web Design &amp; Development</p>
-        <h1>Websites built<br><em>beautifully</em>,<br>built to last.</h1>
-        <p class="hero-sub">I design and build custom-coded websites for small businesses — clean, fast, and made to grow with you. No templates. No confusion. Just results.</p>
+        <p class="section-eyebrow">The Dove Design Co.</p>
+        <h1>Your business is<br>too good for a<br><em>template site.</em></h1>
+        <p class="hero-sub">I'm Justin. I hand-code every website from scratch — no page builders, no cookie-cutter themes. Just a fast, custom site built around your business and nobody else's.</p>
         <div class="hero-ctas">
           <a href="contact.html" class="btn-primary">Book a Discovery Call</a>
-          <a href="contact.html" class="btn-outline">Get a Free Quote</a>
+          <a href="portfolio.html" class="btn-outline">See Our Work</a>
         </div>
         <div class="hero-stats">
           <div>
             <div class="stat-num">100%</div>
-            <div class="stat-label">Custom coded</div>
+            <div class="stat-label">Hand-coded from scratch</div>
           </div>
           <div>
-            <div class="stat-num">No</div>
+            <div class="stat-num">Zero</div>
             <div class="stat-label">Templates or page builders</div>
           </div>
           <div>
@@ -617,6 +619,7 @@
     <a href="index.html" class="footer-logo">The Dove <span>Design</span> Co.</a>
     <ul class="footer-links">
       <li><a href="services.html">Services</a></li>
+      <li><a href="portfolio.html">Work</a></li>
       <li><a href="process.html">Process</a></li>
       <li><a href="about.html">About</a></li>
       <li><a href="contact.html">Contact</a></li>
@@ -630,12 +633,17 @@
     const heroTextLayer  = document.getElementById('heroTextLayer');
     const heroScrollHint = document.getElementById('heroScrollHint');
 
+    let heroEverScrolled = false;
+
     function updateHero() {
       const scrollY = window.scrollY;
       const zone = window.innerHeight * 0.60;
       const p = Math.min(Math.max(scrollY / zone, 0), 1);
 
-      if (heroLogoLayer)  heroLogoLayer.style.opacity  = 1 - p;
+      // Once the user scrolls at all, the hero logo is gone for good
+      if (scrollY > 0) heroEverScrolled = true;
+
+      if (heroLogoLayer)  heroLogoLayer.style.opacity  = heroEverScrolled ? 0 : (1 - p);
       if (heroScrollHint) heroScrollHint.style.opacity = Math.max(0, 1 - p * 2.5);
       if (heroTextLayer) {
         heroTextLayer.style.opacity       = p;
@@ -660,6 +668,19 @@
     function closeMobile() { mobileNav.classList.remove('open'); document.body.style.overflow = ''; }
     if (menuBtn)   menuBtn.addEventListener('click', openMobile);
     if (menuClose) menuClose.addEventListener('click', closeMobile);
+
+    // Logo: visible on entry, fades out on first scroll, never returns
+    const navLogoImg = document.querySelector('.nav-logo img');
+    let logoFaded = false;
+    function fadeLogoOnScroll() {
+      if (!logoFaded && window.scrollY > 0) {
+        logoFaded = true;
+        navLogoImg.style.transition = 'opacity 0.6s ease';
+        navLogoImg.style.opacity = '0';
+        window.removeEventListener('scroll', fadeLogoOnScroll);
+      }
+    }
+    window.addEventListener('scroll', fadeLogoOnScroll, { passive: true });
   </script>
 </body>
 </html>

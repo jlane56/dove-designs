@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About — The Dove Design Co.</title>
-  <meta name="description" content="Learn about Justin and The Dove Design Co. — custom-coded websites for small businesses that are fast, beautiful, and built to last.">
+  <title>Work — The Dove Design Co.</title>
+  <meta name="description" content="Real websites built for real businesses. A portfolio of custom-coded sites by The Dove Design Co.">
   <link rel="manifest" href="/manifest.json">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -13,7 +13,7 @@
   <meta name="theme-color" content="#535344">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://use.typekit.net/kei0jhu.css">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -54,11 +54,10 @@
     h2 { font-family: 'freight-display-pro', serif; font-size: clamp(2rem, 3.5vw, 2.8rem); font-weight: 400; line-height: 1.2; text-align: center; }
     h3 { font-family: 'freight-display-pro', serif; font-size: 1.3rem; font-weight: 500; }
     h2 em, h1 em { font-style: italic; color: var(--dusty-blue); }
-    .section-eyebrow { font-family: 'Jost', sans-serif; font-weight: 400; font-size: 0.82rem; font-weight: 400; letter-spacing: 0.08em; color: var(--taupe); margin-bottom: 1rem; display: block; text-align: center; }
+    .section-eyebrow { font-family: 'Jost', sans-serif; font-size: 0.82rem; font-weight: 400; letter-spacing: 0.08em; color: var(--taupe); margin-bottom: 1rem; display: block; text-align: center; }
     .ornament { display: flex; align-items: center; gap: 0.75rem; justify-content: center; margin-bottom: 1.5rem; }
     .ornament-line { height: 1px; width: 48px; background: var(--light-border); }
     .ornament-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--dusty-blue); }
-    .section-header { text-align: center; margin-bottom: 3.5rem; }
 
     /* Buttons */
     .btn-primary { display: inline-block; padding: 0.85rem 2rem; background: var(--charcoal); color: var(--cream); font-family: 'Jost', sans-serif; font-size: 0.78rem; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; border: 1px solid var(--charcoal); transition: background 0.3s, color 0.3s, border-color 0.3s; cursor: pointer; }
@@ -83,157 +82,169 @@
     .footer-links a:hover { color: var(--cream); }
     .footer-copy { font-size: 0.72rem; color: var(--taupe); }
 
-    /* ─── ABOUT ─── */
-    #about {
-      padding: 7rem 4rem;
-      background: var(--cream);
-    }
-
-    .about-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 5rem;
-      align-items: center;
-    }
-
-    .about-text h2 { text-align: left; margin-bottom: 1.5rem; }
-    .about-text .section-eyebrow { text-align: left; }
-    .about-text .ornament { justify-content: flex-start; }
-
-    .about-text p {
-      font-size: 0.95rem;
-      color: var(--taupe);
-      margin-bottom: 1.25rem;
-      line-height: 1.8;
-    }
-
-    .about-text p strong { color: var(--charcoal); font-weight: 500; }
-
-    .about-text .btn-primary { margin-top: 1rem; }
-
-    .about-visual { position: relative; }
-
-    .about-frame {
-      background: var(--charcoal);
-      aspect-ratio: 4/5;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    .about-frame-inner {
-      text-align: center;
-      padding: 3rem;
-    }
-
-    .about-quote {
-      font-family: 'freight-display-pro', serif;
-      font-size: 1.8rem;
-      font-weight: 300;
-      font-style: italic;
-      color: var(--cream);
-      line-height: 1.4;
-      margin-bottom: 1.5rem;
-    }
-
-    .about-quote-attr {
-      font-size: 0.72rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--dusty-blue);
-    }
-
-    .about-frame-accent {
-      position: absolute;
-      bottom: -20px;
-      right: -20px;
-      width: 80%;
-      height: 80%;
-      border: 1px solid var(--light-border);
-      z-index: -1;
-    }
-
-    /* ─── FAQ ─── */
-    #faq {
-      padding: 7rem 4rem;
+    /* ─── PORTFOLIO ─── */
+    #portfolio {
       background: var(--white);
     }
 
-    .faq-list {
-      max-width: 700px;
-      margin: 0 auto;
-    }
-
-    .faq-item {
+    .project-row {
+      display: grid;
+      grid-template-columns: 58% 42%;
+      min-height: 560px;
       border-bottom: 1px solid var(--light-border);
     }
+    .project-row:nth-child(even) .project-visual { order: 2; }
+    .project-row:nth-child(even) .project-info  { order: 1; }
 
-    .faq-question {
+    /* ── Image area ── */
+    .project-visual {
+      position: relative;
+      overflow: hidden;
+      background: var(--charcoal);
+    }
+    .project-visual img {
       width: 100%;
-      background: none;
-      border: none;
-      text-align: left;
-      padding: 1.5rem 0;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s ease;
+    }
+    .project-row:hover .project-visual img { transform: scale(1.03); }
+
+    /* Placeholder (shown when no screenshot yet) */
+    .project-placeholder {
+      width: 100%;
+      height: 100%;
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
       align-items: center;
-      cursor: pointer;
-      font-family: 'freight-display-pro', serif;
-      font-size: 1.2rem;
-      font-weight: 500;
-      color: var(--charcoal);
+      justify-content: center;
       gap: 1rem;
+      padding: 3rem;
+      text-align: center;
     }
-
-    .faq-icon {
-      font-family: 'Jost', sans-serif;
-      font-size: 1.2rem;
-      color: var(--dusty-blue);
+    .project-placeholder-name {
+      font-family: 'freight-display-pro', serif;
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
       font-weight: 300;
-      flex-shrink: 0;
-      transition: transform 0.3s;
+      font-style: italic;
+      color: rgba(248,240,221,0.25);
+      line-height: 1.2;
+    }
+    .project-placeholder-url {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      color: rgba(248,240,221,0.12);
+      text-transform: lowercase;
+    }
+    /* Subtle grid lines in placeholder */
+    .project-placeholder::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(248,240,221,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(248,240,221,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
     }
 
-    .faq-item.open .faq-icon { transform: rotate(45deg); }
-
-    .faq-answer {
-      font-size: 0.88rem;
+    /* ── Info panel ── */
+    .project-info {
+      padding: 4rem 4.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: var(--white);
+    }
+    .project-num {
+      font-family: 'freight-display-pro', serif;
+      font-size: 3.5rem;
+      font-weight: 300;
+      color: var(--light-border);
+      line-height: 1;
+      margin-bottom: 1.5rem;
+    }
+    .project-tag {
+      display: inline-block;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--dusty-blue);
+      margin-bottom: 1rem;
+    }
+    .project-info h3 {
+      font-family: 'freight-display-pro', serif;
+      font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+      font-weight: 400;
+      color: var(--charcoal);
+      line-height: 1.2;
+      margin-bottom: 1.25rem;
+    }
+    .project-info p {
+      font-size: 0.9rem;
       color: var(--taupe);
       line-height: 1.8;
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.4s ease, padding 0.3s;
+      margin-bottom: 2rem;
+      max-width: 380px;
     }
-
-    .faq-item.open .faq-answer {
-      max-height: 300px;
-      padding-bottom: 1.5rem;
+    .project-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
     }
+    .project-meta-tag {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--taupe);
+      border: 1px solid var(--light-border);
+      padding: 0.3rem 0.75rem;
+    }
+    .project-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 400;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--charcoal);
+      text-decoration: none;
+      border-bottom: 1px solid var(--charcoal);
+      padding-bottom: 0.2rem;
+      transition: color 0.25s, border-color 0.25s;
+      width: fit-content;
+    }
+    .project-link:hover { color: var(--dusty-blue); border-color: var(--dusty-blue); }
+    .project-link svg { transition: transform 0.25s; }
+    .project-link:hover svg { transform: translateX(4px); }
 
     /* ─── CTA BANNER ─── */
     #cta-banner {
-      background: var(--charcoal);
+      background: var(--cream);
       padding: 5rem 4rem;
       text-align: center;
+      border-top: 1px solid var(--light-border);
     }
-
-    #cta-banner h2 { color: var(--cream); margin-bottom: 1rem; }
-    #cta-banner h2 em { color: #D4B483; }
-    #cta-banner p { font-size: 0.95rem; color: rgba(248,240,221,0.6); max-width: 480px; margin: 0 auto 2.5rem; line-height: 1.8; }
-    #cta-banner .ornament-line { background: rgba(248,240,221,0.15); }
+    #cta-banner h2 { margin-bottom: 1rem; }
+    #cta-banner p { font-size: 0.95rem; color: var(--taupe); max-width: 480px; margin: 0 auto 2.5rem; line-height: 1.8; }
 
     /* Responsive */
     @media (max-width: 900px) {
       nav { padding: 0.4rem 2rem; }
       .page-hero { padding: 9rem 2rem 4rem; }
-      #about { padding: 5rem 2rem; }
-      .about-inner { grid-template-columns: 1fr; gap: 3rem; }
-      .about-visual { display: none; }
-      #faq { padding: 5rem 2rem; }
+      .project-row { grid-template-columns: 1fr; min-height: auto; }
+      .project-row:nth-child(even) .project-visual { order: 0; }
+      .project-row:nth-child(even) .project-info  { order: 0; }
+      .project-visual { min-height: 300px; }
+      .project-info { padding: 3rem 2rem; }
       #cta-banner { padding: 4rem 2rem; }
       footer { padding: 2rem 2rem; }
     }
@@ -243,8 +254,8 @@
       .nav-hamburger { display: flex; }
       .page-hero { padding: 8rem 1.5rem 4rem; }
       h2 { font-size: 1.9rem; }
-      #about { padding: 5rem 1.5rem; }
-      #faq { padding: 5rem 1.5rem; }
+      .project-visual { min-height: 260px; }
+      .project-info { padding: 2.5rem 1.5rem; }
       #cta-banner { padding: 4rem 1.5rem; }
       footer { padding: 2rem 1.5rem; flex-direction: column; text-align: center; }
       .footer-links { justify-content: center; flex-wrap: wrap; gap: 1rem; }
@@ -260,9 +271,9 @@
     </a>
     <ul class="nav-links">
       <li><a href="services.html">Services</a></li>
-      <li><a href="portfolio.html">Work</a></li>
+      <li><a href="portfolio.html" class="active">Work</a></li>
       <li><a href="process.html">Process</a></li>
-      <li><a href="about.html" class="active">About</a></li>
+      <li><a href="about.html">About</a></li>
       <li><a href="contact.html">Contact</a></li>
       <li><a href="contact.html" class="btn-primary" style="padding:0.6rem 1.4rem;">Get a Quote</a></li>
     </ul>
@@ -283,77 +294,114 @@
 
   <!-- ── PAGE HERO ── -->
   <div class="page-hero">
-    <p class="section-eyebrow">About</p>
-    <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot"></div><div class="ornament-line"></div></div>
-    <h1>Hi, I'm <em>Justin</em>.</h1>
-    <p>I build custom websites for small businesses that are fast, beautiful, and built to last.</p>
+    <p class="section-eyebrow">Selected Projects</p>
+    <div class="ornament">
+      <div class="ornament-line"></div>
+      <div class="ornament-dot"></div>
+      <div class="ornament-line"></div>
+    </div>
+    <h1>Work that speaks<br>for <em>itself</em>.</h1>
+    <p>Real businesses. Custom code. Every site built from scratch — no templates, no shortcuts.</p>
   </div>
 
-  <!-- ── ABOUT ── -->
-  <section id="about">
-    <div class="about-inner">
-      <div class="about-text">
-        <p class="section-eyebrow">About</p>
-        <div class="ornament" style="justify-content:flex-start;"><div class="ornament-line"></div><div class="ornament-dot"></div></div>
-        <h2>Hi, I'm <em>Justin</em>.</h2>
-        <p>I started The Dove Design Co. because I believe every small business deserves a website that <strong>actually works</strong> — one that looks professional, loads fast, and helps you land real clients.</p>
-        <p>I build everything custom-coded, from scratch. That means your site is faster, more flexible, and built around your goals — not whatever a template was designed for.</p>
-        <p>I keep things <strong>simple and honest</strong>: real communication, transparent proposals, and no disappearing act after launch. You'll always know what's happening and why.</p>
-        <a href="contact.html" class="btn-primary">Work With Me</a>
-      </div>
-      <div class="about-visual">
-        <div class="about-frame">
-          <div class="about-frame-inner">
-            <div class="about-quote">"Your business deserves a site that works as hard as you do."</div>
-            <div class="about-quote-attr">— Justin, The Dove Design Co.</div>
-          </div>
-        </div>
-        <div class="about-frame-accent"></div>
-      </div>
-    </div>
-  </section>
+  <!-- ── PORTFOLIO ── -->
+  <section id="portfolio">
 
-  <!-- ── FAQ ── -->
-  <section id="faq">
-    <div class="section-header">
-      <p class="section-eyebrow">Questions</p>
-      <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot"></div><div class="ornament-line"></div></div>
-      <h2>Things people<br><em>usually ask.</em></h2>
-    </div>
-    <div class="faq-list">
-      <div class="faq-item">
-        <button class="faq-question">How long does it take to build a website?<span class="faq-icon">+</span></button>
-        <div class="faq-answer">Most Starter sites take 2–3 weeks. Standard sites take 3–5 weeks. Timelines depend on how quickly we finalize content and how many revision rounds we go through. I'll give you a clear timeline before we start.</div>
+    <!-- PROJECT 01 — Jubilee Real Estate Media -->
+    <div class="project-row">
+      <div class="project-visual">
+        <!-- Replace the placeholder div below with:
+             <img src="images/portfolio/jubilee.jpg" alt="Jubilee Real Estate Media website">
+             once you have a screenshot -->
+        <div class="project-placeholder">
+          <div class="project-placeholder-name">Jubilee Real Estate<br>Media</div>
+          <div class="project-placeholder-url">jubileeremedia.com</div>
+        </div>
       </div>
-      <div class="faq-item">
-        <button class="faq-question">Do I need to provide content and images?<span class="faq-icon">+</span></button>
-        <div class="faq-answer">Yes — you'll need to provide the text for your pages and any photos of your business or team. I can help you structure and polish the copy, and I can recommend where to source professional stock photos if needed.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-question">What if I need changes after my site is live?<span class="faq-icon">+</span></button>
-        <div class="faq-answer">Small tweaks (text updates, new images) are included in the first month. For ongoing changes, I offer monthly maintenance plans starting at $75/month — or I can handle one-off requests at an hourly rate.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-question">Do I need to know how to code to work with you?<span class="faq-icon">+</span></button>
-        <div class="faq-answer">Not at all. I handle everything technical. You focus on your business and tell me what you need — I'll translate that into a great website without burying you in jargon.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-question">What do I need to get started?<span class="faq-icon">+</span></button>
-        <div class="faq-answer">Just fill out the contact form with a bit about your project. From there, we'll hop on a quick call to talk through your goals, and I'll send you a custom quote. No commitment required for that first conversation.</div>
-      </div>
-      <div class="faq-item">
-        <button class="faq-question">Do you offer payment plans?<span class="faq-icon">+</span></button>
-        <div class="faq-answer">Yes. I typically split projects into two payments: 50% upfront to kick things off, and 50% on launch. For larger projects, we can discuss a payment schedule that works for you.</div>
+      <div class="project-info">
+        <div class="project-num">01</div>
+        <span class="project-tag">Real Estate Media</span>
+        <h3>Jubilee Real Estate Media</h3>
+        <p>A premium web presence for a Central Illinois real estate photography and videography studio. Clean, editorial design built to showcase HDR photography, drone footage, and virtual tour services.</p>
+        <div class="project-meta">
+          <span class="project-meta-tag">Photography</span>
+          <span class="project-meta-tag">Videography</span>
+          <span class="project-meta-tag">Central Illinois</span>
+        </div>
+        <a href="https://jubileeremedia.com" target="_blank" rel="noopener" class="project-link">
+          View Live Site
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
       </div>
     </div>
+
+    <!-- PROJECT 02 — Rock Solid Productions -->
+    <div class="project-row">
+      <div class="project-visual">
+        <!-- Replace with: <img src="images/portfolio/rocksolid.jpg" alt="Rock Solid Productions website"> -->
+        <div class="project-placeholder">
+          <div class="project-placeholder-name">Rock Solid<br>Productions</div>
+          <div class="project-placeholder-url">rock-solid-productions.vercel.app</div>
+        </div>
+      </div>
+      <div class="project-info">
+        <div class="project-num">02</div>
+        <span class="project-tag">Production Company</span>
+        <h3>Rock Solid Productions</h3>
+        <p>Bold, high-energy site for a full-service production company in Dunlap, IL — covering studio recording, live event production, and professional AVL installation. Built to reflect the intensity of their craft.</p>
+        <div class="project-meta">
+          <span class="project-meta-tag">Audio</span>
+          <span class="project-meta-tag">Live Events</span>
+          <span class="project-meta-tag">AVL</span>
+          <span class="project-meta-tag">Dunlap, IL</span>
+        </div>
+        <a href="https://rock-solid-productions.vercel.app" target="_blank" rel="noopener" class="project-link">
+          View Live Site
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- PROJECT 03 — Cleaning Right LLC -->
+    <div class="project-row">
+      <div class="project-visual">
+        <!-- Replace with: <img src="images/portfolio/cleaningright.jpg" alt="Cleaning Right LLC website"> -->
+        <div class="project-placeholder">
+          <div class="project-placeholder-name">Cleaning Right<br>LLC</div>
+          <div class="project-placeholder-url">cleaning-right-llc.vercel.app</div>
+        </div>
+      </div>
+      <div class="project-info">
+        <div class="project-num">03</div>
+        <span class="project-tag">Home Services</span>
+        <h3>Cleaning Right LLC</h3>
+        <p>A clean, trustworthy design for a residential cleaning company serving Peoria County, IL. Four service packages displayed clearly, with a streamlined path for homeowners to request a quote.</p>
+        <div class="project-meta">
+          <span class="project-meta-tag">Residential</span>
+          <span class="project-meta-tag">Home Services</span>
+          <span class="project-meta-tag">Peoria County</span>
+        </div>
+        <a href="https://cleaning-right-llc.vercel.app" target="_blank" rel="noopener" class="project-link">
+          View Live Site
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 7H13M13 7L7 1M13 7L7 13" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
   </section>
 
   <!-- ── CTA BANNER ── -->
   <section id="cta-banner">
-    <div class="ornament"><div class="ornament-line" style="background:rgba(232,224,213,0.2);"></div><div class="ornament-dot"></div><div class="ornament-line" style="background:rgba(232,224,213,0.2);"></div></div>
-    <h2>Ready to build something <em>beautiful</em>?</h2>
-    <p>Fill out the form and I'll get back to you within 24 hours. No sales pitch — just a real conversation about your project.</p>
-    <a href="contact.html" class="btn-primary" style="background:var(--dusty-blue);border-color:var(--dusty-blue);">Get a Free Quote</a>
+    <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot"></div><div class="ornament-line"></div></div>
+    <h2>Want a site like these?</h2>
+    <p>Every project starts with a free discovery call. No obligations — just a conversation about what you need.</p>
+    <a href="contact.html" class="btn-primary">Start a Project</a>
   </section>
 
   <!-- ── FOOTER ── -->
@@ -384,16 +432,6 @@
     function closeMobile() { mobileNav.classList.remove('open'); document.body.style.overflow = ''; }
     if (menuBtn)   menuBtn.addEventListener('click', openMobile);
     if (menuClose) menuClose.addEventListener('click', closeMobile);
-
-    // FAQ accordion
-    document.querySelectorAll('.faq-question').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const item = btn.parentElement;
-        const isOpen = item.classList.contains('open');
-        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-        if (!isOpen) item.classList.add('open');
-      });
-    });
 
     // Logo: visible on entry, fades out on first scroll, never returns
     const navLogoImg = document.querySelector('.nav-logo img');

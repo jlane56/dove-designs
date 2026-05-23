@@ -215,6 +215,7 @@
     </a>
     <ul class="nav-links">
       <li><a href="services.html">Services</a></li>
+      <li><a href="portfolio.html">Work</a></li>
       <li><a href="process.html" class="active">Process</a></li>
       <li><a href="about.html">About</a></li>
       <li><a href="contact.html">Contact</a></li>
@@ -228,6 +229,7 @@
   <div class="mobile-nav" id="mobileNav">
     <button class="mobile-nav-close" id="menuClose">×</button>
     <a href="services.html" onclick="closeMobile()">Services</a>
+    <a href="portfolio.html" onclick="closeMobile()">Work</a>
     <a href="process.html" onclick="closeMobile()">Process</a>
     <a href="about.html" onclick="closeMobile()">About</a>
     <a href="contact.html" onclick="closeMobile()">Contact</a>
@@ -366,6 +368,7 @@
     <a href="index.html" class="footer-logo">The Dove <span>Design</span> Co.</a>
     <ul class="footer-links">
       <li><a href="services.html">Services</a></li>
+      <li><a href="portfolio.html">Work</a></li>
       <li><a href="process.html">Process</a></li>
       <li><a href="about.html">About</a></li>
       <li><a href="contact.html">Contact</a></li>
@@ -388,6 +391,19 @@
     function closeMobile() { mobileNav.classList.remove('open'); document.body.style.overflow = ''; }
     if (menuBtn)   menuBtn.addEventListener('click', openMobile);
     if (menuClose) menuClose.addEventListener('click', closeMobile);
+
+    // Logo: visible on entry, fades out on first scroll, never returns
+    const navLogoImg = document.querySelector('.nav-logo img');
+    let logoFaded = false;
+    function fadeLogoOnScroll() {
+      if (!logoFaded && window.scrollY > 0) {
+        logoFaded = true;
+        navLogoImg.style.transition = 'opacity 0.6s ease';
+        navLogoImg.style.opacity = '0';
+        window.removeEventListener('scroll', fadeLogoOnScroll);
+      }
+    }
+    window.addEventListener('scroll', fadeLogoOnScroll, { passive: true });
   </script>
 </body>
 </html>
