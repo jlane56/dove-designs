@@ -223,34 +223,68 @@
     .ornament-line { width: 50px; height: 1px; background: var(--light-border); }
     .ornament-dot  { width: 4px; height: 4px; border-radius: 50%; background: var(--dusty-blue); }
 
-    /* ─── HERO COVER ─── */
+    /* ─── HERO ─── */
+    #hero-wrapper {
+      height: 220vh; /* scroll space for the transition */
+    }
+
     #hero {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      /* Desktop: the cooler coastal photo */
+      position: sticky;
+      top: 0;
+      height: 100vh;
       background-image: url('images/4231204011-R1-046-21A.JPG');
       background-size: cover;
       background-position: center 45%;
-      position: relative;
       overflow: hidden;
     }
 
+    /* Base dark overlay */
     #hero::before {
       content: '';
       position: absolute; inset: 0;
-      background: rgba(20, 24, 28, 0.40);
+      background:
+        linear-gradient(to right, rgba(18,22,26,0.55) 0%, rgba(18,22,26,0.15) 55%, transparent 100%),
+        rgba(18, 22, 26, 0.28);
       z-index: 0;
     }
 
+    /* Logo — centered, fades out on scroll */
+    .hero-logo-layer {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
     .hero-logo {
-      position: relative;
-      z-index: 1;
       width: clamp(260px, 36vw, 460px);
     }
 
+    /* Text — left-aligned, fades in on scroll */
+    .hero-text-layer {
+      position: absolute;
+      left: 5%;
+      top: 50%;
+      transform: translateY(-50%);
+      max-width: 600px;
+      padding-top: 4rem; /* clear the nav */
+      z-index: 2;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .hero-text-layer .section-eyebrow { color: rgba(240,220,210,0.75); text-align: left; }
+    .hero-text-layer h1               { color: #EEE8DC; }
+    .hero-text-layer h1 em            { color: #D4B483; }
+    .hero-text-layer .hero-sub        { color: rgba(238,232,220,0.78); max-width: 500px; margin-bottom: 2.5rem; }
+    .hero-text-layer .hero-stats      { border-top: 1px solid rgba(238,232,220,0.18); padding-top: 2rem; margin-top: 3.5rem; display:flex; gap:3rem; flex-wrap:wrap; }
+    .hero-text-layer .stat-num        { font-family:'Cormorant Garamond',serif; font-size:2.2rem; font-weight:300; color:#EEE8DC; line-height:1; }
+    .hero-text-layer .stat-label      { font-size:0.72rem; color:rgba(238,232,220,0.62); letter-spacing:0.08em; }
+    .hero-text-layer .btn-outline     { color:#EEE8DC; border-color:rgba(238,232,220,0.55); }
+    .hero-text-layer .btn-outline:hover { background:rgba(238,232,220,0.15); color:#EEE8DC; border-color:#EEE8DC; }
+    .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    /* Scroll hint */
     .hero-scroll {
       position: absolute;
       bottom: 2.5rem;
@@ -265,32 +299,21 @@
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: rgba(248,240,221,0.45);
-      z-index: 1;
+      z-index: 2;
       white-space: nowrap;
     }
-
     .hero-scroll-line {
       width: 1px;
       height: 36px;
       background: rgba(248,240,221,0.35);
     }
 
-    /* Mobile: use the warmer golden film photo */
+    /* Mobile: warm golden film photo */
     @media (max-width: 768px) {
-      #hero {
-        background-image: url('images/vacationfilm-35.JPG');
-        background-position: center 30%;
-      }
+      #hero-wrapper { height: 200vh; }
+      #hero { background-image: url('images/vacationfilm-35.JPG'); background-position: center 30%; }
+      .hero-text-layer { left: 1.5rem; right: 1.5rem; max-width: 100%; padding-top: 5rem; }
     }
-
-    /* ─── INTRO (below the fold) ─── */
-    #intro {
-      padding: 7rem 4rem 6rem;
-      background: var(--white);
-      position: relative;
-    }
-
-    .intro-inner { max-width: 700px; }
 
     .hero-inner {
       max-width: 700px;
@@ -887,41 +910,48 @@
     <a href="#contact" onclick="closeMobile()" style="color:var(--dusty-blue);">Get a Quote</a>
   </div>
 
-  <!-- ── HERO COVER (full screen photo + logo) ── -->
-  <section id="hero">
-    <img src="images/TDDC_Logo1.png" class="hero-logo" alt="The Dove Design Co.">
-    <div class="hero-scroll">
-      <div class="hero-scroll-line"></div>
-      Scroll to explore
-    </div>
-  </section>
+  <!-- ── HERO ── -->
+  <div id="hero-wrapper">
+    <section id="hero">
 
-  <!-- ── INTRO (visible on first scroll) ── -->
-  <section id="intro">
-    <div class="intro-inner">
-      <p class="section-eyebrow">Custom Web Design &amp; Development</p>
-      <h1>Websites built<br><em>beautifully</em>,<br>built to last.</h1>
-      <p class="hero-sub">I design and build custom-coded websites for small businesses — clean, fast, and made to grow with you. No templates. No confusion. Just results.</p>
-      <div class="hero-ctas">
-        <a href="#discovery" class="btn-primary">Book a Discovery Call</a>
-        <a href="#contact" class="btn-outline">Get a Free Quote</a>
+      <!-- Layer 1: centered logo (visible at top, fades out on scroll) -->
+      <div class="hero-logo-layer" id="heroLogoLayer">
+        <img src="images/TDDC_Logo1.png" class="hero-logo" alt="The Dove Design Co.">
       </div>
-      <div class="hero-stats">
-        <div>
-          <div class="stat-num">100%</div>
-          <div class="stat-label">Custom coded</div>
+
+      <!-- Layer 2: left-aligned text (hidden at top, fades in on scroll) -->
+      <div class="hero-text-layer" id="heroTextLayer">
+        <p class="section-eyebrow">Custom Web Design &amp; Development</p>
+        <h1>Websites built<br><em>beautifully</em>,<br>built to last.</h1>
+        <p class="hero-sub">I design and build custom-coded websites for small businesses — clean, fast, and made to grow with you. No templates. No confusion. Just results.</p>
+        <div class="hero-ctas">
+          <a href="#discovery" class="btn-primary">Book a Discovery Call</a>
+          <a href="#contact" class="btn-outline">Get a Free Quote</a>
         </div>
-        <div>
-          <div class="stat-num">No</div>
-          <div class="stat-label">Templates or page builders</div>
-        </div>
-        <div>
-          <div class="stat-num">24hr</div>
-          <div class="stat-label">Quote turnaround</div>
+        <div class="hero-stats">
+          <div>
+            <div class="stat-num">100%</div>
+            <div class="stat-label">Custom coded</div>
+          </div>
+          <div>
+            <div class="stat-num">No</div>
+            <div class="stat-label">Templates or page builders</div>
+          </div>
+          <div>
+            <div class="stat-num">24hr</div>
+            <div class="stat-label">Quote turnaround</div>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+
+      <!-- Scroll hint (fades with logo) -->
+      <div class="hero-scroll" id="heroScrollHint">
+        <div class="hero-scroll-line"></div>
+        Scroll to explore
+      </div>
+
+    </section>
+  </div>
 
   <!-- ── PHOTOSHOOT OFFER ── -->
   <section id="photoshoot" style="background:var(--charcoal);padding:5rem 4rem;">
@@ -1192,6 +1222,28 @@
 
   <script>
     // Navbar shrink on scroll
+    // ── Hero scroll transition ──
+    const heroLogoLayer  = document.getElementById('heroLogoLayer');
+    const heroTextLayer  = document.getElementById('heroTextLayer');
+    const heroScrollHint = document.getElementById('heroScrollHint');
+
+    function updateHero() {
+      const scrollY = window.scrollY;
+      // Transition completes over 60% of viewport height
+      const zone = window.innerHeight * 0.60;
+      const p = Math.min(Math.max(scrollY / zone, 0), 1);
+
+      if (heroLogoLayer)  heroLogoLayer.style.opacity  = 1 - p;
+      if (heroScrollHint) heroScrollHint.style.opacity = Math.max(0, 1 - p * 2.5);
+      if (heroTextLayer) {
+        heroTextLayer.style.opacity      = p;
+        heroTextLayer.style.pointerEvents = p > 0.3 ? 'auto' : 'none';
+      }
+    }
+
+    window.addEventListener('scroll', updateHero, { passive: true });
+    updateHero(); // set correct state on load
+
     const navbar = document.getElementById('navbar');
     window.addEventListener('scroll', () => {
       navbar.classList.toggle('scrolled', window.scrollY > 60);
