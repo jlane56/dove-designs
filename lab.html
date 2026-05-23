@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Lab — The Dove Design Co.</title>
-  <meta name="description" content="A live showcase of what's possible. Interactive demos built with pure HTML, CSS, and JavaScript — no libraries, no shortcuts.">
+  <meta name="description" content="A live playground of motion, interaction, and code. Everything here is built with pure HTML, CSS, and JavaScript.">
   <link rel="manifest" href="/manifest.json">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -34,27 +34,87 @@
     }
 
     html { scroll-behavior: smooth; }
-    body { font-family: 'Jost', sans-serif; background: var(--lab-bg); color: var(--lab-text); font-weight: 300; line-height: 1.7; overflow-x: hidden; }
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--lab-bg);
+      color: var(--lab-text);
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+      cursor: none; /* custom cursor */
+    }
+    @media (hover: none) { body { cursor: auto; } }
 
     /* Grain */
-    body::after { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9999; opacity: 0.022; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)'/%3E%3C/svg%3E"); mix-blend-mode: screen; }
+    body::after { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9998; opacity: 0.025; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)'/%3E%3C/svg%3E"); mix-blend-mode: screen; }
 
-    /* ─── NAV (light bar over dark page) ─── */
-    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 0.4rem 4rem; background: rgba(253,252,249,0.94); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--light-border); transition: padding 0.4s; }
+    /* ─── SCROLL PROGRESS ─── */
+    #scrollProgress {
+      position: fixed;
+      top: 0; left: 0;
+      height: 2px;
+      width: 0%;
+      background: linear-gradient(90deg, var(--lab-accent), #e4c07a);
+      z-index: 99999;
+      pointer-events: none;
+      transition: width 0.05s linear;
+    }
+
+    /* ─── CUSTOM CURSOR ─── */
+    .cursor-dot {
+      position: fixed;
+      width: 7px; height: 7px;
+      background: var(--lab-accent);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 99997;
+      transform: translate(-50%, -50%);
+      transition: width 0.18s ease, height 0.18s ease, background 0.18s;
+      will-change: left, top;
+    }
+    .cursor-ring {
+      position: fixed;
+      width: 36px; height: 36px;
+      border: 1px solid rgba(171,133,82,0.55);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 99996;
+      transform: translate(-50%, -50%);
+      transition: width 0.28s ease, height 0.28s ease, border-color 0.28s;
+      will-change: left, top;
+    }
+    body.cur-hover .cursor-dot  { width: 11px; height: 11px; background: #e4c07a; }
+    body.cur-hover .cursor-ring { width: 54px; height: 54px; border-color: rgba(228,192,122,0.7); }
+    body.cur-click .cursor-dot  { width: 5px; height: 5px; }
+    body.cur-click .cursor-ring { width: 28px; height: 28px; }
+
+    /* ─── CURSOR TRAIL ─── */
+    .c-trail {
+      position: fixed;
+      border-radius: 50%;
+      background: var(--lab-accent);
+      pointer-events: none;
+      z-index: 99994;
+      transform: translate(-50%, -50%);
+      will-change: left, top;
+    }
+
+    /* ─── NAV ─── */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 500; display: flex; justify-content: space-between; align-items: center; padding: 0.4rem 4rem; background: rgba(253,252,249,0.94); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--light-border); transition: padding 0.4s; }
     nav.scrolled { padding: 0.3rem 4rem; }
-    .nav-logo { display: flex; align-items: center; text-decoration: none; }
+    .nav-logo { display: flex; align-items: center; text-decoration: none; cursor: none; }
     .nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
-    .nav-links a { font-family: 'Jost', sans-serif; font-size: 0.72rem; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase; color: var(--taupe); text-decoration: none; transition: color 0.25s; }
+    .nav-links a { font-family: 'Jost', sans-serif; font-size: 0.72rem; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase; color: var(--taupe); text-decoration: none; transition: color 0.25s; cursor: none; }
     .nav-links a:hover, .nav-links a.active { color: var(--charcoal); }
-    .btn-primary { display: inline-block; padding: 0.85rem 2rem; background: var(--charcoal); color: var(--cream); font-family: 'Jost', sans-serif; font-size: 0.78rem; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; border: 1px solid var(--charcoal); transition: background 0.3s, color 0.3s, border-color 0.3s; cursor: pointer; }
+    .btn-primary { display: inline-block; padding: 0.85rem 2rem; background: var(--charcoal); color: var(--cream); font-family: 'Jost', sans-serif; font-size: 0.78rem; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; border: 1px solid var(--charcoal); transition: background 0.3s, color 0.3s, border-color 0.3s; cursor: none; }
     .btn-primary:hover { background: var(--dusty-blue); border-color: var(--dusty-blue); color: var(--white); }
-    .nav-hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px; }
+    .nav-hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: none; padding: 4px; }
     .nav-hamburger span { display: block; width: 22px; height: 1.5px; background: var(--charcoal); transition: 0.3s; }
     .mobile-nav { position: fixed; top: 0; right: -100%; width: min(320px, 85vw); height: 100vh; background: var(--white); z-index: 200; padding: 5rem 2.5rem 3rem; display: flex; flex-direction: column; transition: right 0.4s cubic-bezier(0.4,0,0.2,1); border-left: 1px solid var(--light-border); }
     .mobile-nav.open { right: 0; }
-    .mobile-nav a { font-family: 'Jost', sans-serif; font-size: 0.85rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--taupe); text-decoration: none; padding: 1rem 0; border-bottom: 1px solid var(--light-border); transition: color 0.25s; }
+    .mobile-nav a { font-family: 'Jost', sans-serif; font-size: 0.85rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--taupe); text-decoration: none; padding: 1rem 0; border-bottom: 1px solid var(--light-border); transition: color 0.25s; cursor: auto; }
     .mobile-nav a:hover { color: var(--charcoal); }
-    .mobile-nav-close { position: absolute; top: 1.4rem; right: 1.5rem; background: none; border: none; font-size: 1.4rem; color: var(--taupe); cursor: pointer; }
+    .mobile-nav-close { position: absolute; top: 1.4rem; right: 1.5rem; background: none; border: none; font-size: 1.4rem; color: var(--taupe); cursor: auto; }
 
     /* ─── HERO ─── */
     .lab-hero {
@@ -67,41 +127,58 @@
       position: relative;
       overflow: hidden;
       padding: 2rem;
+      --mx: 30%;
+      --my: 50%;
     }
 
+    /* Mouse-tracking gradient */
     .lab-hero::before {
       content: '';
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(ellipse at 20% 50%, rgba(171,133,82,0.13) 0%, transparent 55%),
-        radial-gradient(ellipse at 80% 20%, rgba(90,110,170,0.07) 0%, transparent 50%),
-        radial-gradient(ellipse at 60% 85%, rgba(171,133,82,0.07) 0%, transparent 45%);
-      animation: labGlow 9s ease-in-out infinite alternate;
+        radial-gradient(ellipse at var(--mx) var(--my), rgba(171,133,82,0.18) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 15%, rgba(90,110,185,0.07) 0%, transparent 45%),
+        radial-gradient(ellipse at 15% 80%, rgba(171,133,82,0.06) 0%, transparent 40%);
+      z-index: 0;
     }
 
-    @keyframes labGlow {
-      0%   { opacity: 0.5; transform: scale(1); }
-      100% { opacity: 1;   transform: scale(1.06); }
-    }
-
+    /* Grid overlay */
     .lab-hero::after {
       content: '';
       position: absolute;
       inset: 0;
       background-image:
-        linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px);
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
       background-size: 64px 64px;
+      pointer-events: none;
+      z-index: 0;
+      animation: gridPulse 6s ease-in-out infinite alternate;
+    }
+    @keyframes gridPulse {
+      0%   { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+
+    /* Particles canvas */
+    #particleCanvas {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
       pointer-events: none;
     }
 
-    .lab-hero-content { position: relative; z-index: 1; max-width: 860px; }
+    .lab-hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 900px;
+    }
 
     .lab-eyebrow {
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 400;
-      letter-spacing: 0.24em;
+      letter-spacing: 0.26em;
       text-transform: uppercase;
       color: var(--lab-accent);
       margin-bottom: 1.75rem;
@@ -109,8 +186,22 @@
       align-items: center;
       justify-content: center;
       gap: 1rem;
+      opacity: 0;
+      transform: translateY(12px);
+      animation: fadeUp 0.7s cubic-bezier(0.25,0.46,0.45,0.94) 0.3s forwards;
     }
-    .lab-eyebrow::before, .lab-eyebrow::after { content: ''; display: block; height: 1px; width: 36px; background: var(--lab-accent); opacity: 0.4; }
+    .lab-eyebrow::before, .lab-eyebrow::after {
+      content: '';
+      display: block;
+      height: 1px;
+      width: 36px;
+      background: var(--lab-accent);
+      opacity: 0.4;
+    }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
 
     .lab-hero h1 {
       font-family: 'freight-display-pro', serif;
@@ -119,17 +210,46 @@
       line-height: 1.04;
       color: var(--lab-text);
       margin-bottom: 1.5rem;
+      overflow: hidden;
     }
     .lab-hero h1 em { font-style: italic; color: var(--lab-accent); }
 
-    .lab-hero p {
-      font-size: clamp(0.9rem, 1.8vw, 1.05rem);
-      color: var(--lab-muted);
-      max-width: 520px;
-      margin: 0 auto 2.5rem;
-      line-height: 1.85;
+    /* Each line of h1 wraps in .h1-line for reveal */
+    .h1-line {
+      display: block;
+      overflow: hidden;
+    }
+    .h1-line-inner {
+      display: block;
+      transform: translateY(110%);
+      animation: lineUp 0.8s cubic-bezier(0.25,0.46,0.45,0.94) forwards;
+    }
+    .h1-line:nth-child(1) .h1-line-inner { animation-delay: 0.55s; }
+    .h1-line:nth-child(2) .h1-line-inner { animation-delay: 0.75s; }
+    .h1-line:nth-child(3) .h1-line-inner { animation-delay: 0.92s; }
+    @keyframes lineUp {
+      to { transform: translateY(0); }
     }
 
+    .lab-hero-sub {
+      font-size: clamp(0.88rem, 1.8vw, 1.05rem);
+      color: var(--lab-muted);
+      max-width: 500px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.85;
+      opacity: 0;
+      animation: fadeUp 0.7s ease 1.2s forwards;
+    }
+
+    .lab-hero-cta {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      opacity: 0;
+      animation: fadeUp 0.7s ease 1.45s forwards;
+    }
+
+    /* Scroll hint */
     .lab-hero-scroll {
       position: absolute;
       bottom: 2.5rem;
@@ -139,11 +259,13 @@
       flex-direction: column;
       align-items: center;
       gap: 0.6rem;
-      font-size: 0.6rem;
-      letter-spacing: 0.22em;
+      font-size: 0.58rem;
+      letter-spacing: 0.24em;
       text-transform: uppercase;
       color: var(--lab-muted);
-      z-index: 1;
+      z-index: 2;
+      opacity: 0;
+      animation: fadeUp 0.7s ease 1.7s forwards;
     }
     .lab-scroll-line {
       width: 1px;
@@ -152,33 +274,96 @@
       animation: scrollPulse 2.2s ease-in-out infinite;
     }
     @keyframes scrollPulse {
-      0%, 100% { opacity: 0.25; transform: scaleY(1); }
-      50%       { opacity: 0.7;  transform: scaleY(1.25); }
+      0%, 100% { opacity: 0.2; transform: scaleY(1); }
+      50%       { opacity: 0.7; transform: scaleY(1.3); }
+    }
+
+    /* ─── MARQUEE STRIP ─── */
+    .marquee-strip {
+      overflow: hidden;
+      border-top: 1px solid var(--lab-border);
+      border-bottom: 1px solid var(--lab-border);
+      padding: 0.85rem 0;
+      background: var(--lab-surface);
+      position: relative;
+    }
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      animation: marqueeRoll 22s linear infinite;
+    }
+    .marquee-strip:hover .marquee-track { animation-play-state: paused; }
+    .marquee-item {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      white-space: nowrap;
+    }
+    .marquee-item span {
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--lab-muted);
+      padding: 0 2rem;
+    }
+    .marquee-item span.hi { color: var(--lab-accent); }
+    .marquee-dot {
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--lab-accent);
+      opacity: 0.4;
+      flex-shrink: 0;
+    }
+    @keyframes marqueeRoll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
     }
 
     /* ─── SECTION SHELL ─── */
-    .lab-section { padding: 8rem 4rem; border-top: 1px solid var(--lab-border); }
+    .lab-section {
+      padding: 8rem 4rem;
+      border-top: 1px solid var(--lab-border);
+      position: relative;
+    }
 
-    .lab-section-header { text-align: center; margin-bottom: 5rem; }
+    .lab-section-header {
+      text-align: center;
+      margin-bottom: 5rem;
+      position: relative;
+    }
 
     .lab-section-num {
       display: block;
       font-family: 'freight-display-pro', serif;
-      font-size: 5.5rem;
+      font-size: 6rem;
       font-weight: 300;
-      color: rgba(255,255,255,0.035);
+      color: rgba(255,255,255,0.03);
       line-height: 1;
-      margin-bottom: -1.2rem;
+      margin-bottom: -1.4rem;
+      user-select: none;
     }
 
     .lab-section-label {
-      display: block;
-      font-size: 0.68rem;
-      letter-spacing: 0.2em;
+      display: inline-block;
+      font-size: 0.66rem;
+      letter-spacing: 0.22em;
       text-transform: uppercase;
       color: var(--lab-accent);
       margin-bottom: 1rem;
+      position: relative;
     }
+    /* Scanline sweep on section label */
+    .lab-section-label::after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      width: 0%;
+      height: 1px;
+      background: var(--lab-accent);
+      transition: width 0.8s cubic-bezier(0.25,0.46,0.45,0.94) 0.1s;
+    }
+    .lab-section-header.in-view .lab-section-label::after { width: 100%; }
 
     .lab-section h2 {
       font-family: 'freight-display-pro', serif;
@@ -191,9 +376,9 @@
     .lab-section h2 em { font-style: italic; color: var(--lab-accent); }
 
     .lab-section-desc {
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       color: var(--lab-muted);
-      max-width: 460px;
+      max-width: 440px;
       margin: 0 auto;
       line-height: 1.85;
     }
@@ -202,7 +387,7 @@
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      font-size: 0.66rem;
+      font-size: 0.64rem;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--lab-muted);
@@ -212,7 +397,15 @@
     }
     .lab-use-case::before { content: '→'; color: var(--lab-accent); }
 
-    /* ─── DEMO 01: 3D TILT CARDS ─── */
+    /* ─── REVEAL ─── */
+    .lr {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s cubic-bezier(0.25,0.46,0.45,0.94), transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    .lr.in { opacity: 1; transform: none; }
+
+    /* ─── DEMO 01: 3D TILT ─── */
     .tilt-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -220,64 +413,28 @@
       max-width: 1000px;
       margin: 0 auto;
     }
-
     .tilt-card {
       background: var(--lab-surface);
       border: 1px solid var(--lab-border);
       padding: 2.5rem 2rem;
       position: relative;
       overflow: hidden;
-      cursor: default;
-      transition: box-shadow 0.4s ease, transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94);
+      cursor: none;
       will-change: transform;
+      transition: box-shadow 0.4s ease, transform 0.3s cubic-bezier(0.25,0.46,0.45,0.94);
     }
-    .tilt-card:hover { box-shadow: 0 28px 70px rgba(0,0,0,0.55), 0 0 0 1px rgba(171,133,82,0.14); }
-
+    .tilt-card:hover { box-shadow: 0 30px 80px rgba(0,0,0,0.55), 0 0 0 1px rgba(171,133,82,0.15); }
     .card-glare { position: absolute; inset: 0; pointer-events: none; }
-
-    .tilt-card-num {
-      font-size: 0.66rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--lab-accent);
-      margin-bottom: 1.25rem;
-      display: block;
-    }
-    .tilt-card h3 {
-      font-family: 'freight-display-pro', serif;
-      font-size: 1.45rem;
-      font-weight: 400;
-      color: var(--lab-text);
-      margin-bottom: 0.75rem;
-    }
+    .tilt-card-num { font-size: 0.64rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--lab-accent); margin-bottom: 1.25rem; display: block; }
+    .tilt-card h3 { font-family: 'freight-display-pro', serif; font-size: 1.45rem; font-weight: 400; color: var(--lab-text); margin-bottom: 0.75rem; }
     .tilt-card p { font-size: 0.84rem; color: var(--lab-muted); line-height: 1.75; }
-
-    .tilt-card-bar {
-      position: absolute;
-      bottom: 0; left: 0;
-      height: 2px; width: 0;
-      background: linear-gradient(90deg, var(--lab-accent), transparent);
-      transition: width 0.5s ease;
-    }
+    .tilt-card-bar { position: absolute; bottom: 0; left: 0; height: 2px; width: 0; background: linear-gradient(90deg, var(--lab-accent), transparent); transition: width 0.5s ease; }
     .tilt-card:hover .tilt-card-bar { width: 100%; }
 
     /* ─── DEMO 02: SCROLL NARRATIVE ─── */
     .narrative-wrapper { height: 280vh; position: relative; }
-    .narrative-sticky {
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-    .narrative-stage {
-      text-align: center;
-      max-width: 820px;
-      padding: 2rem 3rem;
-      position: relative;
-    }
+    .narrative-sticky { position: sticky; top: 0; height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .narrative-stage { text-align: center; max-width: 820px; padding: 2rem 3rem; position: relative; }
     .narrative-line {
       font-family: 'freight-display-pro', serif;
       font-size: clamp(2rem, 5vw, 4.2rem);
@@ -285,20 +442,13 @@
       line-height: 1.1;
       color: var(--lab-text);
       position: absolute;
-      top: 50%;
-      left: 0; right: 0;
+      top: 50%; left: 0; right: 0;
       transform: translateY(-50%);
       opacity: 0;
       padding: 0 2rem;
     }
     .narrative-line em { font-style: italic; color: var(--lab-accent); }
-    .narrative-line.small {
-      font-size: clamp(1rem, 2.5vw, 1.5rem);
-      font-family: 'Jost', sans-serif;
-      font-weight: 300;
-      color: var(--lab-muted);
-      letter-spacing: 0.04em;
-    }
+    .narrative-line.small { font-size: clamp(1rem, 2.5vw, 1.5rem); font-family: 'Jost', sans-serif; font-weight: 300; color: var(--lab-muted); letter-spacing: 0.04em; }
 
     /* ─── DEMO 03: TEXT EFFECTS ─── */
     .text-effects-grid {
@@ -308,7 +458,6 @@
       max-width: 1000px;
       margin: 0 auto;
     }
-
     .text-effect-card {
       background: var(--lab-surface);
       border: 1px solid var(--lab-border);
@@ -321,280 +470,74 @@
       position: relative;
       min-height: 220px;
       gap: 1rem;
+      transition: border-color 0.3s;
     }
-
-    .effect-label {
-      position: absolute;
-      top: 1.1rem; left: 1.5rem;
-      font-size: 0.6rem;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--lab-accent);
-    }
-
-    .effect-replay {
-      position: absolute;
-      bottom: 1rem; right: 1.5rem;
-      font-family: 'Jost', sans-serif;
-      font-size: 0.6rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--lab-muted);
-      background: none;
-      border: 1px solid var(--lab-border);
-      padding: 0.28rem 0.7rem;
-      cursor: pointer;
-      transition: color 0.25s, border-color 0.25s;
-    }
+    .text-effect-card:hover { border-color: rgba(171,133,82,0.25); }
+    .effect-label { position: absolute; top: 1.1rem; left: 1.5rem; font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--lab-accent); }
+    .effect-replay { position: absolute; bottom: 1rem; right: 1.5rem; font-family: 'Jost', sans-serif; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lab-muted); background: none; border: 1px solid var(--lab-border); padding: 0.28rem 0.7rem; cursor: none; transition: color 0.25s, border-color 0.25s; }
     .effect-replay:hover { color: var(--lab-text); border-color: var(--lab-accent); }
 
-    /* Word Cascade */
-    .word-cascade {
-      font-family: 'freight-display-pro', serif;
-      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
-      font-weight: 300;
-      color: var(--lab-text);
-      line-height: 1.2;
-    }
+    .word-cascade { font-family: 'freight-display-pro', serif; font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 300; color: var(--lab-text); line-height: 1.2; }
     .word-cascade .word { display: inline-block; overflow: hidden; vertical-align: top; }
     .word-cascade .word span { display: inline-block; transform: translateY(110%); transition: transform 0.55s cubic-bezier(0.25,0.46,0.45,0.94); }
     .word-cascade.animate .word span { transform: translateY(0); }
 
-    /* Gradient Flow */
-    .gradient-flow {
-      font-family: 'freight-display-pro', serif;
-      font-size: clamp(2rem, 3.5vw, 2.8rem);
-      font-weight: 300;
-      font-style: italic;
-      background: linear-gradient(90deg, #AB8552, #d4b483, #edd9a3, #AB8552, #8a6a3e);
-      background-size: 300% 100%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: gradShift 4s ease infinite;
-    }
-    @keyframes gradShift {
-      0%   { background-position: 0% 50%; }
-      50%  { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
+    .gradient-flow { font-family: 'freight-display-pro', serif; font-size: clamp(2rem, 3.5vw, 2.8rem); font-weight: 300; font-style: italic; background: linear-gradient(90deg, #AB8552, #d4b483, #edd9a3, #AB8552, #8a6a3e); background-size: 300% 100%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: gradShift 4s ease infinite; }
+    @keyframes gradShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-    /* Scramble */
-    .scramble-text {
-      font-family: 'freight-display-pro', serif;
-      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
-      font-weight: 300;
-      color: var(--lab-text);
-      cursor: pointer;
-      transition: color 0.3s;
-      font-variant-numeric: tabular-nums;
-      letter-spacing: 0.02em;
-    }
+    .scramble-text { font-family: 'freight-display-pro', serif; font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 300; color: var(--lab-text); cursor: none; transition: color 0.3s; font-variant-numeric: tabular-nums; }
     .scramble-text:hover { color: var(--lab-accent); }
 
-    /* Counters */
     .counter-row { display: flex; gap: 2.5rem; justify-content: center; }
     .counter-item { text-align: center; }
-    .counter-num {
-      font-family: 'freight-display-pro', serif;
-      font-size: 3.5rem;
-      font-weight: 300;
-      color: var(--lab-text);
-      line-height: 1;
-      display: block;
-    }
-    .counter-lbl { font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lab-muted); }
+    .counter-num { font-family: 'freight-display-pro', serif; font-size: 3.5rem; font-weight: 300; color: var(--lab-text); line-height: 1; display: block; }
+    .counter-lbl { font-size: 0.64rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lab-muted); }
 
     /* ─── DEMO 04: BRAND THEMING ─── */
-    .brand-demo-wrap {
-      max-width: 920px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 3rem;
-      align-items: start;
-    }
-
-    .mini-site {
-      border: 1px solid var(--lab-border);
-      overflow: hidden;
-    }
-
-    .mini-nav-bar {
-      padding: 0.9rem 1.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid rgba(0,0,0,0.08);
-      background: var(--t-bg, #FCF8EE);
-      transition: background 0.55s;
-    }
-    .mini-nav-logo {
-      font-family: 'freight-display-pro', serif;
-      font-size: 1rem;
-      color: var(--t-head, #535344);
-      transition: color 0.55s;
-    }
-    .mini-nav-links {
-      font-size: 0.62rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--t-muted, #98A091);
-      transition: color 0.55s;
-    }
-    .mini-hero-body {
-      padding: 3rem 1.5rem 2.5rem;
-      background: var(--t-bg, #FCF8EE);
-      transition: background 0.55s;
-    }
-    .mini-eyebrow {
-      font-size: 0.62rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--t-accent, #AB8552);
-      margin-bottom: 0.6rem;
-      transition: color 0.55s;
-    }
-    .mini-heading {
-      font-family: 'freight-display-pro', serif;
-      font-size: 1.6rem;
-      font-weight: 300;
-      color: var(--t-head, #535344);
-      line-height: 1.2;
-      margin-bottom: 0.75rem;
-      transition: color 0.55s;
-    }
+    .brand-demo-wrap { max-width: 920px; margin: 0 auto; display: grid; grid-template-columns: 1fr auto; gap: 3rem; align-items: start; }
+    .mini-site { border: 1px solid var(--lab-border); overflow: hidden; }
+    .mini-nav-bar { padding: 0.9rem 1.5rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(0,0,0,0.08); background: var(--t-bg, #FCF8EE); transition: background 0.55s; }
+    .mini-nav-logo { font-family: 'freight-display-pro', serif; font-size: 1rem; color: var(--t-head, #535344); transition: color 0.55s; }
+    .mini-nav-links { font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--t-muted, #98A091); transition: color 0.55s; }
+    .mini-hero-body { padding: 3rem 1.5rem 2.5rem; background: var(--t-bg, #FCF8EE); transition: background 0.55s; }
+    .mini-eyebrow { font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--t-accent, #AB8552); margin-bottom: 0.6rem; transition: color 0.55s; }
+    .mini-heading { font-family: 'freight-display-pro', serif; font-size: 1.6rem; font-weight: 300; color: var(--t-head, #535344); line-height: 1.2; margin-bottom: 0.75rem; transition: color 0.55s; }
     .mini-heading em { font-style: italic; color: var(--t-accent, #AB8552); transition: color 0.55s; }
-    .mini-body-text {
-      font-size: 0.78rem;
-      color: var(--t-muted, #98A091);
-      margin-bottom: 1.5rem;
-      line-height: 1.65;
-      transition: color 0.55s;
-    }
-    .mini-cta {
-      display: inline-block;
-      padding: 0.55rem 1.2rem;
-      background: var(--t-accent, #AB8552);
-      color: var(--t-bg, #FCF8EE);
-      font-size: 0.62rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      border: none;
-      transition: background 0.55s, color 0.55s;
-    }
-
-    /* Palette picker */
-    .palette-col {
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-      min-width: 175px;
-    }
-    .palette-col-label {
-      font-size: 0.65rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--lab-muted);
-      margin-bottom: 0.4rem;
-    }
-    .palette-btn {
-      display: flex;
-      align-items: center;
-      gap: 0.7rem;
-      padding: 0.65rem 0.9rem;
-      border: 1px solid var(--lab-border);
-      cursor: pointer;
-      background: none;
-      text-align: left;
-      transition: border-color 0.25s;
-    }
+    .mini-body-text { font-size: 0.78rem; color: var(--t-muted, #98A091); margin-bottom: 1.5rem; line-height: 1.65; transition: color 0.55s; }
+    .mini-cta { display: inline-block; padding: 0.55rem 1.2rem; background: var(--t-accent, #AB8552); color: var(--t-bg, #FCF8EE); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; border: none; transition: background 0.55s, color 0.55s; cursor: none; }
+    .palette-col { display: flex; flex-direction: column; gap: 0.6rem; min-width: 175px; }
+    .palette-col-label { font-size: 0.63rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--lab-muted); margin-bottom: 0.4rem; }
+    .palette-btn { display: flex; align-items: center; gap: 0.7rem; padding: 0.65rem 0.9rem; border: 1px solid var(--lab-border); cursor: none; background: none; text-align: left; transition: border-color 0.25s; }
     .palette-btn:hover, .palette-btn.active { border-color: var(--lab-accent); }
     .palette-swatch { width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0; }
     .palette-name { font-size: 0.76rem; color: var(--lab-text); font-family: 'Jost', sans-serif; }
 
     /* ─── DEMO 05: MAGNETIC BUTTONS ─── */
-    .magnetic-demo {
-      display: flex;
-      gap: 2rem;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: wrap;
-      padding: 3.5rem 0 2rem;
-    }
-    .mag-btn {
-      display: inline-block;
-      padding: 1.1rem 2.8rem;
-      font-family: 'Jost', sans-serif;
-      font-size: 0.78rem;
-      font-weight: 400;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      cursor: pointer;
-      border: none;
-      position: relative;
-      will-change: transform;
-    }
+    .magnetic-demo { display: flex; gap: 2rem; justify-content: center; align-items: center; flex-wrap: wrap; padding: 3.5rem 0 2rem; }
+    .mag-btn { display: inline-block; padding: 1.1rem 2.8rem; font-family: 'Jost', sans-serif; font-size: 0.78rem; font-weight: 400; letter-spacing: 0.16em; text-transform: uppercase; cursor: none; border: none; position: relative; will-change: transform; }
     .mag-btn-fill   { background: var(--lab-accent); color: var(--lab-bg); }
     .mag-btn-ghost  { background: transparent; color: var(--lab-text); border: 1px solid rgba(255,255,255,0.18); }
     .mag-btn-surface{ background: var(--lab-surface); color: var(--lab-text); border: 1px solid var(--lab-border); }
-    .mag-hint {
-      text-align: center;
-      font-size: 0.73rem;
-      color: var(--lab-muted);
-      letter-spacing: 0.04em;
-    }
+    .mag-hint { text-align: center; font-size: 0.71rem; color: var(--lab-muted); letter-spacing: 0.04em; }
 
     /* ─── CTA ─── */
-    .lab-cta {
-      padding: 8rem 4rem;
-      text-align: center;
-      border-top: 1px solid var(--lab-border);
-      position: relative;
-      overflow: hidden;
-    }
-    .lab-cta::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 50%; transform: translateX(-50%);
-      width: 500px; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--lab-accent), transparent);
-    }
-    .lab-cta h2 {
-      font-family: 'freight-display-pro', serif;
-      font-size: clamp(2.5rem, 5vw, 4rem);
-      font-weight: 300;
-      color: var(--lab-text);
-      line-height: 1.15;
-      margin-bottom: 1rem;
-    }
+    .lab-cta { padding: 8rem 4rem; text-align: center; border-top: 1px solid var(--lab-border); position: relative; overflow: hidden; }
+    .lab-cta::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 500px; height: 1px; background: linear-gradient(90deg, transparent, var(--lab-accent), transparent); }
+    .lab-cta h2 { font-family: 'freight-display-pro', serif; font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 300; color: var(--lab-text); line-height: 1.15; margin-bottom: 1rem; }
     .lab-cta h2 em { font-style: italic; color: var(--lab-accent); }
     .lab-cta p { font-size: 0.98rem; color: var(--lab-muted); max-width: 420px; margin: 0 auto 2.5rem; line-height: 1.85; }
     .lab-cta-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
-    .btn-lab-fill {
-      display: inline-block; padding: 0.9rem 2.2rem;
-      background: var(--lab-accent); color: var(--lab-bg);
-      font-family: 'Jost', sans-serif; font-size: 0.78rem; font-weight: 400;
-      letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none;
-      transition: background 0.3s, transform 0.3s; will-change: transform;
-    }
+    .btn-lab-fill { display: inline-block; padding: 0.9rem 2.2rem; background: var(--lab-accent); color: var(--lab-bg); font-family: 'Jost', sans-serif; font-size: 0.78rem; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; transition: background 0.3s, transform 0.3s; will-change: transform; cursor: none; }
     .btn-lab-fill:hover { background: #c9a06c; }
-    .btn-lab-ghost {
-      display: inline-block; padding: 0.9rem 2.2rem;
-      background: transparent; color: var(--lab-text);
-      font-family: 'Jost', sans-serif; font-size: 0.78rem; font-weight: 400;
-      letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none;
-      border: 1px solid rgba(255,255,255,0.14);
-      transition: border-color 0.3s, transform 0.3s; will-change: transform;
-    }
+    .btn-lab-ghost { display: inline-block; padding: 0.9rem 2.2rem; background: transparent; color: var(--lab-text); font-family: 'Jost', sans-serif; font-size: 0.78rem; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; border: 1px solid rgba(255,255,255,0.14); transition: border-color 0.3s, transform 0.3s; will-change: transform; cursor: none; }
     .btn-lab-ghost:hover { border-color: rgba(255,255,255,0.4); }
 
     /* ─── FOOTER ─── */
     footer { background: #080a0c; padding: 2.5rem 4rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; border-top: 1px solid var(--lab-border); }
-    .footer-logo { font-family: 'freight-display-pro', serif; font-size: 1.3rem; font-weight: 400; color: var(--lab-text); letter-spacing: 0.04em; text-decoration: none; }
+    .footer-logo { font-family: 'freight-display-pro', serif; font-size: 1.3rem; font-weight: 400; color: var(--lab-text); letter-spacing: 0.04em; text-decoration: none; cursor: none; }
     .footer-logo span { color: var(--lab-accent); }
     .footer-links { display: flex; gap: 2rem; list-style: none; }
-    .footer-links a { font-family: 'Jost', sans-serif; font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--lab-muted); text-decoration: none; transition: color 0.25s; }
+    .footer-links a { font-family: 'Jost', sans-serif; font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--lab-muted); text-decoration: none; transition: color 0.25s; cursor: none; }
     .footer-links a:hover { color: var(--lab-text); }
     .footer-copy { font-size: 0.72rem; color: var(--lab-muted); }
 
@@ -619,9 +562,19 @@
       footer { padding: 2rem 1.5rem; flex-direction: column; text-align: center; }
       .footer-links { justify-content: center; flex-wrap: wrap; gap: 1rem; }
     }
+    @media (hover: none) {
+      .cursor-dot, .cursor-ring, .c-trail { display: none; }
+      body { cursor: auto; }
+      * { cursor: auto !important; }
+    }
   </style>
 </head>
 <body>
+
+  <!-- ── UI CHROME ── -->
+  <div id="scrollProgress"></div>
+  <div id="cursorDot"  class="cursor-dot"></div>
+  <div id="cursorRing" class="cursor-ring"></div>
 
   <!-- ── NAV ── -->
   <nav id="navbar">
@@ -654,11 +607,20 @@
   </div>
 
   <!-- ── HERO ── -->
-  <section class="lab-hero">
+  <section class="lab-hero" id="labHero">
+    <canvas id="particleCanvas"></canvas>
     <div class="lab-hero-content">
       <div class="lab-eyebrow">The Lab — Capability Showcase</div>
-      <h1>We build<br><em>experiences</em>,<br>not just websites.</h1>
-      <p>A live playground of interactions and animations — built entirely with HTML, CSS, and vanilla JavaScript. No libraries. No shortcuts.</p>
+      <h1>
+        <span class="h1-line"><span class="h1-line-inner">We build</span></span>
+        <span class="h1-line"><span class="h1-line-inner"><em>experiences</em>,</span></span>
+        <span class="h1-line"><span class="h1-line-inner">not just websites.</span></span>
+      </h1>
+      <p class="lab-hero-sub">A live playground of motion, interaction, and code. Everything here is built with pure HTML, CSS, and JavaScript — no libraries, no shortcuts.</p>
+      <div class="lab-hero-cta">
+        <a href="contact.html" class="btn-lab-fill mag">Start a Project</a>
+        <a href="portfolio.html" class="btn-lab-ghost mag">See Our Work</a>
+      </div>
     </div>
     <div class="lab-hero-scroll">
       <div class="lab-scroll-line"></div>
@@ -666,31 +628,40 @@
     </div>
   </section>
 
+  <!-- ── MARQUEE ── -->
+  <div class="marquee-strip">
+    <div class="marquee-track" id="marqueeTrack">
+      <!-- repeated twice for seamless loop -->
+      <div class="marquee-item"><span class="hi">Custom Code</span><div class="marquee-dot"></div><span>Zero Templates</span><div class="marquee-dot"></div><span>Interactive Design</span><div class="marquee-dot"></div><span class="hi">Motion &amp; Animation</span><div class="marquee-dot"></div><span>Built in HTML</span><div class="marquee-dot"></div><span>CSS Magic</span><div class="marquee-dot"></div><span class="hi">Vanilla JS</span><div class="marquee-dot"></div><span>No Libraries</span><div class="marquee-dot"></div><span>Your Brand</span><div class="marquee-dot"></div><span class="hi">The Dove Design Co.</span><div class="marquee-dot"></div></div>
+      <div class="marquee-item"><span class="hi">Custom Code</span><div class="marquee-dot"></div><span>Zero Templates</span><div class="marquee-dot"></div><span>Interactive Design</span><div class="marquee-dot"></div><span class="hi">Motion &amp; Animation</span><div class="marquee-dot"></div><span>Built in HTML</span><div class="marquee-dot"></div><span>CSS Magic</span><div class="marquee-dot"></div><span class="hi">Vanilla JS</span><div class="marquee-dot"></div><span>No Libraries</span><div class="marquee-dot"></div><span>Your Brand</span><div class="marquee-dot"></div><span class="hi">The Dove Design Co.</span><div class="marquee-dot"></div></div>
+    </div>
+  </div>
+
   <!-- ── DEMO 01: 3D TILT ── -->
   <section class="lab-section" id="demo-tilt">
-    <div class="lab-section-header">
+    <div class="lab-section-header lr">
       <span class="lab-section-num">01</span>
       <span class="lab-section-label">Interactive Cards</span>
       <h2>3D depth<br><em>on hover</em></h2>
-      <p class="lab-section-desc">Move your cursor over each card. The perspective shift creates depth that makes layouts feel premium and responsive to the user's presence.</p>
+      <p class="lab-section-desc">Move your cursor over each card. The perspective shift creates a premium, physical feeling that flat designs can't replicate.</p>
       <div class="lab-use-case">Great for: portfolios, service showcases, product pages</div>
     </div>
     <div class="tilt-grid">
-      <div class="tilt-card" data-tilt>
+      <div class="tilt-card lr" data-tilt>
         <div class="card-glare"></div>
         <span class="tilt-card-num">01 / Design</span>
         <h3>Built Around Your Brand</h3>
         <p>Every color, typeface, and spacing decision reflects who you are. No template could do this.</p>
         <div class="tilt-card-bar"></div>
       </div>
-      <div class="tilt-card" data-tilt>
+      <div class="tilt-card lr" data-tilt style="transition-delay:0.1s">
         <div class="card-glare"></div>
         <span class="tilt-card-num">02 / Performance</span>
         <h3>Fast by Default</h3>
         <p>No bloated plugins. No unnecessary requests. Pure custom code means pages that load in under a second.</p>
         <div class="tilt-card-bar"></div>
       </div>
-      <div class="tilt-card" data-tilt>
+      <div class="tilt-card lr" data-tilt style="transition-delay:0.2s">
         <div class="card-glare"></div>
         <span class="tilt-card-num">03 / Ownership</span>
         <h3>You Own Everything</h3>
@@ -702,7 +673,7 @@
 
   <!-- ── DEMO 02: SCROLL NARRATIVE ── -->
   <section class="lab-section" id="demo-scroll" style="padding-bottom:0;">
-    <div class="lab-section-header">
+    <div class="lab-section-header lr">
       <span class="lab-section-num">02</span>
       <span class="lab-section-label">Scroll Narrative</span>
       <h2>Your story,<br><em>told through scroll</em></h2>
@@ -724,7 +695,7 @@
 
   <!-- ── DEMO 03: TEXT EFFECTS ── -->
   <section class="lab-section" id="demo-text">
-    <div class="lab-section-header">
+    <div class="lab-section-header lr">
       <span class="lab-section-num">03</span>
       <span class="lab-section-label">Typography in Motion</span>
       <h2>Text that<br><em>does something</em></h2>
@@ -732,26 +703,22 @@
       <div class="lab-use-case">Great for: hero headings, section titles, key stats, CTAs</div>
     </div>
     <div class="text-effects-grid">
-
-      <div class="text-effect-card">
+      <div class="text-effect-card lr">
         <div class="effect-label">Word Cascade</div>
         <div class="word-cascade" id="wordCascade"></div>
         <button class="effect-replay" onclick="runWordCascade()">Replay ↺</button>
       </div>
-
-      <div class="text-effect-card">
+      <div class="text-effect-card lr" style="transition-delay:0.1s">
         <div class="effect-label">Gradient Flow</div>
         <div class="gradient-flow">Beautiful by design.</div>
         <span style="position:absolute;bottom:1rem;right:1.5rem;font-size:0.6rem;color:var(--lab-muted);letter-spacing:0.1em;text-transform:uppercase;">Always animating</span>
       </div>
-
-      <div class="text-effect-card">
+      <div class="text-effect-card lr" style="transition-delay:0.2s">
         <div class="effect-label">Text Scramble</div>
         <div class="scramble-text" id="scrambleEl">Your Vision.</div>
-        <button class="effect-replay" onclick="runScramble()">Scramble ↺</button>
+        <button class="effect-replay" onclick="manualScramble()">Scramble ↺</button>
       </div>
-
-      <div class="text-effect-card">
+      <div class="text-effect-card lr" style="transition-delay:0.3s">
         <div class="effect-label">Animated Counters</div>
         <div class="counter-row">
           <div class="counter-item">
@@ -769,20 +736,19 @@
         </div>
         <button class="effect-replay" onclick="runCounters()">Replay ↺</button>
       </div>
-
     </div>
   </section>
 
   <!-- ── DEMO 04: BRAND THEMING ── -->
   <section class="lab-section" id="demo-theme">
-    <div class="lab-section-header">
+    <div class="lab-section-header lr">
       <span class="lab-section-num">04</span>
       <span class="lab-section-label">Live Brand Theming</span>
       <h2>Your brand,<br><em>your colors</em></h2>
       <p class="lab-section-desc">Click any palette to watch the same design system adapt to a completely different identity in real time — no page refresh needed.</p>
       <div class="lab-use-case">Great for: showing brand options, client presentations, design systems</div>
     </div>
-    <div class="brand-demo-wrap">
+    <div class="brand-demo-wrap lr">
       <div class="mini-site" id="miniSite">
         <div class="mini-nav-bar">
           <div class="mini-nav-logo">YourBrand</div>
@@ -823,26 +789,26 @@
 
   <!-- ── DEMO 05: MAGNETIC BUTTONS ── -->
   <section class="lab-section" id="demo-magnetic">
-    <div class="lab-section-header">
+    <div class="lab-section-header lr">
       <span class="lab-section-num">05</span>
       <span class="lab-section-label">Magnetic Interactions</span>
       <h2>Buttons that<br><em>feel alive</em></h2>
-      <p class="lab-section-desc">Move your cursor near — then slowly through — each button. The subtle pull makes interactions feel premium and alive.</p>
+      <p class="lab-section-desc">Move your cursor near — then slowly through — each button. The subtle pull makes interactions feel premium and intentional.</p>
       <div class="lab-use-case">Great for: hero CTAs, landing pages, key conversion moments</div>
     </div>
-    <div class="magnetic-demo">
+    <div class="magnetic-demo lr">
       <button class="mag-btn mag-btn-fill mag">Book a Call</button>
       <button class="mag-btn mag-btn-ghost mag">View Our Work</button>
       <button class="mag-btn mag-btn-surface mag">Learn More</button>
     </div>
-    <p class="mag-hint">← Drag your cursor slowly through each button →</p>
+    <p class="mag-hint lr" style="transition-delay:0.15s">← Drag your cursor slowly through each button →</p>
   </section>
 
   <!-- ── CTA ── -->
   <section class="lab-cta">
-    <h2>Seen enough?<br>Let's build <em>yours</em>.</h2>
-    <p>Every effect on this page can be adapted to your brand. Tell me what you're imagining.</p>
-    <div class="lab-cta-btns">
+    <h2 class="lr">Seen enough?<br>Let's build <em>yours</em>.</h2>
+    <p class="lr" style="transition-delay:0.1s">Every effect on this page can be adapted to your brand. Tell me what you're imagining.</p>
+    <div class="lab-cta-btns lr" style="transition-delay:0.2s">
       <a href="contact.html" class="btn-lab-fill mag">Start a Project</a>
       <a href="portfolio.html" class="btn-lab-ghost mag">See Our Work</a>
     </div>
@@ -863,7 +829,9 @@
   </footer>
 
   <script>
-    // ── NAV ──────────────────────────────────────────────────
+    // ═══════════════════════════════════════════════════════
+    // NAV
+    // ═══════════════════════════════════════════════════════
     const navbar = document.getElementById('navbar');
     window.addEventListener('scroll', () => { navbar.classList.toggle('scrolled', window.scrollY > 50); }, { passive: true });
 
@@ -875,7 +843,6 @@
     if (menuBtn)   menuBtn.addEventListener('click', openMobile);
     if (menuClose) menuClose.addEventListener('click', closeMobile);
 
-    // Logo fade on first scroll
     const navLogoImg = document.querySelector('.nav-logo img');
     let logoFaded = false;
     window.addEventListener('scroll', function fl() {
@@ -887,166 +854,316 @@
       }
     }, { passive: true });
 
-    // ── 3D TILT CARDS ────────────────────────────────────────
+    // ═══════════════════════════════════════════════════════
+    // SCROLL PROGRESS BAR
+    // ═══════════════════════════════════════════════════════
+    const progressBar = document.getElementById('scrollProgress');
+    window.addEventListener('scroll', () => {
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      progressBar.style.width = (window.scrollY / total * 100) + '%';
+    }, { passive: true });
+
+    // ═══════════════════════════════════════════════════════
+    // CUSTOM CURSOR + SPRING TRAIL
+    // ═══════════════════════════════════════════════════════
+    const cursorDot  = document.getElementById('cursorDot');
+    const cursorRing = document.getElementById('cursorRing');
+    let cx = window.innerWidth / 2, cy = window.innerHeight / 2;
+    let rx = cx, ry = cy;
+
+    window.addEventListener('mousemove', e => {
+      cx = e.clientX; cy = e.clientY;
+      cursorDot.style.left = cx + 'px';
+      cursorDot.style.top  = cy + 'px';
+    }, { passive: true });
+
+    (function tickRing() {
+      rx += (cx - rx) * 0.13;
+      ry += (cy - ry) * 0.13;
+      cursorRing.style.left = rx + 'px';
+      cursorRing.style.top  = ry + 'px';
+      requestAnimationFrame(tickRing);
+    })();
+
+    // Cursor states
+    document.querySelectorAll('a, button, [data-tilt], .palette-btn, .effect-replay, .scramble-text, .mini-cta').forEach(el => {
+      el.addEventListener('mouseenter', () => document.body.classList.add('cur-hover'));
+      el.addEventListener('mouseleave', () => document.body.classList.remove('cur-hover'));
+    });
+    document.addEventListener('mousedown', () => document.body.classList.add('cur-click'));
+    document.addEventListener('mouseup',   () => document.body.classList.remove('cur-click'));
+
+    // ═══════════════════════════════════════════════════════
+    // CURSOR TRAIL (8 dots)
+    // ═══════════════════════════════════════════════════════
+    const TRAIL_COUNT = 8;
+    const trailDots = Array.from({ length: TRAIL_COUNT }, (_, i) => {
+      const el = document.createElement('div');
+      el.className = 'c-trail';
+      const size = Math.max(2, 5 - i * 0.4);
+      el.style.cssText = `width:${size}px;height:${size}px;opacity:${((TRAIL_COUNT - i) / TRAIL_COUNT) * 0.28}`;
+      document.body.appendChild(el);
+      return { el, x: cx, y: cy };
+    });
+
+    (function tickTrail() {
+      trailDots.forEach((t, i) => {
+        const src = i === 0 ? { x: cx, y: cy } : trailDots[i - 1];
+        const speed = Math.max(0.05, 0.2 - i * 0.018);
+        t.x += (src.x - t.x) * speed;
+        t.y += (src.y - t.y) * speed;
+        t.el.style.left = t.x + 'px';
+        t.el.style.top  = t.y + 'px';
+      });
+      requestAnimationFrame(tickTrail);
+    })();
+
+    // ═══════════════════════════════════════════════════════
+    // HERO PARTICLE CANVAS
+    // ═══════════════════════════════════════════════════════
+    const canvas  = document.getElementById('particleCanvas');
+    const ctx     = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+      canvas.width  = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas, { passive: true });
+
+    function createParticle() {
+      return {
+        x:     Math.random() * canvas.width,
+        y:     Math.random() * canvas.height,
+        size:  Math.random() * 1.8 + 0.5,
+        speedX: (Math.random() - 0.5) * 0.35,
+        speedY: (Math.random() - 0.5) * 0.35,
+        opacity: Math.random() * 0.4 + 0.1,
+        pulse:  Math.random() * Math.PI * 2,
+      };
+    }
+
+    for (let i = 0; i < 55; i++) particles.push(createParticle());
+
+    function drawParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.pulse += 0.012;
+        p.x += p.speedX;
+        p.y += p.speedY;
+        if (p.x < 0) p.x = canvas.width;
+        if (p.x > canvas.width) p.x = 0;
+        if (p.y < 0) p.y = canvas.height;
+        if (p.y > canvas.height) p.y = 0;
+        const op = p.opacity * (0.7 + 0.3 * Math.sin(p.pulse));
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(171,133,82,${op})`;
+        ctx.fill();
+      });
+      requestAnimationFrame(drawParticles);
+    }
+    drawParticles();
+
+    // ═══════════════════════════════════════════════════════
+    // MOUSE-TRACKING HERO GRADIENT
+    // ═══════════════════════════════════════════════════════
+    const labHero = document.getElementById('labHero');
+    labHero.addEventListener('mousemove', e => {
+      const r = labHero.getBoundingClientRect();
+      labHero.style.setProperty('--mx', ((e.clientX - r.left) / r.width  * 100) + '%');
+      labHero.style.setProperty('--my', ((e.clientY - r.top)  / r.height * 100) + '%');
+    }, { passive: true });
+
+    // ═══════════════════════════════════════════════════════
+    // 3D TILT CARDS
+    // ═══════════════════════════════════════════════════════
     document.querySelectorAll('[data-tilt]').forEach(card => {
       card.addEventListener('mousemove', e => {
         const r  = card.getBoundingClientRect();
         const x  = (e.clientX - r.left)  / r.width;
         const y  = (e.clientY - r.top)   / r.height;
-        const rX = (0.5 - y) * 18;
-        const rY = (x - 0.5) * 18;
-        card.style.transform = `perspective(700px) rotateX(${rX}deg) rotateY(${rY}deg) scale(1.02)`;
-        const glare = card.querySelector('.card-glare');
-        if (glare) glare.style.background = `radial-gradient(circle at ${x*100}% ${y*100}%, rgba(255,255,255,0.09) 0%, transparent 65%)`;
+        card.style.transform = `perspective(700px) rotateX(${(0.5-y)*18}deg) rotateY(${(x-0.5)*18}deg) scale(1.02)`;
+        const g = card.querySelector('.card-glare');
+        if (g) g.style.background = `radial-gradient(circle at ${x*100}% ${y*100}%, rgba(255,255,255,0.1) 0%, transparent 65%)`;
       });
       card.addEventListener('mouseleave', () => {
         card.style.transform = 'perspective(700px) rotateX(0) rotateY(0) scale(1)';
-        const glare = card.querySelector('.card-glare');
-        if (glare) glare.style.background = '';
+        const g = card.querySelector('.card-glare');
+        if (g) g.style.background = '';
       });
     });
 
-    // ── SCROLL NARRATIVE ─────────────────────────────────────
+    // ═══════════════════════════════════════════════════════
+    // SCROLL NARRATIVE
+    // ═══════════════════════════════════════════════════════
     const nWrapper = document.getElementById('narrativeWrapper');
     const nLines   = [0,1,2,3,4].map(i => document.getElementById('nl'+i));
     const nCount   = nLines.length;
 
     function updateNarrative() {
       if (!nWrapper) return;
-      const rect  = nWrapper.getBoundingClientRect();
+      const rect = nWrapper.getBoundingClientRect();
       const range = rect.height - window.innerHeight;
       if (range <= 0) return;
       const progress = Math.max(0, Math.min(1, -rect.top / range));
       const zone = 1 / (nCount + 1);
-
       nLines.forEach((line, i) => {
         const lp = Math.max(0, Math.min(1, (progress - zone * i) / zone));
         let opacity, ty;
-        if (lp < 0.25)      { opacity = lp / 0.25;          ty = (1 - lp / 0.25) * 40; }
-        else if (lp < 0.7)  { opacity = 1;                  ty = 0; }
-        else                 { opacity = 1 - (lp - 0.7) / 0.3; ty = -(lp - 0.7) / 0.3 * 28; }
-        // last line stays
-        if (i === nCount - 1 && lp >= 0.25) { opacity = 1; ty = 0; }
+        if (lp < 0.25)     { opacity = lp / 0.25;            ty = (1 - lp/0.25) * 40; }
+        else if (lp < 0.72){ opacity = 1;                    ty = 0; }
+        else               { opacity = 1-(lp-0.72)/0.28;     ty = -(lp-0.72)/0.28 * 28; }
+        if (i === nCount-1 && lp >= 0.25) { opacity = 1; ty = 0; }
         line.style.opacity   = opacity;
         line.style.transform = `translate(-50%, calc(-50% + ${ty}px))`;
-        line.style.left      = '0'; // ensure width=100%
-        line.style.right     = '0';
+        line.style.left = '0'; line.style.right = '0';
       });
     }
     window.addEventListener('scroll', updateNarrative, { passive: true });
     updateNarrative();
 
-    // ── WORD CASCADE ─────────────────────────────────────────
+    // ═══════════════════════════════════════════════════════
+    // WORD CASCADE
+    // ═══════════════════════════════════════════════════════
+    const wcPhrases = ['Beautifully built.', 'Custom coded.', 'Built to last.', 'Made for you.'];
+    let wcIdx = 0;
+
     function runWordCascade() {
       const el   = document.getElementById('wordCascade');
-      const text = 'Beautifully built.';
-      el.innerHTML = text.split(' ').map(w =>
-        `<span class="word"><span>${w}</span></span>`
-      ).join(' ');
+      const text = wcPhrases[wcIdx % wcPhrases.length];
+      wcIdx++;
+      el.innerHTML = text.split(' ').map(w => `<span class="word"><span>${w}</span></span>`).join(' ');
       el.classList.remove('animate');
-      void el.offsetHeight; // force reflow
+      void el.offsetHeight;
       el.classList.add('animate');
-      el.querySelectorAll('.word span').forEach((span, i) => {
-        span.style.transitionDelay = (i * 0.13) + 's';
-      });
+      el.querySelectorAll('.word span').forEach((s, i) => { s.style.transitionDelay = (i * 0.13) + 's'; });
     }
     runWordCascade();
-
-    // Auto-trigger when scrolled into view
-    const wcEl = document.getElementById('wordCascade');
     new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) { setTimeout(runWordCascade, 350); } });
-    }, { threshold: 0.6 }).observe(wcEl);
+      entries.forEach(e => { if (e.isIntersecting) { setTimeout(runWordCascade, 300); } });
+    }, { threshold: 0.6 }).observe(document.getElementById('wordCascade'));
 
-    // ── TEXT SCRAMBLE ─────────────────────────────────────────
-    const phrases  = ['Your Vision.', 'Custom Code.', 'Built Right.', 'Stand Out.', 'Hello World.'];
-    let phraseIdx  = 0;
-    const chars    = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjklmnpqrstuvwxyz!@#$%&?';
+    // ═══════════════════════════════════════════════════════
+    // TEXT SCRAMBLE (auto-cycles every 3s)
+    // ═══════════════════════════════════════════════════════
+    const scPhrases = ['Your Vision.', 'Custom Code.', 'Built Right.', 'Stand Out.', 'Hello World.', 'Pure CSS.', 'Zero Limits.'];
+    let scIdx       = 0;
+    let scRunning   = false;
+    const chars     = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjklmnpqrstuvwxyz!@#$%&?';
 
-    function runScramble() {
+    function runScramble(phrase) {
       const el    = document.getElementById('scrambleEl');
-      phraseIdx   = (phraseIdx + 1) % phrases.length;
-      const final = phrases[phraseIdx];
-      let frame   = 0;
-      const total = 30;
-      const id    = setInterval(() => {
+      const final = phrase || scPhrases[scIdx % scPhrases.length];
+      if (!phrase) scIdx++;
+      scRunning = true;
+      let frame = 0;
+      const total = 28;
+      const id = setInterval(() => {
         el.textContent = final.split('').map((ch, i) => {
           if (ch === ' ') return ' ';
           if (i < Math.floor((frame / total) * final.length)) return ch;
           return chars[Math.floor(Math.random() * chars.length)];
         }).join('');
-        if (++frame > total) { el.textContent = final; clearInterval(id); }
+        if (++frame > total) { el.textContent = final; clearInterval(id); scRunning = false; }
       }, 45);
     }
+    function manualScramble() { runScramble(); }
 
-    // ── ANIMATED COUNTERS ─────────────────────────────────────
+    // Auto-cycle scramble every 3 seconds when in view
+    let scrambleVisible = false;
+    new IntersectionObserver(entries => {
+      entries.forEach(e => { scrambleVisible = e.isIntersecting; });
+    }, { threshold: 0.5 }).observe(document.getElementById('scrambleEl'));
+
+    setInterval(() => {
+      if (scrambleVisible && !scRunning) runScramble();
+    }, 3000);
+    runScramble(scPhrases[0]);
+
+    // ═══════════════════════════════════════════════════════
+    // ANIMATED COUNTERS
+    // ═══════════════════════════════════════════════════════
     function animateCounter(el, target, dur) {
       const start = performance.now();
       (function tick(now) {
         const p  = Math.min((now - start) / dur, 1);
-        const ep = 1 - Math.pow(1 - p, 3);
+        const ep = 1 - Math.pow(1-p, 3);
         el.textContent = Math.floor(ep * target);
-        if (p < 1) requestAnimationFrame(tick);
-        else el.textContent = target;
+        if (p < 1) requestAnimationFrame(tick); else el.textContent = target;
       })(start);
     }
-
     function runCounters() {
-      document.querySelectorAll('.counter-num').forEach(el => {
-        animateCounter(el, +el.dataset.target, 1800);
-      });
+      document.querySelectorAll('.counter-num').forEach(el => animateCounter(el, +el.dataset.target, 1800));
     }
-
     let countersRan = false;
     new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting && !countersRan) { countersRan = true; runCounters(); }
-      });
+      entries.forEach(e => { if (e.isIntersecting && !countersRan) { countersRan = true; runCounters(); } });
     }, { threshold: 0.5 }).observe(document.querySelector('.counter-row'));
 
-    // ── BRAND THEMING ─────────────────────────────────────────
+    // ═══════════════════════════════════════════════════════
+    // BRAND THEMING
+    // ═══════════════════════════════════════════════════════
     function setTheme(btn, bg, head, muted, accent) {
       document.querySelectorAll('.palette-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       const site = document.getElementById('miniSite');
       if (!site) return;
-      site.style.setProperty('--t-bg',     bg);
-      site.style.setProperty('--t-head',   head);
-      site.style.setProperty('--t-muted',  muted);
-      site.style.setProperty('--t-accent', accent);
+      site.style.setProperty('--t-bg',    bg);
+      site.style.setProperty('--t-head',  head);
+      site.style.setProperty('--t-muted', muted);
+      site.style.setProperty('--t-accent',accent);
     }
 
-    // ── MAGNETIC ─────────────────────────────────────────────
+    // Auto-cycle through palettes every 4 seconds when in view
+    const palettes = [
+      ['#FCF8EE','#535344','#98A091','#AB8552'],
+      ['#0A0E1A','#E8E0F0','#8891B8','#6A7DFF'],
+      ['#F3EFE5','#1B2918','#637560','#4A7C59'],
+      ['#0C0C0C','#F0E8D8','#8A8070','#C9A84C'],
+      ['#FFFFFF','#1A1A1A','#888','#E84855'],
+    ];
+    let palIdx = 0, paletteRunning = false;
+    new IntersectionObserver(entries => {
+      entries.forEach(e => { paletteRunning = e.isIntersecting; });
+    }, { threshold: 0.3 }).observe(document.querySelector('.brand-demo-wrap') || document.body);
+
+    setInterval(() => {
+      if (!paletteRunning) return;
+      palIdx = (palIdx + 1) % palettes.length;
+      const p   = palettes[palIdx];
+      const btn = document.querySelectorAll('.palette-btn')[palIdx];
+      if (btn) setTheme(btn, p[0], p[1], p[2], p[3]);
+    }, 3500);
+
+    // ═══════════════════════════════════════════════════════
+    // MAGNETIC BUTTONS
+    // ═══════════════════════════════════════════════════════
     document.querySelectorAll('.mag').forEach(el => {
       el.style.transition = 'transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94), background 0.3s, color 0.3s, border-color 0.3s';
       el.addEventListener('mousemove', e => {
         const r = el.getBoundingClientRect();
-        el.style.transform = `translate(${(e.clientX - r.left - r.width/2) * 0.25}px, ${(e.clientY - r.top - r.height/2) * 0.28}px)`;
+        el.style.transform = `translate(${(e.clientX-r.left-r.width/2)*0.3}px,${(e.clientY-r.top-r.height/2)*0.32}px)`;
       });
       el.addEventListener('mouseleave', () => { el.style.transform = ''; });
     });
 
-    // ── SECTION REVEAL ────────────────────────────────────────
-    const rs = document.createElement('style');
-    rs.textContent = '.lr{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.25,.46,.45,.94),transform .7s cubic-bezier(.25,.46,.45,.94)}.lr.in{opacity:1;transform:none}';
-    document.head.appendChild(rs);
-
-    document.querySelectorAll('.tilt-card, .text-effect-card, .lab-section-header, .brand-demo-wrap, .magnetic-demo, .mag-hint, .lab-cta h2, .lab-cta p, .lab-cta-btns').forEach((el, i) => {
-      el.classList.add('lr');
-      if (el.classList.contains('tilt-card') || el.classList.contains('text-effect-card')) {
-        const idx = Array.from(el.parentElement.children).indexOf(el);
-        el.style.transitionDelay = (idx * 0.11) + 's';
-      }
-    });
-
-    new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); } });
-    }, { threshold: 0.1 }).observe(document.body);
-
-    // Use a single observer for all .lr elements
+    // ═══════════════════════════════════════════════════════
+    // SECTION REVEAL (IntersectionObserver)
+    // ═══════════════════════════════════════════════════════
     const revealObs = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); revealObs.unobserve(e.target); } });
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          if (e.target.classList.contains('lab-section-header')) {
+            e.target.classList.add('in-view');
+          }
+          revealObs.unobserve(e.target);
+        }
+      });
     }, { threshold: 0.1 });
+
     document.querySelectorAll('.lr').forEach(el => revealObs.observe(el));
   </script>
 </body>
