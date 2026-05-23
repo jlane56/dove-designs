@@ -240,7 +240,7 @@
 
     /* ─── HERO ─── */
     #hero-wrapper {
-      height: 220vh;
+      height: 160vh;
     }
 
     #hero {
@@ -497,7 +497,6 @@
       nav.scrolled { padding: 0.3rem 1.5rem; }
       .nav-links { display: none; }
       .nav-hamburger { display: flex; }
-      #hero-wrapper { height: 150vh; }
       .hero-text-layer { left: 1.5rem; right: 1.5rem; max-width: 100%; padding-top: 5rem; }
       h1 { font-size: clamp(2.2rem, 9vw, 3rem); }
       .hero-text-layer .hero-stats { gap: 1.5rem; margin-top: 2rem; padding-top: 1.5rem; }
@@ -636,17 +635,36 @@
     const heroLogoLayer  = document.getElementById('heroLogoLayer');
     const heroTextLayer  = document.getElementById('heroTextLayer');
     const heroScrollHint = document.getElementById('heroScrollHint');
+    const heroWrapper    = document.getElementById('hero-wrapper');
+
+    let heroEverScrolled = false;
+    let heroTextShown    = false;
+    let heroCollapsed    = false;
 
     function updateHero() {
       const scrollY = window.scrollY;
-      const zone = window.innerHeight * 0.60;
-      const p = Math.min(Math.max(scrollY / zone, 0), 1);
+      const zone    = window.innerHeight * 0.60;
+      const p       = Math.min(Math.max(scrollY / zone, 0), 1);
 
-      if (heroLogoLayer)  heroLogoLayer.style.opacity  = 1 - p;
+      if (scrollY > 0) heroEverScrolled = true;
+      if (p >= 1)      heroTextShown    = true;
+
+      if (heroLogoLayer)  heroLogoLayer.style.opacity  = heroEverScrolled ? 0 : (1 - p);
       if (heroScrollHint) heroScrollHint.style.opacity = Math.max(0, 1 - p * 2.5);
       if (heroTextLayer) {
-        heroTextLayer.style.opacity       = p;
-        heroTextLayer.style.pointerEvents = p > 0.3 ? 'auto' : 'none';
+        heroTextLayer.style.opacity       = heroTextShown ? 1 : p;
+        heroTextLayer.style.pointerEvents = (heroTextShown || p > 0.3) ? 'auto' : 'none';
+      }
+
+      // Once text is fully revealed: collapse wrapper to 100vh and snap to top
+      // The math works out so content below doesn't jump — both before and after
+      // collapse, the first content pixel sits at exactly the viewport bottom.
+      if (!heroCollapsed && heroTextShown) {
+        heroCollapsed = true;
+        const heroBottom = heroWrapper.offsetHeight - window.innerHeight;
+        const overshoot  = Math.max(0, scrollY - heroBottom);
+        heroWrapper.style.height = window.innerHeight + 'px';
+        window.scrollTo({ top: overshoot, behavior: 'instant' });
       }
     }
 
