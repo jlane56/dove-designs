@@ -219,6 +219,7 @@
       <li><a href="process.html" class="active">Process</a></li>
       <li><a href="about.html">About</a></li>
       <li><a href="contact.html">Contact</a></li>
+      <li><a href="lab.html">The Lab</a></li>
       <li><a href="contact.html" class="btn-primary" style="padding:0.6rem 1.4rem;">Get a Quote</a></li>
     </ul>
     <button class="nav-hamburger" id="menuBtn" aria-label="Open menu">
@@ -233,6 +234,7 @@
     <a href="process.html" onclick="closeMobile()">Process</a>
     <a href="about.html" onclick="closeMobile()">About</a>
     <a href="contact.html" onclick="closeMobile()">Contact</a>
+    <a href="lab.html" onclick="closeMobile()">The Lab</a>
     <a href="contact.html" onclick="closeMobile()" style="color:var(--dusty-blue);">Get a Quote</a>
   </div>
 
@@ -372,6 +374,7 @@
       <li><a href="process.html">Process</a></li>
       <li><a href="about.html">About</a></li>
       <li><a href="contact.html">Contact</a></li>
+      <li><a href="lab.html">The Lab</a></li>
     </ul>
     <p class="footer-copy">© 2025 The Dove Design Co.</p>
   </footer>
@@ -404,6 +407,33 @@
       }
     }
     window.addEventListener('scroll', fadeLogoOnScroll, { passive: true });
+
+    // ── SCROLL REVEAL ──────────────────────────────────────
+    (function(){
+      const s = document.createElement('style');
+      s.textContent = '.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.25,.46,.45,.94),transform .7s cubic-bezier(.25,.46,.45,.94)}.reveal.revealed{opacity:1;transform:none}';
+      document.head.appendChild(s);
+      document.querySelectorAll('.section-header,.process-step').forEach(el => {
+        el.classList.add('reveal');
+        if (el.matches('.process-step')) {
+          el.style.transitionDelay = (Array.from(el.parentElement.children).indexOf(el) * 0.12) + 's';
+        }
+      });
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('revealed'); io.unobserve(e.target); } });
+      }, { threshold: 0.12 });
+      document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    })();
+
+    // ── MAGNETIC BUTTONS ───────────────────────────────────
+    document.querySelectorAll('.btn-primary, .btn-outline').forEach(btn => {
+      if (btn.closest('nav')) return;
+      btn.addEventListener('mousemove', e => {
+        const r = btn.getBoundingClientRect();
+        btn.style.transform = `translate(${(e.clientX-r.left-r.width/2)*.18}px,${(e.clientY-r.top-r.height/2)*.22}px)`;
+      });
+      btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
+    });
   </script>
 </body>
 </html>
