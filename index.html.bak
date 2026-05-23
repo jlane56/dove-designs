@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Web Designer Peoria IL | The Dove Design Co. — Custom Websites</title>
-  <meta name="description" content="Custom-coded websites for small businesses in Peoria, IL and Central Illinois. The Dove Design Co. builds fast, beautiful websites — and shoots the photos to match.">
-  <link rel="canonical" href="https://www.thedovedesignco.com/">
+  <title>The Dove Design Co. — Custom Websites Built to Last</title>
+  <meta name="description" content="Custom-coded websites for small businesses. The Dove Design Co. builds beautiful, fast, and functional websites that grow with your business.">
   <link rel="manifest" href="/manifest.json">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -241,7 +240,7 @@
 
     /* ─── HERO ─── */
     #hero-wrapper {
-      height: 160vh;
+      height: 220vh;
     }
 
     #hero {
@@ -347,9 +346,7 @@
     /* ─── SERVICES TEASER ─── */
     #services-teaser {
       padding: 7rem 4rem;
-      background:
-        linear-gradient(rgba(252,248,238,0.93), rgba(252,248,238,0.93)),
-        url('images/tex.jpg') center/cover;
+      background: var(--white);
     }
 
     .services-grid {
@@ -424,104 +421,9 @@
 
     .services-teaser-cta a:hover { color: var(--charcoal); border-color: var(--charcoal); }
 
-    /* ─── PHOTO OFFER ─── */
-    #photo-offer {
-      background: var(--charcoal);
-      padding: 6rem 4rem;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 5rem;
-      align-items: center;
-      max-width: 100%;
-    }
-
-    .photo-offer-text {
-      max-width: 520px;
-    }
-
-    .photo-offer-text .section-eyebrow {
-      text-align: left;
-      color: var(--dusty-blue);
-    }
-
-    .photo-offer-text .ornament {
-      justify-content: flex-start;
-    }
-
-    .photo-offer-text .ornament-line {
-      background: rgba(248,240,221,0.15);
-    }
-
-    .photo-offer-text h2 {
-      color: var(--cream);
-      text-align: left;
-      margin-bottom: 1.5rem;
-    }
-
-    .photo-offer-text h2 em {
-      color: #D4B483;
-    }
-
-    .photo-offer-text p {
-      font-size: 0.95rem;
-      color: rgba(248,240,221,0.62);
-      line-height: 1.85;
-      margin-bottom: 1.25rem;
-    }
-
-    .photo-offer-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.6rem;
-      background: rgba(171,133,82,0.15);
-      border: 1px solid rgba(171,133,82,0.3);
-      padding: 0.5rem 1rem;
-      font-size: 0.72rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--dusty-blue);
-      margin-bottom: 2rem;
-    }
-
-    .photo-offer-visual {
-      position: relative;
-    }
-
-    .photo-offer-img {
-      width: 100%;
-      aspect-ratio: 4/3;
-      object-fit: cover;
-      object-position: center;
-      display: block;
-    }
-
-    .photo-offer-caption {
-      font-size: 0.72rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: rgba(248,240,221,0.3);
-      margin-top: 1rem;
-      text-align: right;
-    }
-
-    @media (max-width: 900px) {
-      #photo-offer {
-        grid-template-columns: 1fr;
-        gap: 3rem;
-        padding: 5rem 2rem;
-      }
-      .photo-offer-text { max-width: 100%; }
-    }
-
-    @media (max-width: 768px) {
-      #photo-offer { padding: 4rem 1.5rem; }
-    }
-
     /* ─── CTA BANNER ─── */
     #cta-banner {
-      background:
-        linear-gradient(rgba(83,83,68,0.91), rgba(83,83,68,0.91)),
-        url('images/tex.jpg') center/cover;
+      background: var(--charcoal);
       padding: 5rem 4rem;
       text-align: center;
     }
@@ -591,6 +493,7 @@
       nav.scrolled { padding: 0.3rem 1.5rem; }
       .nav-links { display: none; }
       .nav-hamburger { display: flex; }
+      #hero-wrapper { height: 150vh; }
       .hero-text-layer { left: 1.5rem; right: 1.5rem; max-width: 100%; padding-top: 5rem; }
       h1 { font-size: clamp(2.2rem, 9vw, 3rem); }
       .hero-text-layer .hero-stats { gap: 1.5rem; margin-top: 2rem; padding-top: 1.5rem; }
@@ -616,9 +519,7 @@
       <li><a href="process.html">Process</a></li>
       <li><a href="about.html">About</a></li>
       <li><a href="contact.html">Contact</a></li>
-      <li><a href="proof.html">The Proof</a></li>
-      <li><a href="blog/index.html">Blog</a></li>
-      <li><a href="contact.html" class="btn-primary" style="padding:0.6rem 1.4rem;">Book a Call</a></li>
+      <li><a href="contact.html" class="btn-primary" style="padding:0.6rem 1.4rem;">Get a Quote</a></li>
     </ul>
     <button class="nav-hamburger" id="menuBtn" aria-label="Open menu">
       <span></span><span></span><span></span>
@@ -633,9 +534,7 @@
     <a href="process.html" onclick="closeMobile()">Process</a>
     <a href="about.html" onclick="closeMobile()">About</a>
     <a href="contact.html" onclick="closeMobile()">Contact</a>
-    <a href="proof.html" onclick="closeMobile()">The Proof</a>
-    <a href="blog/index.html" onclick="closeMobile()">Blog</a>
-    <a href="contact.html" onclick="closeMobile()" style="color:var(--dusty-blue);">Book a Call</a>
+    <a href="contact.html" onclick="closeMobile()" style="color:var(--dusty-blue);">Get a Quote</a>
   </div>
 
   <!-- ── HERO ── -->
@@ -653,10 +552,10 @@
       <div class="hero-text-layer" id="heroTextLayer">
         <p class="section-eyebrow">Custom Web Design &amp; Development</p>
         <h1>Websites built<br><em>beautifully</em>,<br>built to last.</h1>
-        <p class="hero-sub">Custom-coded websites for small businesses — designed to stand out, built to last.</p>
+        <p class="hero-sub">I design and build custom-coded websites for small businesses — clean, fast, and made to grow with you. No templates. No confusion. Just results.</p>
         <div class="hero-ctas">
           <a href="contact.html" class="btn-primary">Book a Discovery Call</a>
-          <a href="portfolio.html" class="btn-outline">See Our Work</a>
+          <a href="contact.html" class="btn-outline">Get a Free Quote</a>
         </div>
         <div class="hero-stats">
           <div>
@@ -666,6 +565,10 @@
           <div>
             <div class="stat-num">No</div>
             <div class="stat-label">Templates or page builders</div>
+          </div>
+          <div>
+            <div class="stat-num">24hr</div>
+            <div class="stat-label">Quote turnaround</div>
           </div>
         </div>
       </div>
@@ -684,18 +587,18 @@
     <div class="section-header">
       <p class="section-eyebrow">What I Do</p>
       <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot"></div><div class="ornament-line"></div></div>
-      <h2>What we <em>build</em>.</h2>
+      <h2>Simple, clear <em>services</em>.<br>No confusion, no surprises.</h2>
     </div>
     <div class="services-grid" style="grid-template-columns:repeat(auto-fit,minmax(250px,1fr));max-width:760px;">
       <div class="service-card">
         <div class="service-num">01</div>
         <h3>New Website Builds</h3>
-        <p>Fully custom-coded from scratch — designed and built to perform, stand out, and scale.</p>
+        <p>Starting from scratch? I design and custom-code your entire site — no templates, no drag-and-drop builders. You get a site that's truly yours, loads fast, and stands out from the competition.</p>
       </div>
       <div class="service-card">
         <div class="service-num">02</div>
         <h3>Website Redesigns</h3>
-        <p>Take an outdated site and rebuild it right — better design, faster load, better results.</p>
+        <p>Have a site that's outdated, slow, or just not converting? I'll rebuild it from the ground up — keeping what works, fixing what doesn't. Better design, better performance, better results.</p>
       </div>
     </div>
     <div class="services-teaser-cta">
@@ -703,30 +606,12 @@
     </div>
   </section>
 
-  <!-- ── PHOTO OFFER ── -->
-  <section id="photo-offer">
-    <div class="photo-offer-text">
-      <p class="section-eyebrow">Included With Every Build</p>
-      <div class="ornament"><div class="ornament-line" style="background:rgba(248,240,221,0.15);"></div><div class="ornament-dot"></div></div>
-      <h2>Your website needs <em>great photos</em>.<br>I'll shoot them.</h2>
-      <div class="photo-offer-badge">
-        <span>★</span> Free with every new website build
-      </div>
-      <p>Most websites underperform because the photography doesn't match the quality of the design. When you hire me to build your site, I'll come to you and shoot the content — your space, your work, your team. Professional photos, built right in. No extra charge.</p>
-      <p>Eight years behind the camera. Commercial, real estate, events. I know what it takes to make a business look its best.</p>
-    </div>
-    <div class="photo-offer-visual">
-      <img src="images/portfolio/jubilee.png" alt="Jubilee Real Estate Media — photography by Justin Lane" class="photo-offer-img">
-      <div class="photo-offer-caption">Jubilee Real Estate Media — content shot by Justin</div>
-    </div>
-  </section>
-
   <!-- ── CTA BANNER ── -->
   <section id="cta-banner">
     <div class="ornament"><div class="ornament-line" style="background:rgba(232,224,213,0.2);"></div><div class="ornament-dot"></div><div class="ornament-line" style="background:rgba(232,224,213,0.2);"></div></div>
     <h2>Ready to build something <em>beautiful</em>?</h2>
-    <p>Response within 24 hours. No pitch — just a real conversation.</p>
-    <a href="contact.html" class="btn-primary" style="background:var(--dusty-blue);border-color:var(--dusty-blue);">Book a Discovery Call</a>
+    <p>Fill out the form and I'll get back to you within 24 hours. No sales pitch — just a real conversation about your project.</p>
+    <a href="contact.html" class="btn-primary" style="background:var(--dusty-blue);border-color:var(--dusty-blue);">Get a Free Quote</a>
   </section>
 
   <!-- ── FOOTER ── -->
@@ -738,10 +623,8 @@
       <li><a href="process.html">Process</a></li>
       <li><a href="about.html">About</a></li>
       <li><a href="contact.html">Contact</a></li>
-      <li><a href="proof.html">The Proof</a></li>
-      <li><a href="blog/index.html">Blog</a></li>
     </ul>
-    <p class="footer-copy">© 2026 The Dove Design Co.</p>
+    <p class="footer-copy">© 2025 The Dove Design Co.</p>
   </footer>
 
   <script>
@@ -749,36 +632,17 @@
     const heroLogoLayer  = document.getElementById('heroLogoLayer');
     const heroTextLayer  = document.getElementById('heroTextLayer');
     const heroScrollHint = document.getElementById('heroScrollHint');
-    const heroWrapper    = document.getElementById('hero-wrapper');
-
-    let heroEverScrolled = false;
-    let heroTextShown    = false;
-    let heroCollapsed    = false;
 
     function updateHero() {
       const scrollY = window.scrollY;
-      const zone    = window.innerHeight * 0.60;
-      const p       = Math.min(Math.max(scrollY / zone, 0), 1);
+      const zone = window.innerHeight * 0.60;
+      const p = Math.min(Math.max(scrollY / zone, 0), 1);
 
-      if (scrollY > 0) heroEverScrolled = true;
-      if (p >= 1)      heroTextShown    = true;
-
-      if (heroLogoLayer)  heroLogoLayer.style.opacity  = heroEverScrolled ? 0 : (1 - p);
+      if (heroLogoLayer)  heroLogoLayer.style.opacity  = 1 - p;
       if (heroScrollHint) heroScrollHint.style.opacity = Math.max(0, 1 - p * 2.5);
       if (heroTextLayer) {
-        heroTextLayer.style.opacity       = heroTextShown ? 1 : p;
-        heroTextLayer.style.pointerEvents = (heroTextShown || p > 0.3) ? 'auto' : 'none';
-      }
-
-      // Once text is fully revealed: collapse wrapper to 100vh and snap to top
-      // The math works out so content below doesn't jump — both before and after
-      // collapse, the first content pixel sits at exactly the viewport bottom.
-      if (!heroCollapsed && heroTextShown) {
-        heroCollapsed = true;
-        const heroBottom = heroWrapper.offsetHeight - window.innerHeight;
-        const overshoot  = Math.max(0, scrollY - heroBottom);
-        heroWrapper.style.height = window.innerHeight + 'px';
-        window.scrollTo({ top: overshoot, behavior: 'instant' });
+        heroTextLayer.style.opacity       = p;
+        heroTextLayer.style.pointerEvents = p > 0.3 ? 'auto' : 'none';
       }
     }
 
@@ -812,33 +676,6 @@
       }
     }
     window.addEventListener('scroll', fadeLogoOnScroll, { passive: true });
-
-    // ── SCROLL REVEAL ──────────────────────────────────────
-    (function(){
-      const s = document.createElement('style');
-      s.textContent = '.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.25,.46,.45,.94),transform .7s cubic-bezier(.25,.46,.45,.94)}.reveal.revealed{opacity:1;transform:none}';
-      document.head.appendChild(s);
-      document.querySelectorAll('.section-header,.service-card,.why-item').forEach(el => {
-        el.classList.add('reveal');
-        if (el.matches('.service-card,.why-item')) {
-          el.style.transitionDelay = (Array.from(el.parentElement.children).indexOf(el) * 0.1) + 's';
-        }
-      });
-      const io = new IntersectionObserver(entries => {
-        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('revealed'); io.unobserve(e.target); } });
-      }, { threshold: 0.12 });
-      document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-    })();
-
-    // ── MAGNETIC BUTTONS ───────────────────────────────────
-    document.querySelectorAll('.btn-primary, .btn-outline').forEach(btn => {
-      if (btn.closest('nav')) return;
-      btn.addEventListener('mousemove', e => {
-        const r = btn.getBoundingClientRect();
-        btn.style.transform = `translate(${(e.clientX-r.left-r.width/2)*.18}px,${(e.clientY-r.top-r.height/2)*.22}px)`;
-      });
-      btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
-    });
   </script>
 </body>
 </html>
