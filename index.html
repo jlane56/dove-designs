@@ -236,16 +236,13 @@
       overflow: hidden;
     }
 
-    /* Background photo — the div is 2.5× the hero size so cover
-       only needs to fill the larger area; the hero (overflow:hidden)
-       clips it, showing ~40% of the displayed image = dramatically zoomed out */
     .hero-bg {
       position: absolute;
-      inset: -75%;
+      inset: 0;
       z-index: 0;
       background-image: url('images/4231204011-R1-046-21A.JPG');
       background-size: cover;
-      background-position: center 45%;
+      background-position: center 15%;
     }
     @media (max-width: 768px) {
       .hero-bg {
