@@ -76,10 +76,10 @@
     }
 
     .nav-links a {
-      font-family: 'Special Elite', 'Courier New', serif;
+      font-family: 'Jost', sans-serif;
       font-size: 0.72rem;
       font-weight: 400;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--taupe);
       text-decoration: none;
@@ -842,9 +842,55 @@
       footer { padding: 2rem 1.5rem; flex-direction: column; text-align: center; }
       .footer-links { justify-content: center; flex-wrap: wrap; gap: 1rem; }
     }
+
+    /* ─── HERO SPLASH ─── */
+    #hero-splash {
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      background: #535344;
+      transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1),
+                  transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    #hero-splash.fade-out {
+      opacity: 0;
+      transform: translateY(-12px);
+      pointer-events: none;
+    }
+
+    #splash-logo {
+      width: 360px;
+      max-width: 72vw;
+      animation: splashIn 1.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+    }
+
+    #splash-hint {
+      font-family: 'Special Elite', 'Courier New', serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      color: rgba(248,240,221,0.4);
+      animation: splashIn 1.4s 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+    }
+
+    @keyframes splashIn {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body>
+
+  <!-- ── HERO SPLASH ── -->
+  <div id="hero-splash">
+    <img src="images/TDDC_Logo1.png" id="splash-logo" alt="The Dove Design Co.">
+    <p id="splash-hint">scroll to explore</p>
+  </div>
 
   <!-- ── NAVIGATION ── -->
   <nav id="navbar">
@@ -1177,6 +1223,28 @@
 
   <script>
     // Navbar shrink on scroll
+    // ── Hero splash dismiss ──
+    (function () {
+      const splash = document.getElementById('hero-splash');
+      if (!splash) return;
+      let dismissed = false;
+
+      function dismiss() {
+        if (dismissed) return;
+        dismissed = true;
+        splash.classList.add('fade-out');
+        setTimeout(() => splash.remove(), 1050);
+      }
+
+      // Dismiss on any scroll or touch
+      window.addEventListener('scroll',    dismiss, { once: true, passive: true });
+      window.addEventListener('touchmove', dismiss, { once: true, passive: true });
+      // Also dismiss on click/tap anywhere on the splash
+      splash.addEventListener('click', dismiss);
+      // Auto-dismiss after 5 s if user hasn't scrolled
+      setTimeout(dismiss, 5000);
+    })();
+
     const navbar = document.getElementById('navbar');
     window.addEventListener('scroll', () => {
       navbar.classList.toggle('scrolled', window.scrollY > 60);
