@@ -512,150 +512,10 @@
       line-height: 1.7;
     }
 
-    /* ─── PRICING ─── */
-    #pricing {
+    /* ─── DISCOVERY CALL ─── */
+    #discovery {
       padding: 7rem 4rem;
-      background: var(--white);
-    }
-
-    .pricing-note-top {
-      text-align: center;
-      font-size: 0.85rem;
-      color: var(--taupe);
-      margin-bottom: 3rem;
-    }
-
-    .pricing-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      max-width: 980px;
-      margin: 0 auto;
-    }
-
-    .pricing-card {
-      border: 1px solid var(--light-border);
-      padding: 2.5rem 2rem 2rem;
-      position: relative;
-      transition: transform 0.3s;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .pricing-card:hover { transform: translateY(-5px); }
-
-    .pricing-card.featured {
-      border-color: var(--dusty-blue);
       background: var(--cream);
-    }
-
-    .pricing-badge {
-      position: absolute;
-      top: -1px; left: 50%;
-      transform: translateX(-50%);
-      background: var(--dusty-blue);
-      color: var(--white);
-      font-size: 0.62rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      padding: 0.3rem 1.25rem;
-      white-space: nowrap;
-    }
-
-    .pricing-tier {
-      font-size: 0.68rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--taupe);
-      margin-bottom: 0.5rem;
-    }
-
-    .pricing-price {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 3.2rem;
-      font-weight: 400;
-      color: var(--charcoal);
-      line-height: 1;
-    }
-
-    .pricing-price sup {
-      font-size: 1.3rem;
-      vertical-align: super;
-      font-weight: 300;
-    }
-
-    .pricing-tagline {
-      font-size: 0.78rem;
-      color: var(--taupe);
-      margin-top: 0.4rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .pricing-divider {
-      height: 1px;
-      background: var(--light-border);
-      margin-bottom: 1.5rem;
-    }
-
-    .pricing-features {
-      list-style: none;
-      flex: 1;
-      margin-bottom: 2rem;
-    }
-
-    .pricing-features li {
-      font-size: 0.84rem;
-      color: var(--taupe);
-      padding: 0.4rem 0;
-      display: flex;
-      align-items: flex-start;
-      gap: 0.6rem;
-      border-bottom: 1px solid var(--light-border);
-    }
-
-    .pricing-features li:last-child { border-bottom: none; }
-
-    .pricing-features li::before {
-      content: '—';
-      color: var(--dusty-blue);
-      flex-shrink: 0;
-      font-size: 0.7rem;
-      margin-top: 0.15rem;
-    }
-
-    .pricing-cta { margin-top: auto; }
-    .pricing-cta a { width: 100%; text-align: center; display: block; }
-
-    .addons {
-      max-width: 980px;
-      margin: 2.5rem auto 0;
-      padding: 1.75rem 2rem;
-      background: var(--cream);
-      border: 1px solid var(--light-border);
-      display: flex;
-      gap: 3rem;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .addon-item {
-      text-align: center;
-    }
-
-    .addon-label {
-      font-size: 0.68rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--taupe);
-      margin-bottom: 0.25rem;
-    }
-
-    .addon-price {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.6rem;
-      font-weight: 400;
-      color: var(--charcoal);
     }
 
     /* ─── ABOUT ─── */
@@ -952,7 +812,7 @@
       .nav-hamburger { display: flex; }
       #hero { padding: 8rem 1.5rem 5rem; }
       .hero-ghost { display: none; }
-      #services, #why, #process, #pricing, #about, #faq, #contact { padding: 5rem 1.5rem; }
+      #services, #why, #process, #discovery, #about, #faq, #contact { padding: 5rem 1.5rem; }
       #about { padding: 5rem 1.5rem; }
       #photoshoot { padding: 4rem 1.5rem !important; }
       #photoshoot > div { grid-template-columns: 1fr !important; gap: 2.5rem !important; }
@@ -973,7 +833,7 @@
     <ul class="nav-links">
       <li><a href="#services">Services</a></li>
       <li><a href="#process">Process</a></li>
-      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#discovery">Discovery Call</a></li>
       <li><a href="#about">About</a></li>
       <li><a href="#faq">FAQ</a></li>
       <li><a href="#contact" class="btn-primary" style="padding:0.6rem 1.4rem;">Get a Quote</a></li>
@@ -988,7 +848,7 @@
     <button class="mobile-nav-close" id="menuClose">×</button>
     <a href="#services" onclick="closeMobile()">Services</a>
     <a href="#process" onclick="closeMobile()">Process</a>
-    <a href="#pricing" onclick="closeMobile()">Pricing</a>
+    <a href="#discovery" onclick="closeMobile()">Discovery Call</a>
     <a href="#about" onclick="closeMobile()">About</a>
     <a href="#faq" onclick="closeMobile()">FAQ</a>
     <a href="#contact" onclick="closeMobile()" style="color:var(--dusty-blue);">Get a Quote</a>
@@ -1001,7 +861,7 @@
       <h1>Websites built<br><em>beautifully</em>,<br>built to last.</h1>
       <p class="hero-sub">I design and build custom-coded websites for small businesses — clean, fast, and made to grow with you. No templates. No confusion. Just results.</p>
       <div class="hero-ctas">
-        <a href="#pricing" class="btn-primary">View Packages</a>
+        <a href="#discovery" class="btn-primary">Book a Discovery Call</a>
         <a href="#contact" class="btn-outline">Get a Free Quote</a>
       </div>
       <div class="hero-stats">
@@ -1157,93 +1017,40 @@
     </div>
   </section>
 
-  <!-- ── PRICING ── -->
-  <section id="pricing">
-    <div class="section-header">
-      <p class="section-eyebrow">Investment</p>
-      <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot"></div><div class="ornament-line"></div></div>
-      <h2>Three packages.<br><em>No guessing.</em></h2>
-      <p style="font-size:0.9rem;color:var(--taupe);max-width:480px;margin:1rem auto 0;">Every package includes a complimentary 2-hour professional photoshoot — because great photos make great websites.</p>
-    </div>
-    <div class="pricing-grid">
+  <!-- ── DISCOVERY CALL ── -->
+  <section id="discovery" style="background:var(--cream);padding:7rem 4rem;">
+    <div style="max-width:900px;margin:0 auto;">
+      <div class="section-header">
+        <p class="section-eyebrow">Let's Talk First</p>
+        <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot"></div><div class="ornament-line"></div></div>
+        <h2>Every great website starts with<br>a <em>Discovery Call.</em></h2>
+        <p style="font-size:0.95rem;color:var(--taupe);max-width:500px;margin:1.25rem auto 0;line-height:1.8;">Before any proposals or pricing, I want to understand your business and your goals. That's what the discovery call is for — a free 30-minute conversation, just us.</p>
+      </div>
 
-      <div class="pricing-card">
-        <p class="pricing-tier">The Sparrow</p>
-        <div class="pricing-price"><sup>$</sup>1,200</div>
-        <p class="pricing-tagline">Getting off the ground — clean, simple, done right</p>
-        <div class="pricing-divider"></div>
-        <ul class="pricing-features">
-          <li>Up to 5 pages</li>
-          <li>Custom design</li>
-          <li>Mobile responsive</li>
-          <li>Contact form</li>
-          <li>Basic on-page SEO</li>
-          <li>2 revision rounds</li>
-          <li>Launch support</li>
-          <li style="color:var(--dusty-blue);border-color:var(--dusty-blue);">Free 2-hr photoshoot</li>
-        </ul>
-        <div class="pricing-cta">
-          <a href="#contact" class="btn-outline">Get Started</a>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem;margin:3rem 0 3.5rem;">
+        <div style="text-align:center;padding:2rem 1.5rem;border:1px solid var(--light-border);background:var(--white);">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:300;color:var(--dusty-blue);line-height:1;margin-bottom:0.75rem;">30</div>
+          <p style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:500;color:var(--charcoal);margin-bottom:0.4rem;">Minutes</p>
+          <p style="font-size:0.82rem;color:var(--taupe);">That's all it takes to figure out if we're a good fit and what your site needs.</p>
+        </div>
+        <div style="text-align:center;padding:2rem 1.5rem;border:1px solid var(--light-border);background:var(--white);">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:300;color:var(--dusty-blue);line-height:1;margin-bottom:0.75rem;">Free</div>
+          <p style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:500;color:var(--charcoal);margin-bottom:0.4rem;">No pitch. No pressure.</p>
+          <p style="font-size:0.82rem;color:var(--taupe);">A real conversation about your business and what success looks like for you.</p>
+        </div>
+        <div style="text-align:center;padding:2rem 1.5rem;border:1px solid var(--light-border);background:var(--white);">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:2.5rem;font-weight:300;color:var(--dusty-blue);line-height:1;margin-bottom:0.75rem;">Custom</div>
+          <p style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:500;color:var(--charcoal);margin-bottom:0.4rem;">Quote after</p>
+          <p style="font-size:0.82rem;color:var(--taupe);">Every project is different. I'll send a proposal tailored specifically to you.</p>
         </div>
       </div>
 
-      <div class="pricing-card featured">
-        <div class="pricing-badge">Most Popular</div>
-        <p class="pricing-tier">The Dove</p>
-        <div class="pricing-price"><sup>$</sup>2,800</div>
-        <p class="pricing-tagline">For businesses ready to look the part and grow</p>
-        <div class="pricing-divider"></div>
-        <ul class="pricing-features">
-          <li>Up to 10 pages</li>
-          <li>Custom design + branding</li>
-          <li>Mobile responsive</li>
-          <li>Contact form + integrations</li>
-          <li>Full on-page SEO setup</li>
-          <li>Google Business setup</li>
-          <li>3 revision rounds</li>
-          <li>1 month free maintenance</li>
-          <li style="color:var(--dusty-blue);border-color:var(--dusty-blue);">Free 2-hr photoshoot</li>
-        </ul>
-        <div class="pricing-cta">
-          <a href="#contact" class="btn-primary">Get Started</a>
+      <div style="background:var(--charcoal);padding:2.5rem 3rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:2rem;">
+        <div>
+          <p style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;font-style:italic;color:var(--white);margin-bottom:0.4rem;">Ready to start the conversation?</p>
+          <p style="font-size:0.85rem;color:var(--taupe);">Fill out the form below and I'll reach out to schedule your free discovery call.</p>
         </div>
-      </div>
-
-      <div class="pricing-card">
-        <p class="pricing-tier">The Wingspan</p>
-        <div class="pricing-price"><sup>$</sup>5,000</div>
-        <p class="pricing-tagline">Full build — everything you need to dominate your market</p>
-        <div class="pricing-divider"></div>
-        <ul class="pricing-features">
-          <li>Unlimited pages</li>
-          <li>Full custom design + branding</li>
-          <li>Booking or e-commerce ready</li>
-          <li>Advanced features + animations</li>
-          <li>Full SEO strategy + Google setup</li>
-          <li>Unlimited revisions</li>
-          <li>3 months free maintenance</li>
-          <li>Priority support</li>
-          <li style="color:var(--dusty-blue);border-color:var(--dusty-blue);">Free 2-hr photoshoot</li>
-        </ul>
-        <div class="pricing-cta">
-          <a href="#contact" class="btn-outline">Get Started</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="addons">
-      <div class="addon-item">
-        <p class="addon-label">Monthly Maintenance</p>
-        <p class="addon-price">$100<span style="font-size:1rem;color:var(--taupe);">/mo</span></p>
-      </div>
-      <div style="width:1px;height:50px;background:var(--light-border);"></div>
-      <div class="addon-item">
-        <p class="addon-label">Ongoing SEO</p>
-        <p class="addon-price">$200<span style="font-size:1rem;color:var(--taupe);">/mo</span></p>
-      </div>
-      <div style="width:1px;height:50px;background:var(--light-border);"></div>
-      <div class="addon-item" style="max-width:280px;text-align:left;">
-        <p style="font-size:0.82rem;color:var(--taupe);line-height:1.6;">Not sure which fits? <a href="#contact" style="color:var(--charcoal);text-decoration:underline;text-underline-offset:3px;">Send me a message</a> — I'll point you in the right direction, no pressure.</p>
+        <a href="#contact" class="btn-primary" style="background:var(--dusty-blue);border-color:var(--dusty-blue);white-space:nowrap;">Book a Discovery Call</a>
       </div>
     </div>
   </section>
@@ -1256,7 +1063,7 @@
       <h2>Hi, I'm <em>Justin</em>.</h2>
       <p>I started The Dove Co. because I believe every small business deserves a website that <strong>actually works</strong> — one that looks professional, loads fast, and helps you land real clients.</p>
       <p>I build everything custom-coded, from scratch. That means your site is faster, more flexible, and built around your goals — not whatever a template was designed for.</p>
-      <p>I keep things <strong>simple and honest</strong>: clear pricing, real communication, and no disappearing act after launch. You'll always know what's happening and why.</p>
+      <p>I keep things <strong>simple and honest</strong>: real communication, transparent proposals, and no disappearing act after launch. You'll always know what's happening and why.</p>
       <a href="#contact" class="btn-primary">Work With Me</a>
     </div>
     <div class="about-visual">
@@ -1339,7 +1146,7 @@
     <a href="#" class="footer-logo">Dove <span>Designs</span></a>
     <ul class="footer-links">
       <li><a href="#services">Services</a></li>
-      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#discovery">Discovery Call</a></li>
       <li><a href="#about">About</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
