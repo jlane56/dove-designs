@@ -861,29 +861,47 @@
 
 
     /* ─── RESPONSIVE ─── */
+
+    /* ── Tablets (up to 900px) ── */
     @media (max-width: 900px) {
-      #about {
-        grid-template-columns: 1fr;
-        gap: 3rem;
-        max-width: 100%;
-      }
+      nav { padding: 0.4rem 2rem; }
+      nav.scrolled { padding: 0.3rem 2rem; }
+      #services, #why, #process, #faq, #contact { padding: 5rem 2rem; }
+      #about { padding: 5rem 2rem; grid-template-columns: 1fr; gap: 3rem; max-width: 100%; }
+      #discovery { padding: 5rem 2rem !important; }
+      #photoshoot { padding: 4rem 2rem !important; }
+      #photoshoot > div { grid-template-columns: 1fr !important; gap: 2.5rem !important; }
       .about-visual { display: none; }
       .process-track { grid-template-columns: 1fr 1fr; gap: 2rem; }
       .process-track::before { display: none; }
     }
 
-    @media (max-width: 700px) {
-      nav { padding: 1.1rem 1.5rem; }
-      nav.scrolled { padding: 0.9rem 1.5rem; }
+    /* ── Mobile phones (up to 768px) ── */
+    @media (max-width: 768px) {
+      /* Nav */
+      nav { padding: 0.4rem 1.5rem; }
+      nav.scrolled { padding: 0.3rem 1.5rem; }
       .nav-links { display: none; }
       .nav-hamburger { display: flex; }
-      #intro { padding: 5rem 1.5rem 4rem; }
+
+      /* Hero */
+      #hero-wrapper { height: 150vh; }
+      .hero-text-layer { left: 1.5rem; right: 1.5rem; max-width: 100%; padding-top: 5rem; }
+      h1 { font-size: clamp(2.2rem, 9vw, 3rem); }
       .hero-ghost { display: none; }
-      #services, #why, #process, #discovery, #about, #faq, #contact { padding: 5rem 1.5rem; }
+      .hero-text-layer .hero-stats { gap: 1.5rem; margin-top: 2rem; padding-top: 1.5rem; }
+
+      /* Sections */
+      #intro { padding: 5rem 1.5rem 4rem; }
+      #services, #why, #process, #faq, #contact { padding: 5rem 1.5rem; }
       #about { padding: 5rem 1.5rem; }
+      #discovery { padding: 5rem 1.5rem !important; }
       #photoshoot { padding: 4rem 1.5rem !important; }
-      #photoshoot > div { grid-template-columns: 1fr !important; gap: 2.5rem !important; }
+      #photoshoot > div { grid-template-columns: 1fr !important; gap: 2rem !important; }
       .process-track { grid-template-columns: 1fr; }
+      .discovery-cta-bar { padding: 2rem 1.5rem !important; flex-direction: column; align-items: flex-start !important; }
+
+      /* Form & footer */
       .form-row { grid-template-columns: 1fr; }
       footer { padding: 2rem 1.5rem; flex-direction: column; text-align: center; }
       .footer-links { justify-content: center; flex-wrap: wrap; gap: 1rem; }
@@ -1127,7 +1145,7 @@
         </div>
       </div>
 
-      <div style="background:var(--charcoal);padding:2.5rem 3rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:2rem;">
+      <div class="discovery-cta-bar" style="background:var(--charcoal);padding:2.5rem 3rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:2rem;">
         <div>
           <p style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;font-style:italic;color:var(--white);margin-bottom:0.4rem;">Ready to start the conversation?</p>
           <p style="font-size:0.85rem;color:var(--taupe);">Fill out the form below and I'll reach out to schedule your free discovery call.</p>
