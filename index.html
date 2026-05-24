@@ -439,7 +439,7 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 5rem;
-      align-items: center;
+      align-items: stretch;
       max-width: 100%;
     }
 
@@ -493,23 +493,40 @@
 
     .photo-offer-visual {
       position: relative;
+      overflow: hidden;
+      align-self: stretch;
+      min-height: 420px;
     }
 
-    .photo-offer-img {
+    /* ─── SCROLLING GALLERY ─── */
+    .gallery-strip {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .gallery-strip-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      animation: gallerySlide 32s linear infinite;
+    }
+
+    .gallery-strip:hover .gallery-strip-inner {
+      animation-play-state: paused;
+    }
+
+    @keyframes gallerySlide {
+      from { transform: translateY(0); }
+      to   { transform: translateY(-50%); }
+    }
+
+    .gallery-photo {
       width: 100%;
-      aspect-ratio: 4/3;
+      aspect-ratio: 3/2;
       object-fit: cover;
       object-position: center;
       display: block;
-    }
-
-    .photo-offer-caption {
-      font-size: 0.72rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: rgba(248,240,221,0.3);
-      margin-top: 1rem;
-      text-align: right;
+      flex-shrink: 0;
     }
 
     @media (max-width: 900px) {
@@ -724,8 +741,22 @@
       <p>Eight years behind the camera. Commercial, real estate, events. I know what it takes to make a business look its best.</p>
     </div>
     <div class="photo-offer-visual">
-      <img src="images/portfolio/jubilee.png" alt="Jubilee Real Estate Media — photography by Justin Lane" class="photo-offer-img">
-      <div class="photo-offer-caption">Jubilee Real Estate Media — content shot by Justin</div>
+      <div class="gallery-strip">
+        <div class="gallery-strip-inner">
+          <!-- ── GALLERY PHOTOS ─────────────────────────────────────────────
+               Drop your shots into images/gallery/ and update the src paths.
+               List them once below, then duplicate the full set after the
+               comment so the loop is seamless.
+          ──────────────────────────────────────────────────────────────── -->
+          <img src="images/vacationfilm-35.JPG"                              alt="Photography by Justin Lane" class="gallery-photo">
+          <img src="images/4231204011-R1-046-21A.JPG"                        alt="Photography by Justin Lane" class="gallery-photo">
+          <img src="images/nordwood-themes-R53t-Tg6J4c-unsplash%20(1).jpg"  alt="Photography by Justin Lane" class="gallery-photo">
+          <!-- Duplicate set — keep in sync with the originals above -->
+          <img src="images/vacationfilm-35.JPG"                              alt="" class="gallery-photo" aria-hidden="true">
+          <img src="images/4231204011-R1-046-21A.JPG"                        alt="" class="gallery-photo" aria-hidden="true">
+          <img src="images/nordwood-themes-R53t-Tg6J4c-unsplash%20(1).jpg"  alt="" class="gallery-photo" aria-hidden="true">
+        </div>
+      </div>
     </div>
   </section>
 
