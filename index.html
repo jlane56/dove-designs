@@ -439,7 +439,7 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 5rem;
-      align-items: stretch;
+      align-items: center;
       max-width: 100%;
     }
 
@@ -493,40 +493,42 @@
 
     .photo-offer-visual {
       position: relative;
+      height: clamp(320px, 38vw, 500px);
       overflow: hidden;
-      align-self: stretch;
-      min-height: 420px;
     }
 
-    /* ─── SCROLLING GALLERY ─── */
+    /* ─── CROSSFADE GALLERY ─── */
     .gallery-strip {
+      position: relative;
+      width: 100%;
       height: 100%;
-      overflow: hidden;
-    }
-
-    .gallery-strip-inner {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      animation: gallerySlide 48s linear infinite;
-    }
-
-    .gallery-strip:hover .gallery-strip-inner {
-      animation-play-state: paused;
-    }
-
-    @keyframes gallerySlide {
-      from { transform: translateY(0); }
-      to   { transform: translateY(-50%); }
     }
 
     .gallery-photo {
+      position: absolute;
+      inset: 0;
       width: 100%;
-      aspect-ratio: 3/2;
+      height: 100%;
       object-fit: cover;
       object-position: center;
-      display: block;
-      flex-shrink: 0;
+      opacity: 0;
+      animation: galleryFade 36s infinite;
+    }
+
+    /* One delay per photo — add a new line if you add more shots */
+    .gallery-photo:nth-child(1) { animation-delay:  0s; }
+    .gallery-photo:nth-child(2) { animation-delay:  6s; }
+    .gallery-photo:nth-child(3) { animation-delay: 12s; }
+    .gallery-photo:nth-child(4) { animation-delay: 18s; }
+    .gallery-photo:nth-child(5) { animation-delay: 24s; }
+    .gallery-photo:nth-child(6) { animation-delay: 30s; }
+
+    @keyframes galleryFade {
+      0%     { opacity: 0; }
+      2.78%  { opacity: 1; }   /* 1s fade in  */
+      16.67% { opacity: 1; }   /* hold        */
+      19.44% { opacity: 0; }   /* 1s fade out */
+      100%   { opacity: 0; }
     }
 
     @media (max-width: 900px) {
@@ -742,25 +744,15 @@
     </div>
     <div class="photo-offer-visual">
       <div class="gallery-strip">
-        <div class="gallery-strip-inner">
-          <!-- ── GALLERY PHOTOS ─────────────────────────────────────────────
-               Add new shots here, then duplicate the full set below so
-               the loop stays seamless.
-          ──────────────────────────────────────────────────────────────── -->
-          <img src="images/_JL_9849.jpg"        alt="Photography by Justin Lane" class="gallery-photo">
-          <img src="images/RSP-4.jpg"           alt="Photography by Justin Lane" class="gallery-photo">
-          <img src="images/000028620008.jpg"    alt="Photography by Justin Lane" class="gallery-photo">
-          <img src="images/RSP-5.jpg"           alt="Photography by Justin Lane" class="gallery-photo">
-          <img src="images/Top%204D-71.jpg"     alt="Photography by Justin Lane" class="gallery-photo">
-          <img src="images/RSP-10.jpg"          alt="Photography by Justin Lane" class="gallery-photo">
-          <!-- Duplicate set — keep in sync with the originals above -->
-          <img src="images/_JL_9849.jpg"        alt="" class="gallery-photo" aria-hidden="true">
-          <img src="images/RSP-4.jpg"           alt="" class="gallery-photo" aria-hidden="true">
-          <img src="images/000028620008.jpg"    alt="" class="gallery-photo" aria-hidden="true">
-          <img src="images/RSP-5.jpg"           alt="" class="gallery-photo" aria-hidden="true">
-          <img src="images/Top%204D-71.jpg"     alt="" class="gallery-photo" aria-hidden="true">
-          <img src="images/RSP-10.jpg"          alt="" class="gallery-photo" aria-hidden="true">
-        </div>
+        <!-- ── GALLERY PHOTOS — one img per shot, add new ones at the bottom.
+             If you add a 7th photo, also add .gallery-photo:nth-child(7) { animation-delay: 36s; }
+             to the CSS and change the animation duration from 36s to 42s. -->
+        <img src="images/_JL_9849.jpg"     alt="Photography by Justin Lane" class="gallery-photo">
+        <img src="images/RSP-4.jpg"        alt="Photography by Justin Lane" class="gallery-photo">
+        <img src="images/000028620008.jpg" alt="Photography by Justin Lane" class="gallery-photo">
+        <img src="images/RSP-5.jpg"        alt="Photography by Justin Lane" class="gallery-photo">
+        <img src="images/Top%204D-71.jpg"  alt="Photography by Justin Lane" class="gallery-photo">
+        <img src="images/RSP-10.jpg"       alt="Photography by Justin Lane" class="gallery-photo">
       </div>
     </div>
   </section>
