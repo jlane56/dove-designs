@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GSAP + Lenis Playground — The Dove Design Co.</title>
+  <!-- Not linked in the nav — this is your personal sandbox for learning -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.typekit.net/kei0jhu.css">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:    #F8F0DD;
+      --white:    #FCF8EE;
+      --charcoal: #535344;
+      --taupe:    #98A091;
+      --gold:     #AB8552;
+      --border:   #DDD5C0;
+    }
+
+    /* Lenis handles smooth scroll — don't use CSS scroll-behavior alongside it */
+    html { scroll-behavior: auto; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--white);
+      color: var(--charcoal);
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── SECTION LABELS ── */
+    /* These tell you which demo you're looking at */
+    .demo-label {
+      display: block;
+      font-size: 0.68rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+    }
+
+    .demo-note {
+      display: block;
+      font-size: 0.78rem;
+      color: var(--taupe);
+      max-width: 560px;
+      margin-bottom: 3rem;
+      line-height: 1.8;
+    }
+
+
+    /* ════════════════════════════════
+       DEMO 1 — PAGE LOAD HERO
+       ════════════════════════════════ */
+    #demo-hero {
+      min-height: 100vh;
+      background: var(--charcoal);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 6rem;
+      overflow: hidden;
+      position: relative;
+    }
+
+    #demo-hero .eyebrow {
+      font-size: 0.78rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(248,240,221,0.45);
+      margin-bottom: 2rem;
+      /* Starts invisible — GSAP animates this in */
+    }
+
+    #demo-hero h1 {
+      font-family: 'freight-display-pro', serif;
+      font-size: clamp(3.2rem, 7vw, 7rem);
+      font-weight: 300;
+      line-height: 1.05;
+      color: var(--cream);
+      margin-bottom: 2.5rem;
+    }
+
+    /* Each .word clips its inner .span so the slide-up is hidden */
+    .word {
+      display: inline-block;
+      overflow: hidden;
+      vertical-align: bottom;
+    }
+
+    .word span {
+      display: inline-block;
+      /* Starts translated down — GSAP slides it to Y:0 */
+    }
+
+    #demo-hero .sub {
+      font-size: 1rem;
+      color: rgba(248,240,221,0.5);
+      max-width: 480px;
+      line-height: 1.9;
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 6rem;
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(248,240,221,0.25);
+    }
+
+
+    /* ════════════════════════════════
+       DEMO 2 — FADE UP ON SCROLL
+       ════════════════════════════════ */
+    #demo-fade {
+      padding: 10rem 6rem;
+      background: var(--white);
+    }
+
+    #demo-fade h2 {
+      font-family: 'freight-display-pro', serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 400;
+      margin-bottom: 0.75rem;
+    }
+
+    .fade-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 3.5rem;
+    }
+
+    .fade-card {
+      background: var(--cream);
+      border: 1px solid var(--border);
+      padding: 2.5rem 2rem;
+    }
+
+    .fade-card .num {
+      font-family: 'freight-display-pro', serif;
+      font-size: 2.8rem;
+      font-weight: 300;
+      color: var(--border);
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+
+    .fade-card h3 {
+      font-family: 'freight-display-pro', serif;
+      font-size: 1.3rem;
+      font-weight: 500;
+      margin-bottom: 0.6rem;
+    }
+
+    .fade-card p {
+      font-size: 0.85rem;
+      color: var(--taupe);
+      line-height: 1.8;
+    }
+
+
+    /* ════════════════════════════════
+       DEMO 3 — SCRUB (scroll-driven)
+       ════════════════════════════════ */
+    #demo-scrub {
+      padding: 10rem 6rem;
+      background: var(--charcoal);
+      min-height: 180vh; /* tall so there's room to scroll and see the effect */
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    #demo-scrub h2 {
+      font-family: 'freight-display-pro', serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 400;
+      color: var(--cream);
+      position: relative;
+      z-index: 2;
+      margin-bottom: 1rem;
+    }
+
+    #demo-scrub .demo-note { color: rgba(248,240,221,0.4); }
+
+    /* This circle is controlled by scroll position, not time */
+    .scrub-circle {
+      position: absolute;
+      width: 700px;
+      height: 700px;
+      border-radius: 50%;
+      border: 1px solid rgba(171,133,82,0.2);
+      background: radial-gradient(circle, rgba(171,133,82,0.06) 0%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.2);
+      /* GSAP will grow this from scale 0.2 → 1.8 as you scroll */
+    }
+
+    /* This bar draws itself across the screen as you scroll */
+    .scrub-bar {
+      position: absolute;
+      bottom: 4rem;
+      left: 6rem;
+      right: 6rem;
+      height: 1px;
+      background: rgba(171,133,82,0.35);
+      transform-origin: left center;
+      transform: scaleX(0);
+    }
+
+
+    /* ════════════════════════════════
+       DEMO 4 — WORD REVEAL
+       ════════════════════════════════ */
+    #demo-text {
+      padding: 10rem 6rem;
+      background: var(--white);
+    }
+
+    .reveal-headline {
+      font-family: 'freight-display-pro', serif;
+      font-size: clamp(2.5rem, 5vw, 5.5rem);
+      font-weight: 300;
+      line-height: 1.2;
+      max-width: 900px;
+    }
+
+    .reveal-headline .word span.em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+
+    /* ════════════════════════════════
+       DEMO 5 — STAGGER GRID
+       ════════════════════════════════ */
+    #demo-stagger {
+      padding: 10rem 6rem;
+      background: var(--charcoal);
+    }
+
+    #demo-stagger h2 {
+      font-family: 'freight-display-pro', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 400;
+      color: var(--cream);
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .stagger-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+
+    .stagger-box {
+      aspect-ratio: 3/4;
+      background: rgba(248,240,221,0.04);
+      border: 1px solid rgba(248,240,221,0.07);
+      display: flex;
+      align-items: flex-end;
+      padding: 1.25rem;
+    }
+
+    .stagger-box span {
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(248,240,221,0.2);
+    }
+
+
+    /* ════════════════════════════════
+       RESPONSIVE
+       ════════════════════════════════ */
+    @media (max-width: 900px) {
+      #demo-hero, #demo-fade, #demo-scrub, #demo-text, #demo-stagger {
+        padding-left: 2rem;
+        padding-right: 2rem;
+      }
+      .fade-grid { grid-template-columns: 1fr; }
+      .stagger-grid { grid-template-columns: repeat(2, 1fr); }
+      .scroll-hint { left: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+
+  <!-- ════════════════════════════════════════════════════════════════
+       DEMO 1 — PAGE LOAD ANIMATION
+
+       When the page loads, a GSAP timeline plays: eyebrow fades in,
+       then each word of the headline slides up from behind its parent
+       (the .word div has overflow:hidden so the slide is clipped),
+       then the subtitle fades in.
+
+       Key concept: gsap.timeline() chains animations. By default they
+       play one after the other. Use position params to overlap them:
+         ">"     = after previous ends
+         "<"     = same time as previous starts
+         "<0.3"  = 0.3s after previous starts
+         "-=0.4" = 0.4s before previous ends
+  ════════════════════════════════════════════════════════════════ -->
+  <section id="demo-hero">
+    <div class="scrub-circle"></div>
+
+    <p class="eyebrow">GSAP + Lenis — Playground</p>
+
+    <h1>
+      <div class="word"><span>Beautiful</span></div>&nbsp;<div class="word"><span>things</span></div>
+      <br>
+      <div class="word"><span>take</span></div>&nbsp;<div class="word"><span>intention.</span></div>
+    </h1>
+
+    <p class="sub">Every effect on this page is yours to copy and use. Read the JS comments — that's where the learning is. Nothing here is magic, just a few patterns repeated.</p>
+
+    <p class="scroll-hint">↓ Scroll to explore</p>
+  </section>
+
+
+  <!-- ════════════════════════════════════════════════════════════════
+       DEMO 2 — FADE UP ON SCROLL
+
+       The most common effect on modern sites. Each card animates in
+       as it enters the viewport using ScrollTrigger.
+
+       Key concept: gsap.from() animates FROM the values you give it
+       back to whatever the element's natural CSS already is. So if
+       you write opacity:0, y:50, it starts invisible and 50px down,
+       then animates to opacity:1 and y:0 (its natural position).
+
+       stagger: 0.12 means each card starts 120ms after the previous.
+  ════════════════════════════════════════════════════════════════ -->
+  <section id="demo-fade">
+    <span class="demo-label">Demo 02 — Fade Up on Scroll</span>
+    <h2>Elements reveal as you scroll.</h2>
+    <span class="demo-note">This fires once when each element enters the viewport. The stagger staggers them in sequence. Change the y value, duration, or ease and see what shifts.</span>
+
+    <div class="fade-grid">
+      <div class="fade-card">
+        <div class="num">01</div>
+        <h3>gsap.from()</h3>
+        <p>Animates FROM the values you give it back to the element's natural CSS state. The most common pattern for reveal animations.</p>
+      </div>
+      <div class="fade-card">
+        <div class="num">02</div>
+        <h3>ScrollTrigger</h3>
+        <p>Watches the scroll position and fires animations when elements enter/leave the viewport. The <code>start</code> value controls exactly when.</p>
+      </div>
+      <div class="fade-card">
+        <div class="num">03</div>
+        <h3>stagger</h3>
+        <p>When multiple elements share one animation call, stagger delays each one slightly. Creates a cascade without writing multiple animations.</p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════════════════════════════════════════════════════════════════
+       DEMO 3 — SCRUB
+
+       Scrub ties animation progress directly to scroll position.
+       Instead of playing on a timer, the animation is a "scrubber"
+       — like dragging a video timeline with your scroll wheel.
+
+       Key concept:
+         scrub: true  → perfectly tied to scroll, no lag
+         scrub: 1     → tied to scroll with 1s of smoothing (weighted)
+
+       The circle and bar aren't on timers — they're driven by
+       how far you've scrolled through this section.
+  ════════════════════════════════════════════════════════════════ -->
+  <section id="demo-scrub">
+    <div class="scrub-circle"></div>
+    <div class="scrub-bar"></div>
+
+    <span class="demo-label" style="color:rgba(171,133,82,0.6);">Demo 03 — Scrub (scroll-driven)</span>
+    <h2>Scroll drives the animation.</h2>
+    <span class="demo-note">The circle and bar aren't on timers — they're controlled by your scroll position. Scroll slowly and you'll see them move with you. Scroll back up and they reverse.</span>
+  </section>
+
+
+  <!-- ════════════════════════════════════════════════════════════════
+       DEMO 4 — WORD REVEAL
+
+       Each word is wrapped in .word (overflow:hidden) with a span
+       inside. The span starts translateY(110%) — below the clip.
+       GSAP animates all the spans to translateY(0) with a stagger,
+       so each word slides up into view in sequence.
+
+       This technique is everywhere on agency sites. The overflow:hidden
+       on the parent is what makes the slide "emerge from a slot"
+       rather than just moving on screen.
+  ════════════════════════════════════════════════════════════════ -->
+  <section id="demo-text">
+    <span class="demo-label">Demo 04 — Word Reveal</span>
+    <span class="demo-note">Each word slides up from behind its parent container. The overflow:hidden on .word clips the movement so words appear to emerge from a slot rather than floating in from below.</span>
+
+    <p class="reveal-headline">
+      <span class="word"><span>Every</span></span>
+      <span class="word"><span>detail</span></span>
+      <span class="word"><span class="em">matters.</span></span>
+      <span class="word"><span>Every</span></span>
+      <span class="word"><span>word</span></span>
+      <span class="word"><span>earns</span></span>
+      <span class="word"><span>its</span></span>
+      <span class="word"><span>place.</span></span>
+    </p>
+  </section>
+
+
+  <!-- ════════════════════════════════════════════════════════════════
+       DEMO 5 — STAGGER GRID
+
+       Same principle as Demo 2, but on a grid of items. The
+       stagger.from option controls the direction:
+         "start"   → left to right, top to bottom
+         "end"     → right to left, bottom to top
+         "center"  → radiates from the center outward
+         "edges"   → starts from corners, meets in the middle
+         0         → index, starts from that specific item
+
+       Try changing stagger.from below and rebuild to see the
+       difference. "center" is particularly dramatic on grids.
+  ════════════════════════════════════════════════════════════════ -->
+  <section id="demo-stagger">
+    <h2>Work that speaks.</h2>
+    <div class="stagger-grid">
+      <div class="stagger-box"><span>01</span></div>
+      <div class="stagger-box"><span>02</span></div>
+      <div class="stagger-box"><span>03</span></div>
+      <div class="stagger-box"><span>04</span></div>
+      <div class="stagger-box"><span>05</span></div>
+      <div class="stagger-box"><span>06</span></div>
+      <div class="stagger-box"><span>07</span></div>
+      <div class="stagger-box"><span>08</span></div>
+    </div>
+  </section>
+
+
+  <!-- ════════════════════════════
+       LIBRARIES
+       Load order: GSAP core → plugins → Lenis → your script
+  ════════════════════════════ -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
+
+  <script>
+
+    // ─────────────────────────────────────────────────────────────
+    // SETUP — always do these two things before anything else
+    // ─────────────────────────────────────────────────────────────
+
+    // 1. Register the ScrollTrigger plugin
+    gsap.registerPlugin(ScrollTrigger);
+
+    // 2. Set up Lenis smooth scroll
+    //    Lenis takes over from the browser's native scroll.
+    //    The gsap.ticker integration keeps them in sync so
+    //    ScrollTrigger fires at the right moment.
+    const lenis = new Lenis({
+      duration: 1.2,  // how long the scroll "glide" lasts in seconds
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // ease-out expo
+    });
+
+    // Drive Lenis from GSAP's animation frame (not requestAnimationFrame directly)
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1000); // GSAP gives seconds, Lenis wants milliseconds
+    });
+
+    gsap.ticker.lagSmoothing(0); // prevents jumps if the tab is backgrounded
+
+
+    // ─────────────────────────────────────────────────────────────
+    // DEMO 1 — PAGE LOAD TIMELINE
+    //
+    // gsap.timeline() groups animations and plays them in sequence.
+    // The position parameter (2nd arg to .to/.from) controls timing:
+    //   ">-0.4"  means 0.4s before the PREVIOUS animation ENDS
+    //   "<0.2"   means 0.2s after the PREVIOUS animation STARTS
+    // ─────────────────────────────────────────────────────────────
+    const tl = gsap.timeline({ delay: 0.3 });
+
+    tl
+      // Fade in the eyebrow label
+      .from('#demo-hero .eyebrow', {
+        opacity: 0,
+        y: 15,
+        duration: 0.8,
+        ease: 'power3.out',
+      })
+
+      // Slide each headline word up from behind its .word container
+      // "<0.3" = start 0.3s after the eyebrow starts (overlapping)
+      .from('#demo-hero .word span', {
+        y: '110%',         // start fully below the overflow:hidden clip
+        duration: 1,
+        ease: 'power4.out',
+        stagger: 0.08,     // 80ms between each word
+      }, '<0.3')
+
+      // Fade in the subtitle paragraph
+      .from('#demo-hero .sub', {
+        opacity: 0,
+        y: 20,
+        duration: 0.9,
+        ease: 'power3.out',
+      }, '>-0.4')           // start 0.4s before the words finish
+
+      // Scroll hint last
+      .from('#demo-hero .scroll-hint', {
+        opacity: 0,
+        duration: 1,
+        ease: 'power2.out',
+      }, '>-0.2');
+
+
+    // ─────────────────────────────────────────────────────────────
+    // DEMO 2 — FADE UP ON SCROLL
+    //
+    // scrollTrigger.start: "top 85%"
+    //   → fire when the TOP of the element hits 85% down the viewport
+    //
+    // Think of "top 85%" as two parts:
+    //   - "top"   = which edge of the ELEMENT to watch
+    //   - "85%"   = where on the VIEWPORT to trigger it
+    //   So: when the element's top edge reaches 85% from the top =
+    //       when the element is near the bottom of the screen
+    // ─────────────────────────────────────────────────────────────
+    gsap.from('#demo-fade h2', {
+      opacity: 0,
+      y: 40,
+      duration: 0.9,
+      ease: 'power3.out',
+      scrollTrigger: { trigger: '#demo-fade h2', start: 'top 85%' }
+    });
+
+    gsap.from('#demo-fade .demo-note', {
+      opacity: 0,
+      y: 25,
+      duration: 0.8,
+      ease: 'power3.out',
+      scrollTrigger: { trigger: '#demo-fade .demo-note', start: 'top 88%' }
+    });
+
+    // Cards: triggered together with a stagger
+    gsap.from('.fade-card', {
+      opacity: 0,
+      y: 60,
+      duration: 0.8,
+      ease: 'power3.out',
+      stagger: 0.12,         // 120ms between each card
+      scrollTrigger: {
+        trigger: '.fade-grid',
+        start: 'top 80%',
+      }
+    });
+
+
+    // ─────────────────────────────────────────────────────────────
+    // DEMO 3 — SCRUB
+    //
+    // scrub: true  → animation progress = scroll progress (no lag)
+    // scrub: 1     → animation follows scroll with 1s smoothing
+    //
+    // start: 'top bottom'  → when section top hits viewport bottom
+    // end:   'bottom top'  → when section bottom exits viewport top
+    // This means the animation spans the entire time this section
+    // is anywhere on screen.
+    // ─────────────────────────────────────────────────────────────
+
+    // The circle grows and fades as you scroll through the section
+    gsap.to('#demo-scrub .scrub-circle', {
+      scale: 1.8,
+      opacity: 0,
+      ease: 'none',            // no easing — perfectly linear with scroll
+      scrollTrigger: {
+        trigger: '#demo-scrub',
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: 1.5,            // 1.5s of smoothing — feels weighted
+      }
+    });
+
+    // The bar draws itself left to right as you scroll
+    gsap.to('.scrub-bar', {
+      scaleX: 1,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '#demo-scrub',
+        start: 'top 60%',
+        end: 'bottom 40%',
+        scrub: true,           // true = perfectly tied, no smoothing
+      }
+    });
+
+
+    // ─────────────────────────────────────────────────────────────
+    // DEMO 4 — WORD REVEAL ON SCROLL
+    //
+    // Same technique as the hero, but triggered by scroll instead
+    // of a page-load timeline.
+    //
+    // stagger: 0.055 is tight — feels like one fluid motion because
+    // the words are so close together in time. Try 0.2 and you'll
+    // see it feel choppy. The sweet spot is usually 0.04–0.1.
+    // ─────────────────────────────────────────────────────────────
+    gsap.from('.reveal-headline .word span', {
+      y: '110%',
+      duration: 1,
+      ease: 'power4.out',
+      stagger: 0.055,
+      scrollTrigger: {
+        trigger: '.reveal-headline',
+        start: 'top 80%',
+      }
+    });
+
+
+    // ─────────────────────────────────────────────────────────────
+    // DEMO 5 — STAGGER GRID
+    //
+    // stagger can be a number (seconds between each) or an object
+    // for more control. The object form lets you set:
+    //   amount: total duration spread across ALL items
+    //   from:   where to start the ripple ("start", "center", etc.)
+    //
+    // Try changing "start" to "center" — the ripple radiates out
+    // from the middle of the grid instead of corner to corner.
+    // ─────────────────────────────────────────────────────────────
+    gsap.from('.stagger-box', {
+      opacity: 0,
+      y: 40,
+      scale: 0.94,
+      duration: 0.7,
+      ease: 'power3.out',
+      stagger: {
+        amount: 0.7,     // total time spread across all 8 boxes = ~88ms each
+        from: 'start',   // try: "end", "center", "edges"
+      },
+      scrollTrigger: {
+        trigger: '.stagger-grid',
+        start: 'top 75%',
+      }
+    });
+
+  </script>
+
+</body>
+</html>
