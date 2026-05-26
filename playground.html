@@ -459,7 +459,7 @@
   ════════════════════════════ -->
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-  <script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.9/dist/lenis.min.js"></script>
 
   <script>
 
@@ -471,20 +471,20 @@
     gsap.registerPlugin(ScrollTrigger);
 
     // 2. Set up Lenis smooth scroll
-    //    Lenis takes over from the browser's native scroll.
-    //    The gsap.ticker integration keeps them in sync so
-    //    ScrollTrigger fires at the right moment.
-    const lenis = new Lenis({
-      duration: 1.2,  // how long the scroll "glide" lasts in seconds
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // ease-out expo
-    });
-
-    // Drive Lenis from GSAP's animation frame (not requestAnimationFrame directly)
-    gsap.ticker.add((time) => {
-      lenis.raf(time * 1000); // GSAP gives seconds, Lenis wants milliseconds
-    });
-
-    gsap.ticker.lagSmoothing(0); // prevents jumps if the tab is backgrounded
+    //    Wrapped in try/catch — if the CDN ever fails, GSAP still runs fine.
+    //    You'll just lose the smooth scroll, not the animations.
+    try {
+      const lenis = new Lenis({
+        duration: 1.2,  // how long the scroll "glide" lasts in seconds
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // ease-out expo
+      });
+      gsap.ticker.add((time) => {
+        lenis.raf(time * 1000); // GSAP gives seconds, Lenis wants milliseconds
+      });
+      gsap.ticker.lagSmoothing(0);
+    } catch(e) {
+      console.warn('Lenis failed to load — smooth scroll disabled, animations still work.');
+    }
 
 
     // ─────────────────────────────────────────────────────────────
