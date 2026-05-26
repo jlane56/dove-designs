@@ -285,6 +285,110 @@
 
 
     /* ════════════════════════════════
+       DEMO 6 — PIN + SCRUB
+       ════════════════════════════════ */
+    #demo-pin {
+      height: 100vh;
+      background: var(--charcoal);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .pin-scene {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Soft radial glow in the background */
+    .pin-bg {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(171,133,82,0.07) 0%, transparent 70%);
+    }
+
+    /* Both headlines sit in the same center spot, stack via z-index */
+    .pin-h1,
+    .pin-h2 {
+      position: absolute;
+      font-family: 'freight-display-pro', serif;
+      font-size: clamp(3rem, 7vw, 7rem);
+      font-weight: 300;
+      color: var(--cream);
+      text-align: center;
+      line-height: 1.1;
+      max-width: 800px;
+      padding: 0 2rem;
+    }
+
+    .pin-h2 { opacity: 0; } /* GSAP controls this — set in CSS to prevent flash */
+    .pin-h2 em { font-style: italic; color: var(--gold); }
+
+    /* Card: phone-shaped element that grows from a tiny point */
+    .pin-card {
+      width: min(260px, 55vw);
+      aspect-ratio: 9/16;
+      background: linear-gradient(160deg, rgba(171,133,82,0.1) 0%, rgba(22,22,18,0.97) 100%);
+      border: 1px solid rgba(171,133,82,0.18);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.2rem;
+      position: relative;
+      opacity: 0;  /* GSAP controls this */
+    }
+
+    .pin-card-ring {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 1px solid rgba(171,133,82,0.35);
+      display: grid;
+      place-items: center;
+    }
+
+    .pin-card-ring::after {
+      content: '';
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(171,133,82,0.45);
+    }
+
+    .pin-card-name {
+      font-family: 'freight-display-pro', serif;
+      font-size: 1rem;
+      font-weight: 300;
+      color: rgba(248,240,221,0.35);
+      text-align: center;
+      letter-spacing: 0.04em;
+      line-height: 1.5;
+    }
+
+    /* Tagline pinned to the bottom of the scene */
+    .pin-tagline {
+      position: absolute;
+      bottom: 3rem;
+      left: 0; right: 0;
+      text-align: center;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(171,133,82,0.5);
+      opacity: 0;  /* GSAP controls this */
+    }
+
+    .pin-demo-label {
+      position: absolute;
+      top: 2rem;
+      left: 4rem;
+    }
+
+    /* ════════════════════════════════
        RESPONSIVE
        ════════════════════════════════ */
     @media (max-width: 900px) {
@@ -449,6 +553,47 @@
       <div class="stagger-box"><span>06</span></div>
       <div class="stagger-box"><span>07</span></div>
       <div class="stagger-box"><span>08</span></div>
+    </div>
+  </section>
+
+
+  <!-- ════════════════════════════════════════════════════════════════
+       DEMO 6 — PIN + SCRUB (The Apple Technique)
+
+       pin: true    → section sticks to viewport while animation plays.
+                      Your scroll drives the animation. Page only moves
+                      again once the animation finishes.
+
+       end: "+=2500" → stay pinned for 2500px of scroll.
+                       More px = slower, more cinematic.
+                       Less px = snappier transitions.
+
+       anticipatePin: 1 → prevents a visual jump when the pin engages.
+                          Always include this — you'll feel the difference.
+
+       Inside the timeline, position numbers (0, 0.2, 1.6...) are
+       "timeline seconds" that map proportionally to 2500px of scroll.
+       So position 1.0 = roughly halfway through the pinned scroll.
+  ════════════════════════════════════════════════════════════════ -->
+  <section id="demo-pin">
+    <div class="pin-scene" id="pinScene">
+      <div class="pin-bg"></div>
+
+      <span class="demo-label pin-demo-label">Demo 06 — Pin + Scrub</span>
+
+      <!-- Phase 1: visible at start, exits as you scroll -->
+      <h2 class="pin-h1">The web<br>has changed.</h2>
+
+      <!-- Grows from a single point to full size -->
+      <div class="pin-card">
+        <div class="pin-card-ring"></div>
+        <p class="pin-card-name">The Dove<br>Design Co.</p>
+      </div>
+
+      <!-- Phase 2: scrubs in once the card is grown -->
+      <h2 class="pin-h2"><em>Build</em><br>for it.</h2>
+
+      <p class="pin-tagline">Custom-coded. Hand-built. Yours.</p>
     </div>
   </section>
 
@@ -659,6 +804,74 @@
         start: 'top 75%',
       }
     });
+
+
+    // ─────────────────────────────────────────────────────────────
+    // DEMO 6 — PIN + SCRUB
+    //
+    // One timeline. Multiple animations inside it. The whole thing
+    // is driven by 2500px of scroll while the section is pinned.
+    //
+    // Rule: always use ease:'none' inside scrubbed timelines.
+    // Easing is for time-based animations. Scrub is position-based.
+    // Adding ease here would make the feel uneven as you scroll.
+    // ─────────────────────────────────────────────────────────────
+
+    const pinTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '#demo-pin',
+        start: 'top top',      // pin the moment section hits top of viewport
+        end: '+=2500',         // stay pinned for 2500px of scroll
+        scrub: 1.5,            // weighted tracking — feels smooth, not mechanical
+        pin: true,             // THIS is the magic — holds the section in place
+        anticipatePin: 1,      // prevents visual jump at pin start — always include
+      }
+    });
+
+    pinTl
+
+      // 0s → 1s: first headline floats up and fades out
+      .to('.pin-h1', {
+        opacity: 0,
+        y: -90,
+        scale: 0.93,
+        duration: 1,
+        ease: 'none',
+      }, 0)
+
+      // 0.2s → 2.2s: card grows from a single pixel to full size
+      // scale(0.05) is roughly 1 pixel on a 260px card = dramatic
+      .fromTo('.pin-card', {
+        scale: 0.05,
+        opacity: 0,
+      }, {
+        scale: 1,
+        opacity: 1,
+        duration: 2,
+        ease: 'none',
+      }, 0.2)               // starts slightly after h1 begins exiting
+
+      // 1.6s → 2.5s: second headline scrubs in
+      .fromTo('.pin-h2', {
+        opacity: 0,
+        y: 55,
+      }, {
+        opacity: 1,
+        y: 0,
+        duration: 0.9,
+        ease: 'none',
+      }, 1.6)               // 1.6 ÷ ~2.7 total = fires at ~60% of scroll distance
+
+      // 2.1s → 2.7s: tagline slides up last
+      .fromTo('.pin-tagline', {
+        opacity: 0,
+        y: 15,
+      }, {
+        opacity: 1,
+        y: 0,
+        duration: 0.6,
+        ease: 'none',
+      }, 2.1);              // last thing to appear — ~80% of scroll distance
 
   </script>
 
