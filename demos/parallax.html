@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Depth & Motion — The Dove Design Co.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.typekit.net/kei0jhu.css">
+  <style>
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: auto; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: #0c0c09;
+      color: #F8F0DD;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+
+    /* ═══════════════════════════════════════════
+       SECTION 1 — PARALLAX HERO
+       Three layers at three depths.
+    ═══════════════════════════════════════════ */
+    #hero {
+      height: 100vh;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Each layer is oversized vertically (inset: -40% 0) so
+       the parallax offset never shows a hard edge            */
+    .layer {
+      position: absolute;
+      inset: -40% 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ─ Layer 1: Background — slowest, feels far away ─ */
+    .layer-bg {
+      background: radial-gradient(ellipse 80% 50% at 50% 60%,
+        rgba(171,133,82,0.07) 0%, transparent 65%);
+      z-index: 1;
+    }
+
+    .layer-bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(248,240,221,0.07) 1px, transparent 1px);
+      background-size: 38px 38px;
+    }
+
+    /* ─ Layer 2: Ghost text — medium speed ─ */
+    .layer-mid {
+      z-index: 2;
+    }
+
+    .ghost-word {
+      font-family: 'freight-display-pro', serif;
+      font-size: clamp(14rem, 32vw, 28rem);
+      font-weight: 300;
+      font-style: italic;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(248,240,221,0.04);
+      white-space: nowrap;
+      user-select: none;
+      line-height: 1;
+    }
+
+    /* ─ Layer 3: Headline — fastest, feels closest ─ */
+    .layer-fg {
+      z-index: 3;
+      inset: 0;           /* fg sits exactly in the viewport */
+      flex-direction: column;
+      text-align: center;
+      gap: 0;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.7rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: rgba(171,133,82,0.55);
+      margin-bottom: 1.75rem;
+    }
+
+    .hero-h1 {
+      font-family: 'freight-display-pro', serif;
+      font-size: clamp(4rem, 9vw, 10rem);
+      font-weight: 300;
+      line-height: 0.95;
+      color: #F8F0DD;
+    }
+
+    .hero-h1 em {
+      font-style: italic;
+      color: #AB8552;
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(248,240,221,0.18);
+      z-index: 10;
+    }
+
+
+    /* ═══════════════════════════════════════════
+       SECTION 2 — BRIDGE
+       Fades in on scroll.
+    ═══════════════════════════════════════════ */
+    #bridge {
+      padding: 12rem 4rem;
+      text-align: center;
+    }
+
+    .bridge-p {
+      font-family: 'freight-display-pro', serif;
+      font-size: clamp(1.8rem, 3.5vw, 3.2rem);
+      font-weight: 300;
+      color: rgba(248,240,221,0.6);
+      max-width: 800px;
+      margin: 0 auto;
+      line-height: 1.45;
+    }
+
+    .bridge-p em {
+      font-style: italic;
+      color: #AB8552;
+    }
+
+
+    /* ═══════════════════════════════════════════
+       SECTION 3 — KEYBOARD
+       Pinned. Key flies on scroll.
+    ═══════════════════════════════════════════ */
+    #keyboard-section {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      perspective: 1200px;
+      perspective-origin: 50% 40%;
+    }
+
+    /* Ambient glow behind keyboard */
+    #keyboard-section::before {
+      content: '';
+      position: absolute;
+      width: 600px;
+      height: 400px;
+      background: radial-gradient(ellipse, rgba(171,133,82,0.06) 0%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .kb-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: rgba(171,133,82,0.35);
+      margin-bottom: 2.5rem;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* ─ Keyboard body ─ */
+    .keyboard {
+      background: #141410;
+      padding: 1.4rem 1.4rem 1.8rem;
+      border-radius: 16px;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.04),
+        0 30px 60px rgba(0,0,0,0.8),
+        0 60px 100px rgba(0,0,0,0.5),
+        inset 0 1px 0 rgba(255,255,255,0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      position: relative;
+      z-index: 5;
+      transform-style: preserve-3d;
+    }
+
+    .key-row {
+      display: flex;
+      gap: 5px;
+      justify-content: center;
+    }
+
+    /* ─ Individual keys ─ */
+    .key {
+      min-width: 44px;
+      height: 44px;
+      padding: 0 6px;
+      background: linear-gradient(180deg, #28281e 0%, #222218 100%);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-bottom: 1px solid rgba(0,0,0,0.4);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      color: rgba(248,240,221,0.35);
+      box-shadow: 0 2px 0 #0a0a07, 0 4px 8px rgba(0,0,0,0.4);
+      user-select: none;
+      flex-shrink: 0;
+    }
+
+    .key.wide    { min-width: 68px; }
+    .key.wider   { min-width: 88px; }
+    .key.widest  { min-width: 190px; }
+    .key.tall    { height: 96px; align-items: flex-end; padding-bottom: 10px; }
+
+    /* ─ The flying key ─ */
+    #flying-key {
+      color: rgba(248,240,221,0.85);
+      background: linear-gradient(180deg, #2f2f22 0%, #272720 100%);
+      border-color: rgba(171,133,82,0.2);
+      box-shadow:
+        0 2px 0 #0a0a07,
+        0 4px 8px rgba(0,0,0,0.4),
+        0 0 0 1px rgba(171,133,82,0.08);
+      z-index: 20;
+      position: relative;
+      transform-style: preserve-3d;
+    }
+
+    /* Glow beneath the key when it's in the air */
+    .key-shadow-glow {
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 20px;
+      background: rgba(171,133,82,0.15);
+      border-radius: 50%;
+      filter: blur(8px);
+      opacity: 0;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* Caption under keyboard */
+    .kb-caption {
+      margin-top: 2.5rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(248,240,221,0);
+      text-align: center;
+      position: relative;
+      z-index: 10;
+    }
+
+
+    /* ═══════════════════════════════════════════
+       SECTION 4 — OUTRO
+    ═══════════════════════════════════════════ */
+    #outro {
+      padding: 12rem 4rem;
+      text-align: center;
+      border-top: 1px solid rgba(248,240,221,0.05);
+    }
+
+    #outro p {
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(248,240,221,0.2);
+      margin-bottom: 2rem;
+    }
+
+    #outro h2 {
+      font-family: 'freight-display-pro', serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 300;
+      color: rgba(248,240,221,0.7);
+      margin-bottom: 2.5rem;
+    }
+
+    #outro h2 em { font-style: italic; color: #AB8552; }
+
+    .outro-link {
+      display: inline-block;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #AB8552;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(171,133,82,0.3);
+      padding-bottom: 3px;
+      transition: border-color 0.25s;
+    }
+
+    .outro-link:hover { border-color: #AB8552; }
+
+
+    /* ═══════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      .key { min-width: 28px; height: 28px; font-size: 0.5rem; padding: 0 4px; }
+      .key.wide    { min-width: 44px; }
+      .key.wider   { min-width: 58px; }
+      .key.widest  { min-width: 120px; }
+      .key.tall    { height: 60px; }
+      .keyboard { gap: 3px; padding: 1rem; }
+      .key-row { gap: 3px; }
+      #bridge { padding: 8rem 2rem; }
+      #outro  { padding: 8rem 2rem; }
+    }
+
+  </style>
+</head>
+<body>
+
+
+  <!-- ══════════════════════════════════════════════
+       SECTION 1 — PARALLAX HERO
+
+       Three layers. Three speeds. One feeling of depth.
+       BG moves slowest → feels far.
+       FG moves fastest → feels close.
+  ══════════════════════════════════════════════ -->
+  <section id="hero">
+
+    <div class="layer layer-bg" id="layerBg"></div>
+
+    <div class="layer layer-mid" id="layerMid">
+      <span class="ghost-word">depth</span>
+    </div>
+
+    <div class="layer layer-fg" id="layerFg">
+      <p class="hero-eyebrow">The Dove Design Co.</p>
+      <h1 class="hero-h1">Not <em>flat</em>.<br>Not boring.</h1>
+    </div>
+
+    <p class="scroll-hint">↓ keep scrolling</p>
+
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════
+       SECTION 2 — BRIDGE
+  ══════════════════════════════════════════════ -->
+  <section id="bridge">
+    <p class="bridge-p">
+      Great websites don't just sit there.<br>
+      They <em>respond</em> to you. They have depth.<br>
+      They make you want to stay.
+    </p>
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════
+       SECTION 3 — KEYBOARD
+
+       A pinned section. Scroll drives the animation.
+       The K key lifts off, hangs in the air, lands.
+       The keyboard body reacts with a subtle sink.
+  ══════════════════════════════════════════════ -->
+  <section id="keyboard-section">
+
+    <p class="kb-label">Scroll-driven 3D — every pixel intentional</p>
+
+    <div class="keyboard" id="keyboard">
+
+      <!-- Row 1 -->
+      <div class="key-row">
+        <div class="key wide">esc</div>
+        <div class="key">Q</div>
+        <div class="key">W</div>
+        <div class="key">E</div>
+        <div class="key">R</div>
+        <div class="key">T</div>
+        <div class="key">Y</div>
+        <div class="key">U</div>
+        <div class="key">I</div>
+        <div class="key">O</div>
+        <div class="key">P</div>
+        <div class="key wider">delete</div>
+      </div>
+
+      <!-- Row 2 -->
+      <div class="key-row">
+        <div class="key wider">caps</div>
+        <div class="key">A</div>
+        <div class="key">S</div>
+        <div class="key">D</div>
+        <div class="key">F</div>
+        <div class="key">G</div>
+        <div class="key">H</div>
+        <div class="key">J</div>
+        <!-- ★ THE STAR ★ -->
+        <div class="key" id="flying-key">
+          K
+          <div class="key-shadow-glow" id="keyGlow"></div>
+        </div>
+        <div class="key">L</div>
+        <div class="key wider">return</div>
+      </div>
+
+      <!-- Row 3 -->
+      <div class="key-row">
+        <div class="key wider">shift</div>
+        <div class="key">Z</div>
+        <div class="key">X</div>
+        <div class="key">C</div>
+        <div class="key">V</div>
+        <div class="key">B</div>
+        <div class="key">N</div>
+        <div class="key">M</div>
+        <div class="key">,</div>
+        <div class="key">.</div>
+        <div class="key wider">shift</div>
+      </div>
+
+      <!-- Spacebar -->
+      <div class="key-row">
+        <div class="key wide">fn</div>
+        <div class="key wide">ctrl</div>
+        <div class="key wide">⌥</div>
+        <div class="key wide">⌘</div>
+        <div class="key widest"></div>
+        <div class="key wide">⌘</div>
+        <div class="key wide">⌥</div>
+      </div>
+
+    </div>
+
+    <p class="kb-caption" id="kbCaption">Every detail matters. Every pixel earns its place.</p>
+
+  </section>
+
+
+  <!-- ══════════════════════════════════════════════
+       SECTION 4 — OUTRO
+  ══════════════════════════════════════════════ -->
+  <section id="outro">
+    <p>The Dove Design Co. — Peoria, IL</p>
+    <h2>This is what your<br>website could <em>feel like</em>.</h2>
+    <a href="../contact.html" class="outro-link">Book a discovery call →</a>
+  </section>
+
+
+  <!-- Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.9/dist/lenis.min.js"></script>
+
+  <script>
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Lenis smooth scroll
+    try {
+      const lenis = new Lenis({
+        duration: 1.2,
+        easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      });
+      gsap.ticker.add(time => lenis.raf(time * 1000));
+      gsap.ticker.lagSmoothing(0);
+    } catch(e) { console.warn('Lenis not loaded'); }
+
+
+    // ─────────────────────────────────────────────
+    // HERO PAGE-LOAD ENTRANCE
+    // ─────────────────────────────────────────────
+    gsap.from('.hero-eyebrow', { opacity: 0, y: 20, duration: 1, ease: 'power3.out', delay: 0.3 });
+    gsap.from('.hero-h1',      { opacity: 0, y: 40, duration: 1.2, ease: 'power3.out', delay: 0.5 });
+    gsap.from('.scroll-hint',  { opacity: 0, duration: 1.5, ease: 'power2.out', delay: 1.2 });
+
+
+    // ─────────────────────────────────────────────
+    // PARALLAX — THREE LAYERS, THREE SPEEDS
+    //
+    // The trigger spans the hero's full on-screen time.
+    // yPercent values are the total movement from start
+    // to finish. Positive = drifts down (lags = far away).
+    // Negative = rises faster (rushes = feels close).
+    // ─────────────────────────────────────────────
+    const parallaxTrigger = {
+      trigger: '#hero',
+      start: 'top bottom',  // begins as hero enters from below
+      end: 'bottom top',    // ends as hero exits above viewport
+      scrub: true,
+    };
+
+    gsap.to('#layerBg',  { yPercent:  28, ease: 'none', scrollTrigger: parallaxTrigger }); // slowest = far
+    gsap.to('#layerMid', { yPercent: -18, ease: 'none', scrollTrigger: parallaxTrigger }); // medium
+    gsap.to('#layerFg',  { yPercent: -30, ease: 'none', scrollTrigger: parallaxTrigger }); // fastest = close
+
+
+    // ─────────────────────────────────────────────
+    // BRIDGE TEXT
+    // ─────────────────────────────────────────────
+    gsap.from('.bridge-p', {
+      opacity: 0,
+      y: 50,
+      duration: 1,
+      ease: 'power3.out',
+      scrollTrigger: { trigger: '.bridge-p', start: 'top 78%' }
+    });
+
+
+    // ─────────────────────────────────────────────
+    // KEYBOARD — FLYING KEY
+    //
+    // One timeline, scroll-driven via scrub.
+    // Pinned for 2200px so each phase feels deliberate.
+    //
+    // Phase 1 (0 → 1.2s):  key lifts, rotates, glows
+    // Phase 2 (1.2 → 2.0s): hangs in the air (nothing changes)
+    // Phase 3 (2.0 → 3.0s): key lands, glow fades, keyboard settles
+    // ─────────────────────────────────────────────
+    const keyTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '#keyboard-section',
+        start: 'top top',
+        end: '+=2200',
+        scrub: 1.5,
+        pin: true,
+        anticipatePin: 1,
+      }
+    });
+
+    keyTl
+
+      // ── KEY RISES ──
+      .to('#flying-key', {
+        y: -170,
+        rotateX: 32,        // tilts top of key toward viewer
+        rotateZ: -8,        // subtle physical rotation
+        scale: 1.5,         // scale up = feels closer to camera
+        color: 'rgba(248,240,221,0.95)',
+        boxShadow: '0 20px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(171,133,82,0.3)',
+        duration: 1.2,
+        ease: 'none',
+      }, 0)
+
+      // Shadow glow appears under the key as it rises
+      .to('#keyGlow', {
+        opacity: 1,
+        scaleX: 2.5,
+        duration: 1.2,
+        ease: 'none',
+      }, 0)
+
+      // Keyboard sinks slightly — reaction to the key launching up
+      .to('#keyboard', {
+        y: 8,
+        rotateX: -2,
+        duration: 0.8,
+        ease: 'none',
+      }, 0)
+
+      // Caption fades in while key is airborne
+      .to('#kbCaption', {
+        color: 'rgba(248,240,221,0.35)',
+        y: 0,
+        duration: 0.8,
+        ease: 'none',
+      }, 0.5)
+
+      // ── KEY HANGS (pause — nothing animates 1.2 → 2.0) ──
+
+      // ── KEY LANDS ──
+      .to('#flying-key', {
+        y: 0,
+        rotateX: 0,
+        rotateZ: 0,
+        scale: 1,
+        color: 'rgba(248,240,221,0.85)',
+        boxShadow: '0 2px 0 #0a0a07, 0 4px 8px rgba(0,0,0,0.4), 0 0 0 1px rgba(171,133,82,0.08)',
+        duration: 1,
+        ease: 'none',
+      }, 2.0)
+
+      .to('#keyGlow', {
+        opacity: 0,
+        scaleX: 1,
+        duration: 0.8,
+        ease: 'none',
+      }, 2.0)
+
+      .to('#keyboard', {
+        y: 0,
+        rotateX: 0,
+        duration: 0.7,
+        ease: 'none',
+      }, 2.2)
+
+      .to('#kbCaption', {
+        color: 'rgba(248,240,221,0)',
+        duration: 0.5,
+        ease: 'none',
+      }, 2.3);
+
+
+    // ─────────────────────────────────────────────
+    // OUTRO
+    // ─────────────────────────────────────────────
+    gsap.from('#outro h2', {
+      opacity: 0, y: 40, duration: 1, ease: 'power3.out',
+      scrollTrigger: { trigger: '#outro h2', start: 'top 80%' }
+    });
+    gsap.from('.outro-link', {
+      opacity: 0, y: 20, duration: 0.8, ease: 'power3.out',
+      scrollTrigger: { trigger: '.outro-link', start: 'top 85%' }
+    });
+
+  </script>
+
+</body>
+</html>
