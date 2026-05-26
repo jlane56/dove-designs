@@ -101,6 +101,7 @@
       grid-template-columns: 58% 42%;
       border-bottom: 1px solid var(--light-border);
       align-items: stretch;
+      overflow: hidden; /* safety net — nothing bleeds out of the row */
     }
     .project-row:nth-child(even) .project-visual { order: 2; }
     .project-row:nth-child(even) .project-info  { order: 1; }
@@ -110,7 +111,8 @@
       position: relative;
       overflow: hidden;
       background: var(--charcoal);
-      aspect-ratio: 16 / 9;
+      min-width: 0;         /* critical: lets grid items shrink below content size */
+      min-height: 380px;    /* replaces aspect-ratio — height comes from grid stretch */
     }
     .project-visual img {
       width: 100%;
@@ -163,11 +165,12 @@
 
     /* ── Info panel ── */
     .project-info {
-      padding: 4rem 4.5rem;
+      padding: 4rem clamp(1.5rem, 4.5vw, 4.5rem); /* shrinks padding at mid-widths */
       display: flex;
       flex-direction: column;
       justify-content: center;
       background: var(--white);
+      min-width: 0;         /* critical: same fix as project-visual */
     }
     .project-num {
       font-family: 'freight-display-pro', serif;
