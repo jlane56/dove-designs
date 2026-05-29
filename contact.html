@@ -277,19 +277,21 @@
     </div>
     <p class="contact-sub">Fill out the form and we'll get back to you within 24 hours. No sales pitch — just a real conversation about your project.</p>
     <form class="contact-form" onsubmit="handleSubmit(event)">
+      <!-- Honeypot spam trap — hidden from real users -->
+      <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
       <div class="form-row">
-        <input type="text" placeholder="Your Name" required>
-        <input type="email" placeholder="Email Address" required>
+        <input type="text"  name="name"     placeholder="Your Name"              required>
+        <input type="email" name="email"    placeholder="Email Address"           required>
       </div>
-      <input type="text" placeholder="Business Name (optional)">
-      <select>
+      <input type="text"   name="business"  placeholder="Business Name (optional)">
+      <select              name="service">
         <option value="" disabled selected>What are you looking for?</option>
         <option>New Website Build</option>
         <option>Website Redesign</option>
         <option>Website Care &amp; Maintenance</option>
         <option>Not sure yet — let's talk</option>
       </select>
-      <textarea placeholder="Tell me a bit about your business and what you're looking for..."></textarea>
+      <textarea            name="message"   placeholder="Tell us a bit about your business and what you're looking for..."></textarea>
       <button type="submit" class="btn-accent">Send Message</button>
     </form>
 
@@ -329,13 +331,35 @@
     if (menuBtn)   menuBtn.addEventListener('click', openMobile);
     if (menuClose) menuClose.addEventListener('click', closeMobile);
 
-    // Contact form feedback
-    function handleSubmit(e) {
+    // Contact form — Formspree submission
+    async function handleSubmit(e) {
       e.preventDefault();
-      const btn = e.target.querySelector('button[type="submit"]');
-      btn.textContent = 'Message Sent ✓';
-      btn.style.background = 'var(--dusty-blue)';
+      const form = e.target;
+      const btn  = form.querySelector('button[type="submit"]');
+
+      btn.textContent = 'Sending...';
       btn.disabled = true;
+
+      try {
+        const res = await fetch('https://formspree.io/f/xdajjkjy', {
+          method:  'POST',
+          headers: { 'Accept': 'application/json' },
+          body:    new FormData(form),
+        });
+
+        if (res.ok) {
+          btn.textContent = 'Message Sent ✓';
+          btn.style.background = 'var(--dusty-blue)';
+          btn.style.borderColor = 'var(--dusty-blue)';
+          form.reset();
+        } else {
+          btn.textContent = 'Something went wrong — try again';
+          btn.disabled = false;
+        }
+      } catch {
+        btn.textContent = 'Something went wrong — try again';
+        btn.disabled = false;
+      }
     }
 
 
