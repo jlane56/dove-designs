@@ -22,7 +22,7 @@
   <meta name="theme-color" content="#535344">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://use.typekit.net/kei0jhu.css">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -434,7 +434,7 @@
 
     /* ─── PHOTO OFFER ─── */
     #photo-offer {
-      background: var(--charcoal);
+      background: var(--cream);
       padding: 6rem 4rem;
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -457,22 +457,28 @@
     }
 
     .photo-offer-text .ornament-line {
-      background: rgba(248,240,221,0.15);
+      background: var(--light-border);
     }
 
     .photo-offer-text h2 {
-      color: var(--cream);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3.5rem, 7vw, 6rem);
+      font-weight: 400;
+      letter-spacing: 0.03em;
+      line-height: 0.95;
+      color: var(--charcoal);
       text-align: left;
       margin-bottom: 1.5rem;
     }
 
     .photo-offer-text h2 em {
-      color: #D4B483;
+      font-style: normal;
+      color: var(--dusty-blue);
     }
 
     .photo-offer-text p {
       font-size: 0.95rem;
-      color: rgba(248,240,221,0.62);
+      color: var(--taupe);
       line-height: 1.85;
       margin-bottom: 1.25rem;
     }
@@ -481,8 +487,8 @@
       display: inline-flex;
       align-items: center;
       gap: 0.6rem;
-      background: rgba(171,133,82,0.15);
-      border: 1px solid rgba(171,133,82,0.3);
+      background: rgba(171,133,82,0.12);
+      border: 1px solid rgba(171,133,82,0.35);
       padding: 0.5rem 1rem;
       font-size: 0.72rem;
       letter-spacing: 0.12em;
@@ -533,6 +539,7 @@
         padding: 5rem 2rem;
       }
       .photo-offer-text { max-width: 100%; }
+      .photo-offer-text h2 { font-size: clamp(3rem, 10vw, 5rem); }
     }
 
     @media (max-width: 768px) {
@@ -732,7 +739,7 @@
   <section id="photo-offer">
     <div class="photo-offer-text">
       <p class="section-eyebrow">Included With Every Build</p>
-      <div class="ornament"><div class="ornament-line" style="background:rgba(248,240,221,0.15);"></div><div class="ornament-dot"></div></div>
+      <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot"></div></div>
       <h2>A professional photo shoot.<br><em>Included. Free.</em></h2>
       <div class="photo-offer-badge" style="font-size:0.82rem;padding:0.75rem 1.25rem;margin-bottom:1.5rem;background:rgba(171,133,82,0.2);border-color:rgba(171,133,82,0.5);">
         <span>★</span> Included with every new website. No extra charge.
