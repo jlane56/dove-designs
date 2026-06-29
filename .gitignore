@@ -1,1 +1,17 @@
 .DS_Store
+node_modules/
+package.json
+package-lock.json
+
+# Internal generator scripts
+generate-*.py
+generate-*.js
+
+# Business documents — not part of the website
+TDDC-*.pdf
+TDDC-*.docx
+*.pdf
+*.docx
+
+# Client files
+Discovery\ Call\ *.txt

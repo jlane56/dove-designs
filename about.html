@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>About Justin Lane | Web Designer & Photographer, Peoria IL</title>
   <meta name="description" content="Justin Lane is a web designer, photographer, and lighting designer based in Peoria, IL. Eight years behind the camera, a career in live production, and a passion for helping small businesses look their best.">
@@ -324,7 +325,6 @@
       <li><a href="about.html" class="active">About</a></li>
       <li><a href="proof.html">The Proof</a></li>
       <li><a href="contact.html" class="btn-primary" style="padding:0.6rem 1.4rem;">Book a Call</a></li>
-      <li><a href="https://portal.thedovedesignco.com" style="font-size:0.8rem;opacity:0.6;letter-spacing:0.04em;">Client Login →</a></li>
     </ul>
     <button class="nav-hamburger" id="menuBtn" aria-label="Open menu">
       <span></span><span></span><span></span>
@@ -339,7 +339,6 @@
     <a href="about.html" onclick="closeMobile()">About</a>
     <a href="proof.html" onclick="closeMobile()">The Proof</a>
     <a href="contact.html" onclick="closeMobile()" style="color:var(--dusty-blue);">Book a Call</a>
-    <a href="https://portal.thedovedesignco.com" onclick="closeMobile()" style="font-size:0.8rem;opacity:0.6;letter-spacing:0.04em;">Client Login →</a>
   </div>
 
   <!-- ── PAGE HERO ── -->
@@ -365,7 +364,7 @@
       <div class="about-visual">
         <div class="about-frame">
           <!-- Replace about-headshot.jpg with your photo — drop it in the images/ folder -->
-          <img src="images/about-headshot.jpg" alt="Justin Lane, The Dove Design Co." style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <picture><source srcset="images/web/about-headshot.webp" type="image/webp"><img src="images/web/about-headshot.jpg" alt="Justin Lane, The Dove Design Co." style="width:100%;height:100%;object-fit:cover;display:block;" loading="lazy"></picture>
           <div class="about-frame-inner" style="display:none;">
             <div class="about-quote">"Always in the room. Never the headliner. That's where you learn what actually works."</div>
             <div class="about-quote-attr">Justin, The Dove Design Co.</div>
