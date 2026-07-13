@@ -248,9 +248,9 @@
 
     .btn-outline:hover { background: var(--charcoal); color: var(--white); border-color: var(--charcoal); }
 
-    /* ─── HERO ─── */
+    /* ─── HERO (scroll-expansion) ─── */
     #hero-wrapper {
-      height: 160vh;
+      height: 260vh;
     }
 
     #hero {
@@ -268,35 +268,86 @@
       background-image: url('images/web/4231204011-R1-046-21A.jpg');
       background-size: cover;
       background-position: center 15%;
-    }
-
-    @media (max-width: 768px) {
-      .hero-bg {
-        background-image: url('images/web/vacationfilm-35.jpg');
-        background-position: center 30%;
-      }
+      will-change: opacity;
     }
 
     #hero::before {
       content: '';
       position: absolute; inset: 0;
-      background:
-        linear-gradient(to right, rgba(18,22,26,0.55) 0%, rgba(18,22,26,0.15) 55%, transparent 100%),
-        rgba(18, 22, 26, 0.28);
+      background: rgba(18, 22, 26, 0.28);
       z-index: 1;
     }
 
-    .hero-logo-layer {
+    /* Expanding media card */
+    .hero-media-card {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 2;
+      overflow: hidden;
+      border-radius: 18px;
+      box-shadow: 0 0 50px rgba(0,0,0,0.35);
+      will-change: width, height;
+    }
+
+    .hero-media-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 30%;
+      display: block;
+    }
+
+    .hero-media-overlay {
+      position: absolute;
+      inset: 0;
+      background: #12161a;
+      opacity: 0.45;
+      pointer-events: none;
+    }
+
+    /* Readability scrim — fades in with the headline once expanded */
+    .hero-media-scrim {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, rgba(18,22,26,0.55) 0%, rgba(18,22,26,0.15) 55%, transparent 100%);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Split title over the media */
+    .hero-title-split {
       position: absolute;
       inset: 0;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      z-index: 2;
+      gap: 0.5rem;
+      z-index: 3;
+      pointer-events: none;
     }
 
-    .hero-logo {
-      width: clamp(260px, 36vw, 460px);
+    .hero-title-split span {
+      font-family: 'freight-display-pro', serif;
+      font-weight: 300;
+      font-size: clamp(2.6rem, 7.5vw, 5.5rem);
+      line-height: 1.05;
+      color: #EEE8DC;
+      text-shadow: 0 2px 30px rgba(18,22,26,0.55);
+      will-change: transform;
+      white-space: nowrap;
+    }
+
+    .hero-title-split .split-sub {
+      font-family: 'Jost', sans-serif;
+      font-weight: 400;
+      font-size: 0.72rem;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: rgba(238,232,220,0.75);
+      margin-top: 1.2rem;
     }
 
     .hero-text-layer {
@@ -306,7 +357,7 @@
       transform: translateY(-50%);
       max-width: 600px;
       padding-top: 4rem;
-      z-index: 2;
+      z-index: 4;
       opacity: 0;
       pointer-events: none;
     }
@@ -668,11 +719,19 @@
   <div id="hero-wrapper">
     <section id="hero">
 
-      <div class="hero-bg"></div>
+      <div class="hero-bg" id="heroBg"></div>
 
-      <!-- Layer 1: centered logo (visible at top, fades out on scroll) -->
-      <div class="hero-logo-layer" id="heroLogoLayer">
-        <img src="images/TDDC_Logo1.png" class="hero-logo" alt="The Dove Design Co.">
+      <!-- Layer 1: expanding media card + split title -->
+      <div class="hero-media-card" id="heroMediaCard">
+        <img src="images/web/vacationfilm-35.jpg" alt="The Dove Design Co. photography">
+        <div class="hero-media-overlay" id="heroMediaOverlay"></div>
+        <div class="hero-media-scrim" id="heroMediaScrim"></div>
+      </div>
+
+      <div class="hero-title-split" id="heroTitleSplit">
+        <span id="splitLine1">The Dove</span>
+        <span id="splitLine2">Design Co.</span>
+        <span class="split-sub" id="splitSub">Scroll to expand</span>
       </div>
 
       <!-- Layer 2: left-aligned text (hidden at top, fades in on scroll) -->
@@ -694,12 +753,6 @@
             <div class="stat-label">Templates or page builders</div>
           </div>
         </div>
-      </div>
-
-      <!-- Scroll hint -->
-      <div class="hero-scroll" id="heroScrollHint">
-        <div class="hero-scroll-line"></div>
-        Scroll to explore
       </div>
 
     </section>
@@ -789,44 +842,73 @@
   </footer>
 
   <script>
-    // Hero scroll transition
-    const heroLogoLayer  = document.getElementById('heroLogoLayer');
+    // Hero scroll-expansion
+    const heroBg         = document.getElementById('heroBg');
+    const heroMediaCard  = document.getElementById('heroMediaCard');
+    const heroMediaOverlay = document.getElementById('heroMediaOverlay');
+    const heroTitleSplit = document.getElementById('heroTitleSplit');
+    const splitLine1     = document.getElementById('splitLine1');
+    const splitLine2     = document.getElementById('splitLine2');
+    const splitSub       = document.getElementById('splitSub');
     const heroTextLayer  = document.getElementById('heroTextLayer');
-    const heroScrollHint = document.getElementById('heroScrollHint');
     const heroWrapper    = document.getElementById('hero-wrapper');
 
-    let heroEverScrolled = false;
-    let heroTextShown    = false;
-    let heroCollapsed    = false;
+    let heroExpanded  = false;
+    let heroCollapsed = false;
 
     function updateHero() {
-      const scrollY = window.scrollY;
-      const zone    = window.innerHeight * 0.60;
-      const p       = Math.min(Math.max(scrollY / zone, 0), 1);
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const isMobile = vw < 768;
+      const scrollY  = window.scrollY;
+      const zone     = heroWrapper.offsetHeight - vh;
+      let p = heroCollapsed ? 1 : Math.min(Math.max(scrollY / zone, 0), 1);
 
-      if (scrollY > 0) heroEverScrolled = true;
-      if (p >= 1)      heroTextShown    = true;
+      if (p >= 1) heroExpanded = true;
+      if (heroExpanded) p = 1;
 
-      if (heroLogoLayer)  heroLogoLayer.style.opacity  = heroEverScrolled ? 0 : (1 - p);
-      if (heroScrollHint) heroScrollHint.style.opacity = Math.max(0, 1 - p * 2.5);
-      if (heroTextLayer) {
-        heroTextLayer.style.opacity       = heroTextShown ? 1 : p;
-        heroTextLayer.style.pointerEvents = (heroTextShown || p > 0.3) ? 'auto' : 'none';
-      }
+      // Media card grows from a small centered card to full-bleed
+      const startW = isMobile ? 230 : 320;
+      const startH = isMobile ? 320 : 420;
+      const w = startW + p * (vw - startW);
+      const h = startH + p * (vh - startH);
+      heroMediaCard.style.width        = w + 'px';
+      heroMediaCard.style.height       = h + 'px';
+      heroMediaCard.style.borderRadius = (18 * (1 - p)) + 'px';
+      heroMediaCard.style.boxShadow    = `0 0 50px rgba(0,0,0,${0.35 * (1 - p)})`;
 
-      // Once text is fully revealed: collapse wrapper to 100vh and snap to top
+      // Dark overlay on the media eases off as it expands
+      heroMediaOverlay.style.opacity = 0.45 - p * 0.25;
+
+      // Background photo fades away behind the growing card
+      heroBg.style.opacity = 1 - p;
+
+      // Title splits apart and slides off-screen
+      const slide = p * (isMobile ? 120 : 80);
+      splitLine1.style.transform = `translateX(-${slide}vw)`;
+      splitLine2.style.transform = `translateX(${slide}vw)`;
+      splitSub.style.opacity     = Math.max(0, 1 - p * 2.5);
+
+      // Headline + CTAs fade in over the full-bleed image
+      const textP = Math.min(Math.max((p - 0.8) / 0.2, 0), 1);
+      heroTextLayer.style.opacity       = textP;
+      heroTextLayer.style.pointerEvents = textP > 0.5 ? 'auto' : 'none';
+      document.getElementById('heroMediaScrim').style.opacity = textP;
+
+      // Once fully expanded: collapse wrapper to 100vh and snap to top
       // The math works out so content below doesn't jump — both before and after
       // collapse, the first content pixel sits at exactly the viewport bottom.
-      if (!heroCollapsed && heroTextShown) {
+      if (!heroCollapsed && heroExpanded) {
         heroCollapsed = true;
-        const heroBottom = heroWrapper.offsetHeight - window.innerHeight;
+        const heroBottom = heroWrapper.offsetHeight - vh;
         const overshoot  = Math.max(0, scrollY - heroBottom);
-        heroWrapper.style.height = window.innerHeight + 'px';
+        heroWrapper.style.height = vh + 'px';
         window.scrollTo({ top: overshoot, behavior: 'instant' });
       }
     }
 
     window.addEventListener('scroll', updateHero, { passive: true });
+    window.addEventListener('resize', updateHero, { passive: true });
     updateHero();
 
     // Nav scroll shrink
