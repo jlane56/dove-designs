@@ -413,6 +413,21 @@
       padding: 0 1.5rem;
     }
 
+    /* Dove mark — appears once the living dove has crossed the frame */
+    .final-logo {
+      height: 58px;
+      margin-bottom: 1.6rem;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 2.2s ease, transform 2.2s ease;
+      filter: drop-shadow(0 2px 14px rgba(18,22,26,0.45));
+    }
+
+    .final-logo.show {
+      opacity: 0.95;
+      transform: translateY(0);
+    }
+
     .hero-final .final-eyebrow {
       font-family: 'Jost', sans-serif;
       font-size: 0.72rem;
@@ -802,7 +817,7 @@
 
       <!-- Journey: scrub canvas (grass -> crest), then resting video (waterline) -->
       <canvas class="hero-canvas" id="heroCanvas"></canvas>
-      <video class="hero-video" id="heroVideo" muted loop playsinline preload="auto"
+      <video class="hero-video" id="heroVideo" muted playsinline preload="auto"
              poster="hero-video/03-poster.jpg">
         <source src="hero-video/03-waterline.mp4" type="video/mp4">
       </video>
@@ -824,6 +839,7 @@
 
       <!-- The journey ends here: one call to action over living water -->
       <div class="hero-final" id="heroFinal">
+        <img class="final-logo" id="finalLogo" src="images/DoveSketch_Cream.png" alt="">
         <p class="final-eyebrow">The Dove Design Co. &middot; Peoria, IL</p>
         <h1>Your website should<br>feel like <em>this</em>.</h1>
         <a href="contact.html" class="btn-journey">Book a Discovery Call</a>
@@ -883,9 +899,7 @@
         canvas.height = window.innerHeight * dpr;
       }
 
-      function draw(idx){
-        const img = frames[Math.round(idx)];
-        if (!img || !img.complete || !img.naturalWidth) return;
+      function drawCover(img){
         const cw = canvas.width, ch = canvas.height;
         const ir = img.naturalWidth / img.naturalHeight, cr = cw / ch;
         let dw, dh, dx, dy;
@@ -894,8 +908,37 @@
         ctx.drawImage(img, dx, dy, dw, dh);
       }
 
+      // Sub-frame rendering: crossfade the two neighboring frames so slow
+      // scrolling glides instead of stepping frame to frame.
+      function draw(idx){
+        const i0 = Math.max(0, Math.floor(idx));
+        const i1 = Math.min(FRAME_COUNT - 1, i0 + 1);
+        const frac = idx - i0;
+        const a = frames[i0], b = frames[i1];
+        if (!a || !a.complete || !a.naturalWidth) return;
+        drawCover(a);
+        if (i1 !== i0 && frac > 0.02 && b.complete && b.naturalWidth){
+          ctx.globalAlpha = frac;
+          drawCover(b);
+          ctx.globalAlpha = 1;
+        }
+      }
+
       let targetP = 0, smoothP = 0, videoPlaying = false;
       let lastTick = 0;
+
+      // The dove crosses once (0s-5.5s), then the water loops seamlessly —
+      // the dissolve at the loop point is baked into the video file itself.
+      const LOOP_START = 6.25, LOOP_END = 9.92;
+      const finalLogo  = document.getElementById('finalLogo');
+      video.addEventListener('timeupdate', () => {
+        if (video.currentTime >= LOOP_END) video.currentTime = LOOP_START;
+        if (video.currentTime >= 5.2) finalLogo.classList.add('show');
+      });
+      video.addEventListener('ended', () => {
+        video.currentTime = LOOP_START;
+        video.play().catch(()=>{});
+      });
 
       function onScroll(){
         const zone = wrapper.offsetHeight - window.innerHeight;
@@ -906,6 +949,49 @@
           smoothP = targetP;
           apply();
         }
+        scheduleMagnet();
+      }
+
+      // ── Copy magnet: when a swipe ends near a copy beat, glide to it and
+      // hold. The next scroll releases it naturally.
+      const BEAT_CENTERS = [0.29, 0.65];
+      let magnetTimer = null, magnetAnim = null;
+
+      function cancelMagnet(){
+        if (magnetAnim){ clearInterval(magnetAnim); magnetAnim = null; }
+      }
+
+      ['wheel', 'touchstart', 'keydown'].forEach(ev =>
+        window.addEventListener(ev, cancelMagnet, { passive: true }));
+
+      function scheduleMagnet(){
+        if (magnetAnim) return;               // already gliding
+        clearTimeout(magnetTimer);
+        magnetTimer = setTimeout(() => {
+          const zone = wrapper.offsetHeight - window.innerHeight;
+          for (const c of BEAT_CENTERS){
+            const d = Math.abs(targetP - c);
+            if (d > 0.005 && d < 0.10){
+              glideTo(c * zone);
+              break;
+            }
+          }
+        }, 170);
+      }
+
+      function glideTo(y){
+        cancelMagnet();
+        const start = window.scrollY, dist = y - start;
+        if (Math.abs(dist) < 2) return;
+        const t0 = performance.now(), dur = 520;
+        magnetAnim = setInterval(() => {
+          const t = Math.min((performance.now() - t0) / dur, 1);
+          const e = 1 - Math.pow(1 - t, 3);
+          // 'instant' so our own easing drives the motion — the page's CSS
+          // scroll-behavior:smooth would otherwise double-animate and fight it
+          window.scrollTo({ top: start + dist * e, behavior: 'instant' });
+          if (t >= 1) cancelMagnet();
+        }, 16);
       }
 
       // A beat travels through its scroll window [a, b]: rises in from below,
@@ -958,7 +1044,7 @@
       // so a chunky mouse wheel still produces one buttery, reversible motion.
       function tick(){
         lastTick = performance.now();
-        smoothP += (targetP - smoothP) * 0.14;
+        smoothP += (targetP - smoothP) * 0.09;
         if (Math.abs(targetP - smoothP) < 0.0004) smoothP = targetP;
         apply();
         requestAnimationFrame(tick);
