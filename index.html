@@ -924,7 +924,7 @@
         }
       }
 
-      let targetP = 0, smoothP = 0, videoPlaying = false;
+      let targetP = 0, smoothP = 0, shownFrame = 0, videoPlaying = false;
       let lastTick = 0;
 
       // The dove crosses once (0s-5.5s), then the water loops seamlessly —
@@ -1010,7 +1010,14 @@
       function apply(){
         const p      = smoothP;
         const scrubT = Math.min(p / SCRUB_END, 1);
-        draw(easeJourney(scrubT) * (FRAME_COUNT - 1));
+        // Crossfade frames while moving; settle onto a SHARP whole frame at
+        // rest — otherwise pausing mid-frame leaves a blurry double-exposure.
+        const frameFloat = easeJourney(scrubT) * (FRAME_COUNT - 1);
+        const settleTo = Math.abs(targetP - smoothP) < 0.002
+                       ? Math.round(frameFloat) : frameFloat;
+        shownFrame += (settleTo - shownFrame) * 0.4;
+        if (Math.abs(settleTo - shownFrame) < 0.01) shownFrame = settleTo;
+        draw(shownFrame);
 
         // Waterline: fade the living video in over the last scrub frame
         const endP = Math.min(Math.max((p - SCRUB_END) / (1 - SCRUB_END), 0), 1);
