@@ -15,3 +15,10 @@ TDDC-*.docx
 
 # Client files
 Discovery\ Call\ *.txt
+.vercel
+
+# Video source assets + build artifacts (raw Kling clips live locally only)
+images/hero-journey/
+frames/
+video-tools.py
+demos/scroll-tour.html

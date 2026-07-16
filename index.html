@@ -123,6 +123,41 @@
       transition: 0.3s;
     }
 
+    /* Floating hamburger over the full-bleed hero */
+    .menu-fab {
+      position: fixed;
+      top: 1.4rem;
+      right: 1.6rem;
+      z-index: 150;
+      width: 52px;
+      height: 52px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: rgba(18, 22, 26, 0.32);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(248, 240, 221, 0.22);
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    .menu-fab:hover {
+      background: rgba(18, 22, 26, 0.55);
+      border-color: rgba(248, 240, 221, 0.45);
+    }
+
+    .menu-fab span {
+      display: block;
+      width: 20px;
+      height: 1.5px;
+      background: #F8F0DD;
+      transition: 0.3s;
+    }
+
     .mobile-nav {
       position: fixed;
       top: 0; right: -100%;
@@ -248,9 +283,9 @@
 
     .btn-outline:hover { background: var(--charcoal); color: var(--white); border-color: var(--charcoal); }
 
-    /* ─── HERO (scroll-expansion) ─── */
+    /* ─── HERO (scroll journey) ─── */
     #hero-wrapper {
-      height: 260vh;
+      height: 200vh;
     }
 
     #hero {
@@ -261,57 +296,43 @@
       overflow: hidden;
     }
 
+    /* Journey scrub canvas (clips 1 + 2) */
+    .hero-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      display: block;
+    }
+
+    /* Resting pool video (clip 3) — the world keeps breathing */
+    .hero-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 1;
+      opacity: 0;
+      pointer-events: none;
+      will-change: opacity;
+    }
+
+    /* Solid base behind the canvas while frames preload */
     .hero-bg {
       position: absolute;
       inset: 0;
       z-index: 0;
-      background-image: url('images/web/4231204011-R1-046-21A.jpg');
-      background-size: cover;
-      background-position: center 15%;
-      will-change: opacity;
-    }
-
-    #hero::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: rgba(18, 22, 26, 0.28);
-      z-index: 1;
-    }
-
-    /* Expanding media card */
-    .hero-media-card {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 2;
-      overflow: hidden;
-      border-radius: 18px;
-      box-shadow: 0 0 50px rgba(0,0,0,0.35);
-      will-change: width, height;
-    }
-
-    .hero-media-card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center 30%;
-      display: block;
-    }
-
-    .hero-media-overlay {
-      position: absolute;
-      inset: 0;
       background: #12161a;
-      opacity: 0.45;
-      pointer-events: none;
     }
 
-    /* Readability scrim — fades in with the headline once expanded */
+    /* Readability scrim — soft center vignette behind the final CTA */
     .hero-media-scrim {
       position: absolute;
       inset: 0;
-      background: linear-gradient(to right, rgba(18,22,26,0.55) 0%, rgba(18,22,26,0.15) 55%, transparent 100%);
+      z-index: 2;
+      background: radial-gradient(ellipse 70% 60% at 50% 48%, rgba(18,22,26,0.5) 0%, rgba(18,22,26,0.2) 55%, transparent 100%);
       opacity: 0;
       pointer-events: none;
     }
@@ -325,7 +346,7 @@
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
-      z-index: 3;
+      z-index: 4;
       pointer-events: none;
     }
 
@@ -350,29 +371,99 @@
       margin-top: 1.2rem;
     }
 
-    .hero-text-layer {
+    /* Copy beats — short lines that surface mid-journey */
+    .hero-beat {
       position: absolute;
-      left: 5%;
-      top: 50%;
-      transform: translateY(-50%);
-      max-width: 600px;
-      padding-top: 4rem;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      z-index: 3;
+      opacity: 0;
+      pointer-events: none;
+      padding: 0 1.5rem;
+    }
+
+    .hero-beat p {
+      font-family: 'freight-display-pro', serif;
+      font-weight: 300;
+      font-size: clamp(1.7rem, 3.6vw, 2.9rem);
+      line-height: 1.3;
+      color: #F4EDDE;
+      text-shadow: 0 2px 26px rgba(18,22,26,0.6);
+      max-width: 780px;
+    }
+
+    .hero-beat p em { color: #D4B483; font-style: italic; }
+
+    /* Final layer — the journey ends on a single call to action */
+    .hero-final {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
       z-index: 4;
       opacity: 0;
       pointer-events: none;
+      padding: 0 1.5rem;
     }
 
-    .hero-text-layer .section-eyebrow { color: rgba(240,220,210,0.75); text-align: left; }
-    .hero-text-layer h1               { color: #EEE8DC; }
-    .hero-text-layer h1 em            { color: #D4B483; }
-    .hero-text-layer .hero-sub        { color: rgba(238,232,220,0.78); max-width: 500px; margin-bottom: 2.5rem; }
-    .hero-text-layer .hero-stats      { border-top: 1px solid rgba(238,232,220,0.18); padding-top: 2rem; margin-top: 3.5rem; display:flex; gap:3rem; flex-wrap:wrap; }
-    .hero-text-layer .stat-num        { font-family:'freight-display-pro',serif; font-size:2.2rem; font-weight:300; color:#EEE8DC; line-height:1; }
-    .hero-text-layer .stat-label      { font-size:0.72rem; color:rgba(238,232,220,0.62); letter-spacing:0.08em; }
-    .hero-text-layer .btn-outline     { color:#EEE8DC; border-color:rgba(238,232,220,0.55); }
-    .hero-text-layer .btn-outline:hover { background:rgba(238,232,220,0.15); color:#EEE8DC; border-color:#EEE8DC; }
+    .hero-final .final-eyebrow {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(244,237,222,0.8);
+      margin-bottom: 1.4rem;
+    }
 
-    .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .hero-final h1 {
+      color: #F4EDDE;
+      text-shadow: 0 2px 30px rgba(18,22,26,0.55);
+      margin-bottom: 2.8rem;
+      font-size: clamp(2.8rem, 6vw, 5rem);
+    }
+
+    .hero-final h1 em { color: #D4B483; }
+
+    .btn-journey {
+      font-family: 'Jost', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: #F4EDDE;
+      border: 1px solid rgba(244,237,222,0.65);
+      padding: 1.1rem 2.6rem;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      background: rgba(18,22,26,0.18);
+      transition: background 0.35s, color 0.35s, border-color 0.35s;
+    }
+
+    .btn-journey:hover {
+      background: #F4EDDE;
+      color: #535344;
+      border-color: #F4EDDE;
+    }
+
+    .hero-final .final-copy {
+      position: absolute;
+      bottom: 1.6rem;
+      left: 0;
+      right: 0;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.62rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(244,237,222,0.45);
+    }
 
     .hero-scroll {
       position: absolute;
@@ -687,22 +778,10 @@
 <body>
 
   <!-- ── NAVIGATION ── -->
-  <nav id="navbar">
-    <a href="index.html" class="nav-logo">
-      <img src="images/DoveSketch_Cream.png?v=2" alt="The Dove Design Co." height="56" style="display:block;filter:brightness(0);opacity:0.82;">
-    </a>
-    <ul class="nav-links">
-      <li><a href="services.html">Services</a></li>
-      <li><a href="portfolio.html">Work</a></li>
-      <li><a href="process.html">Process</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="proof.html">The Proof</a></li>
-      <li><a href="contact.html" class="btn-primary" style="padding:0.6rem 1.4rem;">Book a Call</a></li>
-    </ul>
-    <button class="nav-hamburger" id="menuBtn" aria-label="Open menu">
-      <span></span><span></span><span></span>
-    </button>
-  </nav>
+  <!-- Floating hamburger — the hero runs full-bleed, menu slides in from the right -->
+  <button class="menu-fab" id="menuBtn" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
 
   <!-- Mobile nav -->
   <div class="mobile-nav" id="mobileNav">
@@ -719,203 +798,179 @@
   <div id="hero-wrapper">
     <section id="hero">
 
-      <div class="hero-bg" id="heroBg"></div>
+      <div class="hero-bg"></div>
 
-      <!-- Layer 1: expanding media card + split title -->
-      <div class="hero-media-card" id="heroMediaCard">
-        <img src="images/web/vacationfilm-35.jpg" alt="The Dove Design Co. photography">
-        <div class="hero-media-overlay" id="heroMediaOverlay"></div>
-        <div class="hero-media-scrim" id="heroMediaScrim"></div>
-      </div>
+      <!-- Journey: scrub canvas (grass -> crest), then resting video (waterline) -->
+      <canvas class="hero-canvas" id="heroCanvas"></canvas>
+      <video class="hero-video" id="heroVideo" muted loop playsinline preload="auto"
+             poster="hero-video/03-poster.jpg">
+        <source src="hero-video/03-waterline.mp4" type="video/mp4">
+      </video>
+      <div class="hero-media-scrim" id="heroMediaScrim"></div>
 
       <div class="hero-title-split" id="heroTitleSplit">
         <span id="splitLine1">The Dove</span>
         <span id="splitLine2">Design Co.</span>
-        <span class="split-sub" id="splitSub">Scroll to expand</span>
+        <span class="split-sub" id="splitSub">Scroll to begin</span>
       </div>
 
-      <!-- Layer 2: left-aligned text (hidden at top, fades in on scroll) -->
-      <div class="hero-text-layer" id="heroTextLayer">
-        <p class="section-eyebrow">The Dove Design Co.</p>
-        <h1>Websites built<br><em>beautifully</em>,<br>built to last.</h1>
-        <p class="hero-sub">Custom-coded websites for small businesses, designed to stand out, built to last.</p>
-        <div class="hero-ctas">
-          <a href="contact.html" class="btn-primary">Book a Discovery Call</a>
-          <a href="portfolio.html" class="btn-outline">See Our Work</a>
-        </div>
-        <div class="hero-stats">
-          <div>
-            <div class="stat-num">100%</div>
-            <div class="stat-label">Custom coded</div>
-          </div>
-          <div>
-            <div class="stat-num">No</div>
-            <div class="stat-label">Templates or page builders</div>
-          </div>
-        </div>
+      <!-- Copy beats — revealed as the journey unfolds -->
+      <div class="hero-beat" id="heroBeat1">
+        <p>Custom-coded websites.<br>No templates. No shortcuts.</p>
+      </div>
+      <div class="hero-beat" id="heroBeat2">
+        <p>Every site includes a professional<br>photo shoot — <em>free</em>.</p>
+      </div>
+
+      <!-- The journey ends here: one call to action over living water -->
+      <div class="hero-final" id="heroFinal">
+        <p class="final-eyebrow">The Dove Design Co. &middot; Peoria, IL</p>
+        <h1>Your website should<br>feel like <em>this</em>.</h1>
+        <a href="contact.html" class="btn-journey">Book a Discovery Call</a>
+        <p class="final-copy">&copy; 2026 The Dove Design Co.</p>
       </div>
 
     </section>
   </div>
 
-  <!-- ── SERVICES TEASER ── -->
-  <section id="services-teaser">
-    <div class="section-header">
-      <p class="section-eyebrow">What We Do</p>
-      <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot"></div><div class="ornament-line"></div></div>
-      <h2>What we <em>build</em>.</h2>
-    </div>
-    <div class="services-grid" style="grid-template-columns:repeat(auto-fit,minmax(250px,1fr));max-width:1060px;">
-      <div class="service-card">
-        <div class="service-num">01</div>
-        <h3>New Website Builds</h3>
-        <p>Fully custom-coded from scratch, designed and built to perform, stand out, and scale.</p>
-      </div>
-      <div class="service-card">
-        <div class="service-num">02</div>
-        <h3>Website Redesigns</h3>
-        <p>Take an outdated site and rebuild it right. Better design, faster load, better results.</p>
-      </div>
-      <div class="service-card">
-        <div class="service-num">03</div>
-        <h3>Brand + Web Design</h3>
-        <p>No logo yet? No problem. We partner with a brand designer to deliver your identity and website together, start to finish.</p>
-      </div>
-    </div>
-    <div class="services-teaser-cta">
-      <a href="services.html">See all services &rarr;</a>
-    </div>
-  </section>
-
-  <!-- ── PHOTO OFFER ── -->
-  <section id="photo-offer">
-    <div class="photo-offer-text">
-      <p class="section-eyebrow">Included With Every Build</p>
-      <div class="ornament"><div class="ornament-line"></div><div class="ornament-dot"></div></div>
-      <h2>A professional photo shoot.<br><em>Included. Free.</em></h2>
-      <div class="photo-offer-badge" style="font-size:0.82rem;padding:0.75rem 1.25rem;margin-bottom:1.5rem;background:rgba(171,133,82,0.2);border-color:rgba(171,133,82,0.5);">
-        <span>★</span> Included with every new website. No extra charge.
-      </div>
-      <p>We come to you and handle everything. No extra charge. Ever.</p>
-      <ul style="list-style:none;margin-top:1.25rem;display:flex;flex-direction:column;gap:0.6rem;">
-        <li style="font-size:0.82rem;letter-spacing:0.08em;color:var(--charcoal);display:flex;align-items:center;gap:0.75rem;"><span style="color:var(--dusty-blue);">→</span> Landing page hero shots</li>
-        <li style="font-size:0.82rem;letter-spacing:0.08em;color:var(--charcoal);display:flex;align-items:center;gap:0.75rem;"><span style="color:var(--dusty-blue);">→</span> Employee headshots</li>
-        <li style="font-size:0.82rem;letter-spacing:0.08em;color:var(--charcoal);display:flex;align-items:center;gap:0.75rem;"><span style="color:var(--dusty-blue);">→</span> Lifestyle photography</li>
-        <li style="font-size:0.82rem;letter-spacing:0.08em;color:var(--charcoal);display:flex;align-items:center;gap:0.75rem;"><span style="color:var(--dusty-blue);">→</span> Product and detail shots</li>
-        <li style="font-size:0.82rem;letter-spacing:0.08em;color:var(--charcoal);display:flex;align-items:center;gap:0.75rem;"><span style="color:var(--dusty-blue);">→</span> Space and environment</li>
-      </ul>
-    </div>
-    <div class="photo-offer-visual">
-      <!-- ── GALLERY PHOTOS — one img per shot. To add more:
-           1. Add the <img> here
-           2. Add .gallery-photo:nth-child(N) { animation-delay: Xs; } in CSS
-           3. Increase the animation duration by 6s per new photo -->
-      <picture><source srcset="images/web/_JL_9849.webp" type="image/webp"><img src="images/web/_JL_9849.jpg" alt="Photography by Justin Lane" class="gallery-photo" loading="lazy"></picture>
-      <picture><source srcset="images/web/RSP-4.webp" type="image/webp"><img src="images/web/RSP-4.jpg" alt="Photography by Justin Lane" class="gallery-photo" loading="lazy"></picture>
-      <picture><source srcset="images/web/000028620008.webp" type="image/webp"><img src="images/web/000028620008.jpg" alt="Photography by Justin Lane" class="gallery-photo" loading="lazy"></picture>
-      <picture><source srcset="images/web/RSP-5.webp" type="image/webp"><img src="images/web/RSP-5.jpg" alt="Photography by Justin Lane" class="gallery-photo" loading="lazy"></picture>
-      <picture><source srcset="images/web/Top 4D-71.webp" type="image/webp"><img src="images/web/Top 4D-71.jpg" alt="Photography by Justin Lane" class="gallery-photo" loading="lazy"></picture>
-      <picture><source srcset="images/web/RSP-10.webp" type="image/webp"><img src="images/web/RSP-10.jpg" alt="Photography by Justin Lane" class="gallery-photo" loading="lazy"></picture>
-    </div>
-  </section>
-
-  <!-- ── CTA BANNER ── -->
-  <section id="cta-banner">
-    <div class="ornament"><div class="ornament-line" style="background:rgba(232,224,213,0.2);"></div><div class="ornament-dot"></div><div class="ornament-line" style="background:rgba(232,224,213,0.2);"></div></div>
-    <h2>Ready to build something <em>beautiful</em>?</h2>
-    <p>Response within 24 hours. No pitch. Just a real conversation.</p>
-    <a href="contact.html" class="btn-primary" style="background:var(--dusty-blue);border-color:var(--dusty-blue);">Book a Discovery Call</a>
-  </section>
-
-  <!-- ── FOOTER ── -->
-  <footer>
-    <a href="index.html" class="footer-logo">The Dove <span>Design</span> Co.</a>
-    <ul class="footer-links">
-      <li><a href="services.html">Services</a></li>
-      <li><a href="portfolio.html">Work</a></li>
-      <li><a href="process.html">Process</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="contact.html">Contact</a></li>
-      <li><a href="proof.html">The Proof</a></li>
-    </ul>
-    <p class="footer-copy">© 2026 The Dove Design Co.</p>
-  </footer>
-
   <script>
-    // Hero scroll-expansion
-    const heroBg         = document.getElementById('heroBg');
-    const heroMediaCard  = document.getElementById('heroMediaCard');
-    const heroMediaOverlay = document.getElementById('heroMediaOverlay');
-    const heroTitleSplit = document.getElementById('heroTitleSplit');
-    const splitLine1     = document.getElementById('splitLine1');
-    const splitLine2     = document.getElementById('splitLine2');
-    const splitSub       = document.getElementById('splitSub');
-    const heroTextLayer  = document.getElementById('heroTextLayer');
-    const heroWrapper    = document.getElementById('hero-wrapper');
+    // ── HERO SCROLL JOURNEY ────────────────────────────────
+    // Scrub a frame sequence (grass -> crest reveal), then hand off to a
+    // living video loop at the waterline. Scroll distance maps NON-linearly:
+    // grass rushes past, the reveal breathes, the waterline is the rest.
+    (function(){
+      const canvas    = document.getElementById('heroCanvas');
+      const ctx       = canvas.getContext('2d');
+      const video     = document.getElementById('heroVideo');
+      const scrim     = document.getElementById('heroMediaScrim');
+      const titleSplit= document.getElementById('heroTitleSplit');
+      const splitLine1= document.getElementById('splitLine1');
+      const splitLine2= document.getElementById('splitLine2');
+      const splitSub  = document.getElementById('splitSub');
+      const beat1     = document.getElementById('heroBeat1');
+      const beat2     = document.getElementById('heroBeat2');
+      const finalLayer= document.getElementById('heroFinal');
+      const wrapper   = document.getElementById('hero-wrapper');
 
-    let heroExpanded  = false;
-    let heroCollapsed = false;
+      const FRAME_COUNT = 70;               // clips 1+2 → 70 webp frames
+      const SCRUB_END   = 0.82;             // last 18% of scroll = waterline handoff
+      const framePath   = i => `hero-frames/f${String(i).padStart(3,'0')}.webp`;
 
-    function updateHero() {
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
-      const isMobile = vw < 768;
-      const scrollY  = window.scrollY;
-      const zone     = heroWrapper.offsetHeight - vh;
-      let p = heroCollapsed ? 1 : Math.min(Math.max(scrollY / zone, 0), 1);
-
-      if (p >= 1) heroExpanded = true;
-      if (heroExpanded) p = 1;
-
-      // Media card grows from a small centered card to full-bleed
-      const startW = isMobile ? 230 : 320;
-      const startH = isMobile ? 320 : 420;
-      const w = startW + p * (vw - startW);
-      const h = startH + p * (vh - startH);
-      heroMediaCard.style.width        = w + 'px';
-      heroMediaCard.style.height       = h + 'px';
-      heroMediaCard.style.borderRadius = (18 * (1 - p)) + 'px';
-      heroMediaCard.style.boxShadow    = `0 0 50px rgba(0,0,0,${0.35 * (1 - p)})`;
-
-      // Dark overlay on the media eases off as it expands
-      heroMediaOverlay.style.opacity = 0.45 - p * 0.25;
-
-      // Background photo fades away behind the growing card
-      heroBg.style.opacity = 1 - p;
-
-      // Title splits apart and slides off-screen
-      const slide = p * (isMobile ? 120 : 80);
-      splitLine1.style.transform = `translateX(-${slide}vw)`;
-      splitLine2.style.transform = `translateX(${slide}vw)`;
-      splitSub.style.opacity     = Math.max(0, 1 - p * 2.5);
-
-      // Headline + CTAs fade in over the full-bleed image
-      const textP = Math.min(Math.max((p - 0.8) / 0.2, 0), 1);
-      heroTextLayer.style.opacity       = textP;
-      heroTextLayer.style.pointerEvents = textP > 0.5 ? 'auto' : 'none';
-      document.getElementById('heroMediaScrim').style.opacity = textP;
-
-      // Once fully expanded: collapse wrapper to 100vh and snap to top
-      // The math works out so content below doesn't jump — both before and after
-      // collapse, the first content pixel sits at exactly the viewport bottom.
-      if (!heroCollapsed && heroExpanded) {
-        heroCollapsed = true;
-        const heroBottom = heroWrapper.offsetHeight - vh;
-        const overshoot  = Math.max(0, scrollY - heroBottom);
-        heroWrapper.style.height = vh + 'px';
-        window.scrollTo({ top: overshoot, behavior: 'instant' });
+      // Non-linear scroll map: grass (first 30 frames) gets less scroll,
+      // the crest reveal (last 40) gets more room to breathe.
+      function easeJourney(t){
+        // t 0..1 across the scrub. Bias so early frames advance faster.
+        return t < 0.45 ? (t / 0.45) * 0.42
+                        : 0.42 + ((t - 0.45) / 0.55) * 0.58;
       }
-    }
 
-    window.addEventListener('scroll', updateHero, { passive: true });
-    window.addEventListener('resize', updateHero, { passive: true });
-    updateHero();
+      const frames = [];
+      let loaded = 0, firstReady = false;
+      for (let i = 0; i < FRAME_COUNT; i++){
+        const img = new Image();
+        img.onload = () => {
+          loaded++;
+          if (i === 0 && !firstReady){ firstReady = true; sizeCanvas(); draw(0); }
+        };
+        img.src = framePath(i);
+        frames.push(img);
+      }
 
-    // Nav scroll shrink
-    const navbar = document.getElementById('navbar');
-    window.addEventListener('scroll', () => {
-      navbar.classList.toggle('scrolled', window.scrollY > 50);
-    }, { passive: true });
+      let dpr = Math.min(window.devicePixelRatio || 1, 2);
+      function sizeCanvas(){
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width  = window.innerWidth  * dpr;
+        canvas.height = window.innerHeight * dpr;
+      }
+
+      function draw(idx){
+        const img = frames[Math.round(idx)];
+        if (!img || !img.complete || !img.naturalWidth) return;
+        const cw = canvas.width, ch = canvas.height;
+        const ir = img.naturalWidth / img.naturalHeight, cr = cw / ch;
+        let dw, dh, dx, dy;
+        if (ir > cr){ dh = ch; dw = ch * ir; dx = (cw - dw) / 2; dy = 0; }
+        else        { dw = cw; dh = cw / ir; dx = 0; dy = (ch - dh) / 2; }
+        ctx.drawImage(img, dx, dy, dw, dh);
+      }
+
+      let targetP = 0, smoothP = 0, videoPlaying = false;
+      let lastTick = 0;
+
+      function onScroll(){
+        const zone = wrapper.offsetHeight - window.innerHeight;
+        targetP = Math.min(Math.max(window.scrollY / zone, 0), 1);
+        // If the rAF loop is throttled or suspended (hidden tab, low-power
+        // webviews), apply directly so the journey still tracks the scroll.
+        if (performance.now() - lastTick > 250){
+          smoothP = targetP;
+          apply();
+        }
+      }
+
+      // A beat travels through its scroll window [a, b]: rises in from below,
+      // holds center, exits upward — and reverses perfectly when scrolling back.
+      function beatState(p, a, b){
+        if (p <= a) return { op: 0, y:  60 };
+        if (p >= b) return { op: 0, y: -60 };
+        const t = (p - a) / (b - a);
+        const ramp = 0.32;
+        let op = 1;
+        if (t < ramp)          op = t / ramp;
+        else if (t > 1 - ramp) op = (1 - t) / ramp;
+        return { op, y: (0.5 - t) * 120 };
+      }
+
+      function apply(){
+        const p      = smoothP;
+        const scrubT = Math.min(p / SCRUB_END, 1);
+        draw(easeJourney(scrubT) * (FRAME_COUNT - 1));
+
+        // Waterline: fade the living video in over the last scrub frame
+        const endP = Math.min(Math.max((p - SCRUB_END) / (1 - SCRUB_END), 0), 1);
+        video.style.opacity = endP;
+        if (endP > 0.05 && !videoPlaying){ video.play().catch(()=>{}); videoPlaying = true; }
+        if (endP < 0.05 && videoPlaying){ video.pause(); videoPlaying = false; }
+
+        // Title splits apart and drifts up as the journey starts
+        const slide = Math.min(scrubT * 70, 70);
+        splitLine1.style.transform = `translateX(-${slide}vw)`;
+        splitLine2.style.transform = `translateX(${slide}vw)`;
+        titleSplit.style.opacity   = Math.max(0, 1 - scrubT * 2.8);
+        splitSub.style.opacity     = Math.max(0, 1 - scrubT * 5);
+
+        // Copy beats ride the scroll: in from below, out through the top
+        const b1 = beatState(p, 0.14, 0.44);
+        const b2 = beatState(p, 0.50, 0.80);
+        beat1.style.opacity   = b1.op;
+        beat1.style.transform = `translateY(${b1.y}px)`;
+        beat2.style.opacity   = b2.op;
+        beat2.style.transform = `translateY(${b2.y}px)`;
+
+        // Final CTA rises with the water and settles at center
+        finalLayer.style.opacity       = endP;
+        finalLayer.style.transform     = `translateY(${(1 - endP) * 46}px)`;
+        finalLayer.style.pointerEvents = endP > 0.5 ? 'auto' : 'none';
+        scrim.style.opacity            = endP * 0.7;
+      }
+
+      // One smoothed scroll value drives EVERYTHING — frames, copy, video, CTA —
+      // so a chunky mouse wheel still produces one buttery, reversible motion.
+      function tick(){
+        lastTick = performance.now();
+        smoothP += (targetP - smoothP) * 0.14;
+        if (Math.abs(targetP - smoothP) < 0.0004) smoothP = targetP;
+        apply();
+        requestAnimationFrame(tick);
+      }
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', () => { sizeCanvas(); onScroll(); smoothP = targetP; apply(); }, { passive: true });
+      sizeCanvas();
+      onScroll();
+      apply();
+      requestAnimationFrame(tick);
+    })();
 
     // Hamburger
     const menuBtn   = document.getElementById('menuBtn');
