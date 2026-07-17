@@ -929,11 +929,11 @@
 
       // The dove crosses once (0s-5.5s), then the water loops seamlessly —
       // the dissolve at the loop point is baked into the video file itself.
-      const LOOP_START = 6.25, LOOP_END = 9.92;
+      const LOOP_START = 8.17, LOOP_END = 9.88;
       const finalLogo  = document.getElementById('finalLogo');
       video.addEventListener('timeupdate', () => {
         if (video.currentTime >= LOOP_END) video.currentTime = LOOP_START;
-        if (video.currentTime >= 5.2) finalLogo.classList.add('show');
+        if (video.currentTime >= 6.5) finalLogo.classList.add('show');
       });
       video.addEventListener('ended', () => {
         video.currentTime = LOOP_START;
