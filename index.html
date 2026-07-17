@@ -285,7 +285,7 @@
 
     /* ─── HERO (scroll journey) ─── */
     #hero-wrapper {
-      height: 200vh;
+      height: 340vh;
     }
 
     #hero {
@@ -1051,7 +1051,7 @@
       // so a chunky mouse wheel still produces one buttery, reversible motion.
       function tick(){
         lastTick = performance.now();
-        smoothP += (targetP - smoothP) * 0.09;
+        smoothP += (targetP - smoothP) * 0.065;
         if (Math.abs(targetP - smoothP) < 0.0004) smoothP = targetP;
         apply();
         requestAnimationFrame(tick);
