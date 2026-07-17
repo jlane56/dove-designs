@@ -868,32 +868,62 @@
       const finalLayer= document.getElementById('heroFinal');
       const wrapper   = document.getElementById('hero-wrapper');
 
-      const FRAME_COUNT = 70;               // clips 1+2 → 70 webp frames
-      const SCRUB_END   = 0.82;             // last 18% of scroll = waterline handoff
-      const framePath   = i => `hero-frames/f${String(i).padStart(3,'0')}.webp`;
+      // Dense frame sets: 240 for desktop, 120 for mobile — adjacent frames
+      // are tiny visual steps, so scrubbing reads as continuous motion.
+      // Chosen lazily: background/prerendered tabs report innerWidth 0, so
+      // deciding at eval time would lock in the wrong set and a 0x0 canvas.
+      const SCRUB_END = 0.82;               // last 18% of scroll = waterline handoff
+      let isMobile = false, FRAME_COUNT = 0, framePath = null;
 
-      // Non-linear scroll map: grass (first 30 frames) gets less scroll,
-      // the crest reveal (last 40) gets more room to breathe.
+      // Non-linear scroll map: grass (first half of frames) gets less scroll,
+      // the crest reveal gets more room to breathe.
       function easeJourney(t){
-        // t 0..1 across the scrub. Bias so early frames advance faster.
         return t < 0.45 ? (t / 0.45) * 0.42
                         : 0.42 + ((t - 0.45) / 0.55) * 0.58;
       }
 
       const frames = [];
-      let loaded = 0, firstReady = false;
-      for (let i = 0; i < FRAME_COUNT; i++){
+      const ready  = [];
+      let firstReady = false;
+
+      function loadFrame(i){
         const img = new Image();
         img.onload = () => {
-          loaded++;
+          ready[i] = true;
           if (i === 0 && !firstReady){ firstReady = true; sizeCanvas(); draw(0); }
         };
         img.src = framePath(i);
-        frames.push(img);
+        frames[i] = img;
+      }
+
+      function initFrames(){
+        isMobile    = Math.min(window.innerWidth, window.screen.width) < 768;
+        FRAME_COUNT = isMobile ? 120 : 240;
+        framePath   = i => `hero-frames/${isMobile ? 'm' : 'd'}/f${String(i).padStart(3,'0')}.webp`;
+        frames.length = FRAME_COUNT;
+        for (let i = 0; i < FRAME_COUNT; i++) ready[i] = false;
+        // Two-pass load: every 4th frame first (scrubbable in ~a second),
+        // then the in-betweens backfill for full smoothness.
+        for (let i = 0; i < FRAME_COUNT; i += 4) loadFrame(i);
+        setTimeout(() => {
+          for (let i = 0; i < FRAME_COUNT; i++) if (i % 4) loadFrame(i);
+        }, 700);
+      }
+
+
+      // Until a frame arrives, fall back to its nearest loaded neighbor
+      function nearestReady(i){
+        if (ready[i]) return i;
+        for (let d = 1; d < FRAME_COUNT; d++){
+          if (i - d >= 0          && ready[i - d]) return i - d;
+          if (i + d < FRAME_COUNT && ready[i + d]) return i + d;
+        }
+        return -1;
       }
 
       let dpr = Math.min(window.devicePixelRatio || 1, 2);
       function sizeCanvas(){
+        if (!window.innerWidth || !window.innerHeight) return;
         dpr = Math.min(window.devicePixelRatio || 1, 2);
         canvas.width  = window.innerWidth  * dpr;
         canvas.height = window.innerHeight * dpr;
@@ -909,17 +939,18 @@
       }
 
       // Sub-frame rendering: crossfade the two neighboring frames so slow
-      // scrolling glides instead of stepping frame to frame.
+      // scrolling glides instead of stepping. With dense frames the blend
+      // spans tiny visual deltas — motion smoothing, not ghosting.
       function draw(idx){
-        const i0 = Math.max(0, Math.floor(idx));
-        const i1 = Math.min(FRAME_COUNT - 1, i0 + 1);
-        const frac = idx - i0;
-        const a = frames[i0], b = frames[i1];
-        if (!a || !a.complete || !a.naturalWidth) return;
-        drawCover(a);
-        if (i1 !== i0 && frac > 0.02 && b.complete && b.naturalWidth){
+        const f0 = Math.max(0, Math.floor(idx));
+        const i0 = nearestReady(f0);
+        if (i0 < 0) return;
+        const i1 = nearestReady(Math.min(FRAME_COUNT - 1, f0 + 1));
+        const frac = idx - f0;
+        drawCover(frames[i0]);
+        if (i1 >= 0 && i1 !== i0 && frac > 0.02){
           ctx.globalAlpha = frac;
-          drawCover(b);
+          drawCover(frames[i1]);
           ctx.globalAlpha = 1;
         }
       }
@@ -1059,9 +1090,19 @@
 
       window.addEventListener('scroll', onScroll, { passive: true });
       window.addEventListener('resize', () => { sizeCanvas(); onScroll(); smoothP = targetP; apply(); }, { passive: true });
-      sizeCanvas();
-      onScroll();
-      apply();
+
+      // Boot only once the viewport actually exists — background/prerendered
+      // tabs report innerWidth 0 at eval time.
+      (function boot(){
+        if (window.innerWidth > 0){
+          initFrames();
+          sizeCanvas();
+          onScroll();
+          apply();
+        } else {
+          setTimeout(boot, 120);
+        }
+      })();
       requestAnimationFrame(tick);
     })();
 
