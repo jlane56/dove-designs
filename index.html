@@ -1004,48 +1004,71 @@
         videoLoop.play().catch(()=>{});
       });
 
-      // Journey gates: a gesture that crosses a gate is caught and held for a
-      // beat (600ms), then ALWAYS releases — a timer, not event-silence, so
-      // momentum tails and rapid flicks can never wedge it shut. Scrolling
-      // back releases instantly.
+      // Journey gates — VISUAL holds, zero scroll interference. Native
+      // scrolling is never touched (no scrollTo, no fighting momentum, no
+      // tactile glitch). Crossing a gate pauses the JOURNEY at the copy beat
+      // for 600ms while the real scroll runs free underneath; on release the
+      // visuals sweep smoothly to wherever the scroll actually is. If a hard
+      // fling crossed the next gate during the hold, the gates chain —
+      // pause, sweep, pause — a guided tour instead of a fight.
       const GATES = [0.29, 0.65];
       const GATE_HOLD_MS = 600;
       const gateCleared = [false, false];
-      let gatePinned = -1, gateDir = 0, gatePinTime = 0, prevGateP = 0;
+      let gatePinned = -1, gateDir = 0, gatePinTime = 0, prevRawP = 0;
+
+      // First uncleared gate strictly between two positions, nearest to 'from'
+      function gateBetween(from, to){
+        const dir = to > from ? 1 : -1;
+        let best = -1;
+        for (let gi = 0; gi < GATES.length; gi++){
+          if (gateCleared[gi]) continue;
+          const g = GATES[gi];
+          if ((g - from) * dir > 0.002 && (to - g) * dir > 0.002){
+            if (best < 0 || (g - from) * dir < (GATES[best] - from) * dir) best = gi;
+          }
+        }
+        return best;
+      }
 
       function onScroll(){
         const zone = wrapper.offsetHeight - window.innerHeight;
-        let p = Math.min(Math.max(window.scrollY / zone, 0), 1);
+        const raw = Math.min(Math.max(window.scrollY / zone, 0), 1);
+        let p = raw;
 
         if (gatePinned >= 0){
           const g = GATES[gatePinned];
-          const overshoot = (p - g) * gateDir;
-          if (performance.now() - gatePinTime > GATE_HOLD_MS || overshoot < -0.002){
-            // held long enough, or the user reversed: release
+          const expired  = performance.now() - gatePinTime > GATE_HOLD_MS;
+          const reversed = (raw - g) * gateDir < -0.002;
+          if (expired || reversed){
             gateCleared[gatePinned] = true;
             gatePinned = -1;
-          } else if (overshoot > 0.002){
-            // momentum still pushing past the gate: hold the line
-            window.scrollTo({ top: g * zone, behavior: 'instant' });
-            p = g;
+            if (!reversed){
+              // momentum sailed on during the hold — chain to the next gate it crossed
+              const nxt = gateBetween(g, raw);
+              if (nxt >= 0){
+                gatePinned = nxt;
+                gateDir = raw > g ? 1 : -1;
+                gatePinTime = performance.now();
+                p = GATES[nxt];
+              }
+            }
+          } else {
+            p = g;   // journey rests at the beat; the page scrolls free beneath it
           }
         } else {
+          const crossed = gateBetween(prevRawP, raw);
+          if (crossed >= 0){
+            gatePinned = crossed;
+            gateDir = raw > prevRawP ? 1 : -1;
+            gatePinTime = performance.now();
+            p = GATES[crossed];
+          }
           for (let gi = 0; gi < GATES.length; gi++){
-            const g = GATES[gi];
-            if (!gateCleared[gi] && (prevGateP - g) * (p - g) < 0){
-              gatePinned = gi;
-              gateDir = p > prevGateP ? 1 : -1;
-              gatePinTime = performance.now();
-              window.scrollTo({ top: g * zone, behavior: 'instant' });
-              p = g;
-              break;
-            }
-            // re-arm a cleared gate once you've moved well away from it
-            if (gateCleared[gi] && Math.abs(p - g) > 0.12) gateCleared[gi] = false;
+            if (gateCleared[gi] && Math.abs(raw - GATES[gi]) > 0.12) gateCleared[gi] = false;
           }
         }
 
-        prevGateP = p;
+        prevRawP = raw;
         targetP = p;
         // If the rAF loop is throttled or suspended (hidden tab, low-power
         // webviews), apply directly so the journey still tracks the scroll.
@@ -1124,6 +1147,9 @@
       // so a chunky mouse wheel still produces one buttery, reversible motion.
       function tick(){
         lastTick = performance.now();
+        // If a gate hold expired after momentum died (no more scroll events),
+        // run the release logic so the journey continues on its own.
+        if (gatePinned >= 0 && performance.now() - gatePinTime > GATE_HOLD_MS) onScroll();
         smoothP += (targetP - smoothP) * 0.055;
         if (Math.abs(targetP - smoothP) < 0.0004) smoothP = targetP;
         apply();
