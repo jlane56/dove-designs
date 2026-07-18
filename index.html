@@ -955,7 +955,7 @@
         }
       }
 
-      let targetP = 0, smoothP = 0, shownFrame = 0, videoPlaying = false;
+      let targetP = 0, smoothP = 0, shownFrame = 0, lastPlayTry = 0;
       let lastTick = 0;
 
       // The dove crosses once (0s-5.5s), then the water loops seamlessly —
@@ -1053,8 +1053,15 @@
         // Waterline: fade the living video in over the last scrub frame
         const endP = Math.min(Math.max((p - SCRUB_END) / (1 - SCRUB_END), 0), 1);
         video.style.opacity = endP;
-        if (endP > 0.05 && !videoPlaying){ video.play().catch(()=>{}); videoPlaying = true; }
-        if (endP < 0.05 && videoPlaying){ video.pause(); videoPlaying = false; }
+        // video.paused is the only truth — browsers force-pause muted videos
+        // to save power, so keep re-playing whenever the finale is visible.
+        const wantVideo = endP > 0.3;
+        if (wantVideo && video.paused && performance.now() - lastPlayTry > 400){
+          lastPlayTry = performance.now();
+          video.play().catch(()=>{});
+        } else if (!wantVideo && !video.paused){
+          video.pause();
+        }
 
         // Title splits apart and drifts up as the journey starts
         const slide = Math.min(scrubT * 70, 70);
