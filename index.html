@@ -1004,13 +1004,14 @@
         videoLoop.play().catch(()=>{});
       });
 
-      // Journey gates: a gesture that crosses a gate is caught and held
-      // there while its momentum lasts. Scrolling BACK releases instantly —
-      // the gate only ever resists the direction you crossed it in. Pausing
-      // briefly also clears it, so the next gesture passes freely.
+      // Journey gates: a gesture that crosses a gate is caught and held for a
+      // beat (600ms), then ALWAYS releases — a timer, not event-silence, so
+      // momentum tails and rapid flicks can never wedge it shut. Scrolling
+      // back releases instantly.
       const GATES = [0.29, 0.65];
+      const GATE_HOLD_MS = 600;
       const gateCleared = [false, false];
-      let gatePinned = -1, gateDir = 0, gateIdleTimer = null, prevGateP = 0;
+      let gatePinned = -1, gateDir = 0, gatePinTime = 0, prevGateP = 0;
 
       function onScroll(){
         const zone = wrapper.offsetHeight - window.innerHeight;
@@ -1019,14 +1020,14 @@
         if (gatePinned >= 0){
           const g = GATES[gatePinned];
           const overshoot = (p - g) * gateDir;
-          if (overshoot > 0.002){
+          if (performance.now() - gatePinTime > GATE_HOLD_MS || overshoot < -0.002){
+            // held long enough, or the user reversed: release
+            gateCleared[gatePinned] = true;
+            gatePinned = -1;
+          } else if (overshoot > 0.002){
             // momentum still pushing past the gate: hold the line
             window.scrollTo({ top: g * zone, behavior: 'instant' });
             p = g;
-          } else if (overshoot < -0.002){
-            // user reversed: let go immediately, no trap
-            gateCleared[gatePinned] = true;
-            gatePinned = -1;
           }
         } else {
           for (let gi = 0; gi < GATES.length; gi++){
@@ -1034,6 +1035,7 @@
             if (!gateCleared[gi] && (prevGateP - g) * (p - g) < 0){
               gatePinned = gi;
               gateDir = p > prevGateP ? 1 : -1;
+              gatePinTime = performance.now();
               window.scrollTo({ top: g * zone, behavior: 'instant' });
               p = g;
               break;
@@ -1044,11 +1046,6 @@
         }
 
         prevGateP = p;
-        clearTimeout(gateIdleTimer);
-        gateIdleTimer = setTimeout(() => {
-          if (gatePinned >= 0){ gateCleared[gatePinned] = true; gatePinned = -1; }
-        }, 280);
-
         targetP = p;
         // If the rAF loop is throttled or suspended (hidden tab, low-power
         // webviews), apply directly so the journey still tracks the scroll.
@@ -1136,10 +1133,16 @@
       window.addEventListener('scroll', onScroll, { passive: true });
       window.addEventListener('resize', () => { sizeCanvas(); onScroll(); smoothP = targetP; apply(); }, { passive: true });
 
+      // The journey always begins at its beginning — browsers restoring a
+      // mid-journey scroll position on reload would trip a gate on the very
+      // first scroll event and pin the page before any input.
+      if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+
       // Boot only once the viewport actually exists — background/prerendered
       // tabs report innerWidth 0 at eval time.
       (function boot(){
         if (window.innerWidth > 0){
+          window.scrollTo({ top: 0, behavior: 'instant' });
           initFrames();
           sizeCanvas();
           onScroll();
