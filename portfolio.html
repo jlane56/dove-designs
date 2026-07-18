@@ -87,14 +87,16 @@
       text-align: center;
       position: relative;
       overflow: hidden;
+      /* Scrim is contained ABOVE the dissolve zone — if its tint reaches the
+         hero's bottom edge it shifts the final tone and draws a seam line */
       background:
-        radial-gradient(ellipse 75% 70% at 50% 42%, rgba(18,22,26,0.55) 0%, rgba(18,22,26,0.28) 60%, rgba(18,22,26,0.14) 100%),
-        url('images/web/headers/work.webp') center 45%/cover no-repeat #12161a;
+        radial-gradient(ellipse 75% 55% at 50% 36%, rgba(18,22,26,0.55) 0%, rgba(18,22,26,0.24) 55%, rgba(18,22,26,0) 80%),
+        url('images/web/headers/work.webp') center 45%/cover no-repeat #FCF8EE;
     }
     .page-hero .section-eyebrow { color: rgba(244,237,222,0.8); letter-spacing: 0.28em; text-transform: uppercase; font-size: 0.72rem; }
     .page-hero h1 { color: #F4EDDE; font-size: clamp(2.8rem, 5.5vw, 4.4rem); margin-bottom: 1.2rem; text-shadow: 0 2px 30px rgba(18,22,26,0.55); }
     .page-hero h1 em { color: #D4B483; font-style: italic; }
-    .page-hero p { font-size: 1rem; color: rgba(244,237,222,0.85); max-width: 520px; margin: 0 auto; line-height: 1.8; text-shadow: 0 1px 18px rgba(18,22,26,0.5); }
+    .page-hero p { font-size: 1rem; color: rgba(83,83,68,0.8); max-width: 520px; margin: 0 auto; line-height: 1.8; }
     .page-hero .ornament-line { background: rgba(244,237,222,0.25); }
 
     @keyframes riseIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
@@ -323,26 +325,26 @@
     /* Keep header text above the grain + dissolve layers */
     .page-hero > * { position: relative; z-index: 1; }
 
-    /* Film grain over the header still — matches the landing footage */
-    .page-hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)'/%3E%3C/svg%3E");
-      opacity: 0.16;
-      mix-blend-mode: overlay;
-      pointer-events: none;
-    }
+    /* (Header grain removed: the page-wide grain overlay already covers the
+       hero, and a blend-mode pseudo here draws a compositor hairline at its
+       layer edge — Chromium artifact.) */
 
-    /* The photo dissolves into the page instead of hard-cutting */
+    /* The photo dissolves into the page instead of hard-cutting — a long,
+       eased fade that starts high and settles gently into the cream */
     .page-hero::after {
       content: '';
       position: absolute;
       left: 0; right: 0; bottom: 0;
-      height: 9rem;
+      height: 26rem;
       z-index: 0;
-      background: linear-gradient(to bottom, rgba(252,248,238,0) 0%, var(--white) 100%);
+      background: linear-gradient(to bottom,
+        rgba(252,248,238,0)    0%,
+        rgba(252,248,238,0.08) 20%,
+        rgba(252,248,238,0.26) 40%,
+        rgba(252,248,238,0.55) 58%,
+        rgba(252,248,238,0.85) 76%,
+        var(--white)           92%,
+        var(--white)           100%);
       pointer-events: none;
     }
 
