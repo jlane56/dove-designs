@@ -901,19 +901,26 @@
       const ready  = [];
       let firstReady = false;
 
+      // Frames are pre-decoded to GPU-ready bitmaps: every draw is then a
+      // pure blit with zero decode work, so scrubbing never micro-stutters.
+      const canBitmap = typeof createImageBitmap === 'function';
       function loadFrame(i){
         const img = new Image();
         img.onload = () => {
-          ready[i] = true;
-          if (i === 0 && !firstReady){ firstReady = true; sizeCanvas(); draw(0); }
+          const finish = obj => {
+            frames[i] = obj;
+            ready[i] = true;
+            if (i === 0 && !firstReady){ firstReady = true; sizeCanvas(); draw(0); }
+          };
+          if (canBitmap) createImageBitmap(img).then(finish).catch(() => finish(img));
+          else finish(img);
         };
         img.src = framePath(i);
-        frames[i] = img;
       }
 
       function initFrames(){
         isMobile    = Math.min(window.innerWidth, window.screen.width) < 768;
-        FRAME_COUNT = isMobile ? 120 : 240;
+        FRAME_COUNT = isMobile ? 240 : 480;
         framePath   = i => `hero-frames/${isMobile ? 'm' : 'd'}/f${String(i).padStart(3,'0')}.webp`;
         frames.length = FRAME_COUNT;
         for (let i = 0; i < FRAME_COUNT; i++) ready[i] = false;
@@ -946,7 +953,8 @@
 
       function drawCover(img){
         const cw = canvas.width, ch = canvas.height;
-        const ir = img.naturalWidth / img.naturalHeight, cr = cw / ch;
+        const iw = img.naturalWidth || img.width, ih = img.naturalHeight || img.height;
+        const ir = iw / ih, cr = cw / ch;
         let dw, dh, dx, dy;
         if (ir > cr){ dh = ch; dw = ch * ir; dx = (cw - dw) / 2; dy = 0; }
         else        { dw = cw; dh = cw / ir; dx = 0; dy = (ch - dh) / 2; }
@@ -1072,7 +1080,7 @@
       // so a chunky mouse wheel still produces one buttery, reversible motion.
       function tick(){
         lastTick = performance.now();
-        smoothP += (targetP - smoothP) * 0.065;
+        smoothP += (targetP - smoothP) * 0.055;
         if (Math.abs(targetP - smoothP) < 0.0004) smoothP = targetP;
         apply();
         requestAnimationFrame(tick);
