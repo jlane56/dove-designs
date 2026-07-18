@@ -76,12 +76,55 @@
     .btn-outline:hover { background: var(--charcoal); color: var(--white); border-color: var(--charcoal); }
 
     /* Page hero */
-    .page-hero { padding: 10rem 4rem 5rem; background: var(--charcoal); text-align: center; position: relative; overflow: hidden; }
-    .page-hero .section-eyebrow { color: rgba(248,240,221,0.5); }
-    .page-hero h1 { color: var(--cream); font-size: clamp(2.6rem, 5vw, 3.8rem); margin-bottom: 1rem; }
+    /* Page hero — a still moment from the landing journey's world */
+    .page-hero {
+      min-height: 58vh;
+      padding: 8rem 4rem 5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 75% 70% at 50% 45%, rgba(18,22,26,0.48) 0%, rgba(18,22,26,0.22) 60%, rgba(18,22,26,0.12) 100%),
+        url('hero-frames/d/f200.webp') center 55%/cover no-repeat #12161a;
+    }
+    .page-hero .section-eyebrow { color: rgba(244,237,222,0.8); letter-spacing: 0.28em; text-transform: uppercase; font-size: 0.72rem; }
+    .page-hero h1 { color: #F4EDDE; font-size: clamp(2.8rem, 5.5vw, 4.4rem); margin-bottom: 1.2rem; text-shadow: 0 2px 30px rgba(18,22,26,0.55); }
     .page-hero h1 em { color: #D4B483; font-style: italic; }
-    .page-hero p { font-size: 1rem; color: rgba(248,240,221,0.6); max-width: 520px; margin: 0 auto; line-height: 1.8; }
-    .page-hero .ornament-line { background: rgba(248,240,221,0.15); }
+    .page-hero p { font-size: 1rem; color: rgba(244,237,222,0.85); max-width: 520px; margin: 0 auto; line-height: 1.8; text-shadow: 0 1px 18px rgba(18,22,26,0.5); }
+    .page-hero .ornament-line { background: rgba(244,237,222,0.25); }
+
+    @keyframes riseIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+    .page-hero .section-eyebrow { animation: riseIn 0.9s cubic-bezier(0.25,0.46,0.45,0.94) both; }
+    .page-hero .ornament       { animation: riseIn 0.9s cubic-bezier(0.25,0.46,0.45,0.94) 0.08s both; }
+    .page-hero h1              { animation: riseIn 0.9s cubic-bezier(0.25,0.46,0.45,0.94) 0.16s both; }
+    .page-hero p               { animation: riseIn 0.9s cubic-bezier(0.25,0.46,0.45,0.94) 0.28s both; }
+
+    /* Floating controls over the hero */
+    .menu-fab {
+      position: fixed; top: 1.4rem; right: 1.6rem; z-index: 150;
+      width: 52px; height: 52px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+      background: rgba(18,22,26,0.32);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(248,240,221,0.22); border-radius: 50%;
+      cursor: pointer; transition: background 0.3s, border-color 0.3s;
+    }
+    .menu-fab:hover { background: rgba(18,22,26,0.55); border-color: rgba(248,240,221,0.45); }
+    .menu-fab span { display: block; width: 20px; height: 1.5px; background: #F8F0DD; transition: 0.3s; }
+    .home-fab {
+      position: fixed; top: 1.4rem; left: 1.6rem; z-index: 150;
+      width: 52px; height: 52px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(18,22,26,0.32);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(248,240,221,0.22); border-radius: 50%;
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .home-fab:hover { background: rgba(18,22,26,0.55); border-color: rgba(248,240,221,0.45); }
 
     /* Footer */
     footer { background: var(--charcoal); padding: 2.5rem 4rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; }
@@ -280,22 +323,13 @@
 <body>
 
   <!-- ── NAVIGATION ── -->
-  <nav id="navbar">
-    <a href="index.html" class="nav-logo">
-      <img src="images/DoveSketch_Cream.png?v=2" alt="The Dove Design Co." height="56" style="display:block;filter:brightness(0);opacity:0.82;">
-    </a>
-    <ul class="nav-links">
-      <li><a href="services.html">Services</a></li>
-      <li><a href="portfolio.html" class="active">Work</a></li>
-      <li><a href="process.html">Process</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="proof.html">The Proof</a></li>
-      <li><a href="contact.html" class="btn-primary" style="padding:0.6rem 1.4rem;">Book a Call</a></li>
-    </ul>
-    <button class="nav-hamburger" id="menuBtn" aria-label="Open menu">
-      <span></span><span></span><span></span>
-    </button>
-  </nav>
+  <!-- Floating menu — matches the landing journey -->
+  <a href="index.html" class="home-fab" aria-label="Home">
+    <img src="hero-video/dove-mark.png" alt="The Dove Design Co." height="30">
+  </a>
+  <button class="menu-fab" id="menuBtn" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
 
   <div class="mobile-nav" id="mobileNav">
     <button class="mobile-nav-close" id="menuClose">×</button>
@@ -419,12 +453,6 @@
   </footer>
 
   <script>
-    // Nav scroll shrink
-    const navbar = document.getElementById('navbar');
-    window.addEventListener('scroll', () => {
-      navbar.classList.toggle('scrolled', window.scrollY > 50);
-    }, { passive: true });
-
     // Hamburger
     const menuBtn   = document.getElementById('menuBtn');
     const mobileNav = document.getElementById('mobileNav');
