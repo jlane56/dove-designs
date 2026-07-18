@@ -38,7 +38,18 @@
       --light-border: #DDD5C0;
     }
 
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; scroll-snap-type: y mandatory; }
+
+    /* Journey gates — invisible snap targets the scroll must stop at */
+    .snap-gate {
+      position: absolute;
+      left: 0;
+      width: 1px;
+      height: 100vh;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      pointer-events: none;
+    }
 
     body {
       font-family: 'Jost', sans-serif;
@@ -810,7 +821,11 @@
   </div>
 
   <!-- ── HERO ── -->
-  <div id="hero-wrapper">
+  <div id="hero-wrapper" style="position:relative;">
+    <div class="snap-gate"></div>
+    <div class="snap-gate"></div>
+    <div class="snap-gate"></div>
+    <div class="snap-gate"></div>
     <section id="hero">
 
       <div class="hero-bg"></div>
@@ -831,10 +846,10 @@
 
       <!-- Copy beats — revealed as the journey unfolds -->
       <div class="hero-beat" id="heroBeat1">
-        <p>Custom-coded websites.<br>No templates. No shortcuts.</p>
+        <p>Custom coded websites.<br>No templates. No shortcuts.</p>
       </div>
       <div class="hero-beat" id="heroBeat2">
-        <p>Every site includes a professional<br>photo shoot — <em>free</em>.</p>
+        <p>Every site includes a professional<br>photo shoot. <em>Free</em>.</p>
       </div>
 
       <!-- The journey ends here: one call to action over living water -->
@@ -980,49 +995,17 @@
           smoothP = targetP;
           apply();
         }
-        scheduleMagnet();
       }
 
-      // ── Copy magnet: when a swipe ends near a copy beat, glide to it and
-      // hold. The next scroll releases it naturally.
-      const BEAT_CENTERS = [0.29, 0.65];
-      let magnetTimer = null, magnetAnim = null;
-
-      function cancelMagnet(){
-        if (magnetAnim){ clearInterval(magnetAnim); magnetAnim = null; }
-      }
-
-      ['wheel', 'touchstart', 'keydown'].forEach(ev =>
-        window.addEventListener(ev, cancelMagnet, { passive: true }));
-
-      function scheduleMagnet(){
-        if (magnetAnim) return;               // already gliding
-        clearTimeout(magnetTimer);
-        magnetTimer = setTimeout(() => {
-          const zone = wrapper.offsetHeight - window.innerHeight;
-          for (const c of BEAT_CENTERS){
-            const d = Math.abs(targetP - c);
-            if (d > 0.005 && d < 0.10){
-              glideTo(c * zone);
-              break;
-            }
-          }
-        }, 170);
-      }
-
-      function glideTo(y){
-        cancelMagnet();
-        const start = window.scrollY, dist = y - start;
-        if (Math.abs(dist) < 2) return;
-        const t0 = performance.now(), dur = 520;
-        magnetAnim = setInterval(() => {
-          const t = Math.min((performance.now() - t0) / dur, 1);
-          const e = 1 - Math.pow(1 - t, 3);
-          // 'instant' so our own easing drives the motion — the page's CSS
-          // scroll-behavior:smooth would otherwise double-animate and fight it
-          window.scrollTo({ top: start + dist * e, behavior: 'instant' });
-          if (t >= 1) cancelMagnet();
-        }, 16);
+      // ── Hard gates: native scroll-snap markers at each copy beat. With
+      // scroll-snap-stop:always the browser CANNOT coast past one, no matter
+      // how hard the flick — the scroll latches, the next gesture continues.
+      const GATE_POSITIONS = [0, 0.29, 0.65, 1];
+      function placeGates(){
+        const zone = wrapper.offsetHeight - window.innerHeight;
+        document.querySelectorAll('.snap-gate').forEach((el, i) => {
+          el.style.top = (GATE_POSITIONS[i] * zone) + 'px';
+        });
       }
 
       // A beat travels through its scroll window [a, b]: rises in from below,
@@ -1096,7 +1079,7 @@
       }
 
       window.addEventListener('scroll', onScroll, { passive: true });
-      window.addEventListener('resize', () => { sizeCanvas(); onScroll(); smoothP = targetP; apply(); }, { passive: true });
+      window.addEventListener('resize', () => { sizeCanvas(); placeGates(); onScroll(); smoothP = targetP; apply(); }, { passive: true });
 
       // Boot only once the viewport actually exists — background/prerendered
       // tabs report innerWidth 0 at eval time.
@@ -1104,6 +1087,7 @@
         if (window.innerWidth > 0){
           initFrames();
           sizeCanvas();
+          placeGates();
           onScroll();
           apply();
         } else {
