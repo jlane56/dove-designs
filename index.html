@@ -38,18 +38,7 @@
       --light-border: #DDD5C0;
     }
 
-    html { scroll-behavior: smooth; scroll-snap-type: y mandatory; }
-
-    /* Journey gates — invisible snap targets the scroll must stop at */
-    .snap-gate {
-      position: absolute;
-      left: 0;
-      width: 1px;
-      height: 100vh;
-      scroll-snap-align: start;
-      scroll-snap-stop: always;
-      pointer-events: none;
-    }
+    html { scroll-behavior: smooth; }
 
     body {
       font-family: 'Jost', sans-serif;
@@ -822,10 +811,6 @@
 
   <!-- ── HERO ── -->
   <div id="hero-wrapper" style="position:relative;">
-    <div class="snap-gate"></div>
-    <div class="snap-gate"></div>
-    <div class="snap-gate"></div>
-    <div class="snap-gate"></div>
     <section id="hero">
 
       <div class="hero-bg"></div>
@@ -836,8 +821,8 @@
              poster="hero-video/03-poster.jpg">
         <source src="hero-video/03-waterline.mp4" type="video/mp4">
       </video>
-      <!-- Seamless resting loop: static camera, no dove, first frame == last frame -->
-      <video class="hero-video" id="heroVideoLoop" muted loop playsinline preload="auto">
+      <!-- Seamless resting loop: static camera, no dove, tail baked to dissolve into head -->
+      <video class="hero-video" id="heroVideoLoop" muted playsinline preload="auto">
         <source src="hero-video/04-loop.mp4" type="video/mp4">
       </video>
       <div class="hero-media-scrim" id="heroMediaScrim"></div>
@@ -985,50 +970,84 @@
       let targetP = 0, smoothP = 0, shownFrame = 0, lastPlayTry = 0;
       let lastTick = 0;
 
-      // Two-stage finale: the dove clip plays once, then hands off to the
-      // dedicated resting loop (static camera, no dove, first frame == last
-      // frame, so even the native loop restart is seamless).
+      // Two-stage finale: the dove clip plays once, then CROSSFADES into the
+      // dedicated resting loop over its final 0.7s — no hard cut.
       const videoLoop  = document.getElementById('heroVideoLoop');
       const finalLogo  = document.getElementById('finalLogo');
-      let doveDone = false;
+      const XFADE_MS   = 700;
+      let doveDone = false, xfStart = 0;
+
+      function startHandoff(){
+        if (doveDone) return;
+        doveDone = true;
+        xfStart = performance.now();
+        finalLogo.classList.add('show');
+        videoLoop.play().catch(()=>{});
+      }
+
       video.addEventListener('timeupdate', () => {
         if (video.currentTime >= 6.5) finalLogo.classList.add('show');
+        if (video.duration && video.currentTime >= video.duration - 0.7) startHandoff();
       });
-      video.addEventListener('ended', () => {
-        doveDone = true;
-        finalLogo.classList.add('show');
+      video.addEventListener('ended', startHandoff);
+
+      // The loop's own restart: its tail is baked to dissolve into its head,
+      // so jumping back lands on matching pixels AND matching motion.
+      const LOOP2_START = 0.67, LOOP2_TAIL = 0.16;
+      videoLoop.addEventListener('timeupdate', () => {
+        if (videoLoop.duration && videoLoop.currentTime >= videoLoop.duration - LOOP2_TAIL){
+          videoLoop.currentTime = LOOP2_START;
+        }
+      });
+      videoLoop.addEventListener('ended', () => {
+        videoLoop.currentTime = LOOP2_START;
         videoLoop.play().catch(()=>{});
       });
 
-      // JS gate backstop: CSS scroll-snap-stop should halt hard flings at
-      // each copy beat, but momentum coasts through on some browsers. If a
-      // gesture crosses an armed gate, clamp to it and hold until the
-      // gesture dies; the next gesture passes freely.
+      // Journey gates: a gesture that crosses a gate is caught and held
+      // there while its momentum lasts. Scrolling BACK releases instantly —
+      // the gate only ever resists the direction you crossed it in. Pausing
+      // briefly also clears it, so the next gesture passes freely.
       const GATES = [0.29, 0.65];
-      const gateArmed = [true, true];
-      let gatePinned = -1, gateIdleTimer = null, prevGateP = 0;
+      const gateCleared = [false, false];
+      let gatePinned = -1, gateDir = 0, gateIdleTimer = null, prevGateP = 0;
 
       function onScroll(){
         const zone = wrapper.offsetHeight - window.innerHeight;
         let p = Math.min(Math.max(window.scrollY / zone, 0), 1);
 
-        for (let gi = 0; gi < GATES.length; gi++){
-          const g = GATES[gi];
-          if (gatePinned === gi || (gateArmed[gi] && (prevGateP - g) * (p - g) < 0)){
-            gatePinned = gi;
-            if (Math.abs(p - g) > 0.002){
-              window.scrollTo({ top: g * zone, behavior: 'instant' });
-            }
+        if (gatePinned >= 0){
+          const g = GATES[gatePinned];
+          const overshoot = (p - g) * gateDir;
+          if (overshoot > 0.002){
+            // momentum still pushing past the gate: hold the line
+            window.scrollTo({ top: g * zone, behavior: 'instant' });
             p = g;
-          } else if (!gateArmed[gi] && gatePinned !== gi && Math.abs(p - g) > 0.12){
-            gateArmed[gi] = true;   // re-arm once you've moved well away
+          } else if (overshoot < -0.002){
+            // user reversed: let go immediately, no trap
+            gateCleared[gatePinned] = true;
+            gatePinned = -1;
+          }
+        } else {
+          for (let gi = 0; gi < GATES.length; gi++){
+            const g = GATES[gi];
+            if (!gateCleared[gi] && (prevGateP - g) * (p - g) < 0){
+              gatePinned = gi;
+              gateDir = p > prevGateP ? 1 : -1;
+              window.scrollTo({ top: g * zone, behavior: 'instant' });
+              p = g;
+              break;
+            }
+            // re-arm a cleared gate once you've moved well away from it
+            if (gateCleared[gi] && Math.abs(p - g) > 0.12) gateCleared[gi] = false;
           }
         }
+
         prevGateP = p;
         clearTimeout(gateIdleTimer);
         gateIdleTimer = setTimeout(() => {
-          if (gatePinned >= 0){ gateArmed[gatePinned] = false; gatePinned = -1; }
-        }, 300);
+          if (gatePinned >= 0){ gateCleared[gatePinned] = true; gatePinned = -1; }
+        }, 280);
 
         targetP = p;
         // If the rAF loop is throttled or suspended (hidden tab, low-power
@@ -1037,17 +1056,6 @@
           smoothP = targetP;
           apply();
         }
-      }
-
-      // ── Hard gates: native scroll-snap markers at each copy beat. With
-      // scroll-snap-stop:always the browser CANNOT coast past one, no matter
-      // how hard the flick — the scroll latches, the next gesture continues.
-      const GATE_POSITIONS = [0, 0.29, 0.65, 1];
-      function placeGates(){
-        const zone = wrapper.offsetHeight - window.innerHeight;
-        document.querySelectorAll('.snap-gate').forEach((el, i) => {
-          el.style.top = (GATE_POSITIONS[i] * zone) + 'px';
-        });
       }
 
       // A beat travels through its scroll window [a, b]: rises in from below,
@@ -1076,20 +1084,21 @@
         draw(shownFrame);
 
         // Waterline: fade the living video in over the last scrub frame.
-        // Before the dove has flown: the intro clip. After: the resting loop.
+        // Intro clip first; once the handoff starts, crossfade to the loop.
         const endP = Math.min(Math.max((p - SCRUB_END) / (1 - SCRUB_END), 0), 1);
-        const active   = doveDone ? videoLoop : video;
-        const inactive = doveDone ? video : videoLoop;
-        active.style.opacity   = endP;
-        inactive.style.opacity = 0;
+        const xf = doveDone ? Math.min((performance.now() - xfStart) / XFADE_MS, 1) : 0;
+        video.style.opacity     = endP * (1 - xf);
+        videoLoop.style.opacity = endP * xf;
         // paused state is the only truth — browsers force-pause muted videos
         // to save power, so keep re-playing whenever the finale is visible.
         const wantVideo = endP > 0.3;
-        if (wantVideo && active.paused && performance.now() - lastPlayTry > 400){
+        if (wantVideo && performance.now() - lastPlayTry > 400){
           lastPlayTry = performance.now();
-          active.play().catch(()=>{});
-        } else if (!wantVideo && !active.paused){
-          active.pause();
+          if (xf < 1 && video.paused && !video.ended) video.play().catch(()=>{});
+          if (doveDone && videoLoop.paused) videoLoop.play().catch(()=>{});
+        } else if (!wantVideo){
+          if (!video.paused) video.pause();
+          if (!videoLoop.paused) videoLoop.pause();
         }
 
         // Title splits apart and drifts up as the journey starts
@@ -1125,7 +1134,7 @@
       }
 
       window.addEventListener('scroll', onScroll, { passive: true });
-      window.addEventListener('resize', () => { sizeCanvas(); placeGates(); onScroll(); smoothP = targetP; apply(); }, { passive: true });
+      window.addEventListener('resize', () => { sizeCanvas(); onScroll(); smoothP = targetP; apply(); }, { passive: true });
 
       // Boot only once the viewport actually exists — background/prerendered
       // tabs report innerWidth 0 at eval time.
@@ -1133,7 +1142,6 @@
         if (window.innerWidth > 0){
           initFrames();
           sizeCanvas();
-          placeGates();
           onScroll();
           apply();
         } else {
