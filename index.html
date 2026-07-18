@@ -836,6 +836,10 @@
              poster="hero-video/03-poster.jpg">
         <source src="hero-video/03-waterline.mp4" type="video/mp4">
       </video>
+      <!-- Seamless resting loop: static camera, no dove, first frame == last frame -->
+      <video class="hero-video" id="heroVideoLoop" muted loop playsinline preload="auto">
+        <source src="hero-video/04-loop.mp4" type="video/mp4">
+      </video>
       <div class="hero-media-scrim" id="heroMediaScrim"></div>
 
       <div class="hero-title-split" id="heroTitleSplit">
@@ -981,17 +985,19 @@
       let targetP = 0, smoothP = 0, shownFrame = 0, lastPlayTry = 0;
       let lastTick = 0;
 
-      // The dove crosses once (0s-5.5s), then the water loops seamlessly —
-      // the dissolve at the loop point is baked into the video file itself.
-      const LOOP_START = 8.17, LOOP_END = 9.88;
+      // Two-stage finale: the dove clip plays once, then hands off to the
+      // dedicated resting loop (static camera, no dove, first frame == last
+      // frame, so even the native loop restart is seamless).
+      const videoLoop  = document.getElementById('heroVideoLoop');
       const finalLogo  = document.getElementById('finalLogo');
+      let doveDone = false;
       video.addEventListener('timeupdate', () => {
-        if (video.currentTime >= LOOP_END) video.currentTime = LOOP_START;
         if (video.currentTime >= 6.5) finalLogo.classList.add('show');
       });
       video.addEventListener('ended', () => {
-        video.currentTime = LOOP_START;
-        video.play().catch(()=>{});
+        doveDone = true;
+        finalLogo.classList.add('show');
+        videoLoop.play().catch(()=>{});
       });
 
       function onScroll(){
@@ -1041,17 +1047,21 @@
         if (Math.abs(settleTo - shownFrame) < 0.01) shownFrame = settleTo;
         draw(shownFrame);
 
-        // Waterline: fade the living video in over the last scrub frame
+        // Waterline: fade the living video in over the last scrub frame.
+        // Before the dove has flown: the intro clip. After: the resting loop.
         const endP = Math.min(Math.max((p - SCRUB_END) / (1 - SCRUB_END), 0), 1);
-        video.style.opacity = endP;
-        // video.paused is the only truth — browsers force-pause muted videos
+        const active   = doveDone ? videoLoop : video;
+        const inactive = doveDone ? video : videoLoop;
+        active.style.opacity   = endP;
+        inactive.style.opacity = 0;
+        // paused state is the only truth — browsers force-pause muted videos
         // to save power, so keep re-playing whenever the finale is visible.
         const wantVideo = endP > 0.3;
-        if (wantVideo && video.paused && performance.now() - lastPlayTry > 400){
+        if (wantVideo && active.paused && performance.now() - lastPlayTry > 400){
           lastPlayTry = performance.now();
-          video.play().catch(()=>{});
-        } else if (!wantVideo && !video.paused){
-          video.pause();
+          active.play().catch(()=>{});
+        } else if (!wantVideo && !active.paused){
+          active.pause();
         }
 
         // Title splits apart and drifts up as the journey starts
