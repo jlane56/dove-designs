@@ -386,9 +386,64 @@
     }
     .footer-links { justify-content: center; flex-wrap: wrap; }
     .footer-dove { height: 34px; opacity: 0.85; display: block; margin: 0 auto; }
+    /* ─── GLASS PROTOTYPE — the world behind, content on sea glass ─── */
+
+    /* The beach lives behind everything, fixed (div layer: iOS-safe) */
+    .world-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: url('images/web/headers/work.webp') center 40%/cover no-repeat #12161a;
+    }
+
+    /* Header becomes a transparent window onto the world */
+    .page-hero {
+      background: radial-gradient(ellipse 70% 60% at 50% 42%,
+        rgba(18,22,26,0.45) 0%, rgba(18,22,26,0.18) 55%, rgba(18,22,26,0) 80%);
+      min-height: 52vh;
+    }
+    .page-hero::after { display: none; }   /* no dissolve — glass handles the hand-off */
+    .page-hero p { color: rgba(244,237,222,0.85); text-shadow: 0 1px 16px rgba(18,22,26,0.45); }
+
+    /* Slide deck: each project is a glass card that pins while the next
+       one glides up and stacks over it. Pure sticky positioning — native
+       scrolling, no hijacking. */
+    #portfolio {
+      background: transparent;
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 4vh 2rem 22vh;
+    }
+
+    .project-row {
+      position: sticky;
+      top: 7vh;
+      min-height: 82vh;
+      margin-bottom: 26vh;
+      background: rgba(252, 248, 238, 0.87);
+      -webkit-backdrop-filter: blur(26px) saturate(1.15);
+      backdrop-filter: blur(26px) saturate(1.15);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 34px 80px -32px rgba(18, 22, 26, 0.5);
+    }
+    .project-row:last-of-type { margin-bottom: 0; }
+
+    @media (max-width: 768px) {
+      .project-row { min-height: auto; top: 9vh; }
+    }
+
+    /* Footer: dark glass, same world behind */
+    footer {
+      background: rgba(30, 30, 26, 0.78);
+      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(20px);
+    }
   </style>
 </head>
 <body>
+  <div class="world-bg"></div>
 
   <!-- ── NAVIGATION ── -->
   <!-- Floating menu — matches the landing journey -->
