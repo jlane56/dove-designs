@@ -909,15 +909,16 @@
 
       function initFrames(){
         isMobile    = Math.min(window.innerWidth, window.screen.width) < 768;
-        FRAME_COUNT = 240;   // desktop 1600w 16:9, mobile 720w portrait crop
+        FRAME_COUNT = isMobile ? 240 : 718;   // desktop: 36fps optical-flow set @1600w; mobile: 720w portrait
         framePath   = i => `hero-frames/${isMobile ? 'm' : 'd'}/f${String(i).padStart(3,'0')}.webp`;
         frames.length = FRAME_COUNT;
         for (let i = 0; i < FRAME_COUNT; i++) ready[i] = false;
         // Two-pass load: every 4th frame first (scrubbable in ~a second),
         // then the in-betweens backfill for full smoothness.
-        for (let i = 0; i < FRAME_COUNT; i += 4) loadFrame(i);
+        const step = isMobile ? 4 : 6;
+        for (let i = 0; i < FRAME_COUNT; i += step) loadFrame(i);
         setTimeout(() => {
-          for (let i = 0; i < FRAME_COUNT; i++) if (i % 4) loadFrame(i);
+          for (let i = 0; i < FRAME_COUNT; i++) if (i % step) loadFrame(i);
         }, 700);
       }
 
