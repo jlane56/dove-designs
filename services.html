@@ -272,9 +272,65 @@
       footer { padding: 2rem 1.5rem; flex-direction: column; text-align: center; }
       .footer-links { justify-content: center; flex-wrap: wrap; gap: 1rem; }
     }
+    /* ─── GLASS WORLD — content on sea glass, the grass behind ─── */
+
+    .world-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: url('images/web/headers/services.webp') center 40%/cover no-repeat #12161a;
+    }
+
+    .page-hero {
+      background: radial-gradient(ellipse 70% 60% at 50% 45%,
+        rgba(18,22,26,0.42) 0%, rgba(18,22,26,0.16) 55%, rgba(18,22,26,0) 80%);
+      min-height: 48vh;
+    }
+
+    /* Light sea glass for the services list */
+    #services {
+      background: rgba(252, 248, 238, 0.86);
+      -webkit-backdrop-filter: blur(26px) saturate(1.12);
+      backdrop-filter: blur(26px) saturate(1.12);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 28px;
+      max-width: 1240px;
+      margin: 0 auto 10vh;
+      box-shadow: 0 34px 80px -32px rgba(18, 22, 26, 0.5);
+    }
+
+    /* Dark sea glass for the why section */
+    #why {
+      background: rgba(30, 30, 26, 0.66);
+      -webkit-backdrop-filter: blur(26px) saturate(1.1);
+      backdrop-filter: blur(26px) saturate(1.1);
+      border: 1px solid rgba(248, 240, 221, 0.16);
+      border-radius: 28px;
+      max-width: 1240px;
+      margin: 0 auto 14vh;
+      box-shadow: 0 34px 80px -32px rgba(18, 22, 26, 0.6);
+    }
+
+    footer {
+      background: rgba(30, 30, 26, 0.78);
+      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(20px);
+      flex-direction: column;
+      text-align: center;
+      justify-content: center;
+      gap: 1.5rem;
+      padding: 4.5rem 2rem 3rem;
+    }
+    .footer-links { justify-content: center; flex-wrap: wrap; }
+    .footer-dove { height: 34px; opacity: 0.85; display: block; margin: 0 auto; }
+
+    @media (max-width: 768px) {
+      #services, #why { margin-left: 1rem; margin-right: 1rem; border-radius: 22px; }
+    }
   </style>
 </head>
 <body>
+  <div class="world-bg"></div>
 
   <!-- ── NAVIGATION ── -->
   <!-- Floating menu — matches the landing journey -->
@@ -408,6 +464,7 @@
 
   <!-- ── FOOTER ── -->
   <footer>
+    <a href="index.html"><img src="hero-video/dove-mark.png" class="footer-dove" alt=""></a>
     <a href="index.html" class="footer-logo">The Dove <span>Design</span> Co.</a>
     <ul class="footer-links">
       <li><a href="services.html">Services</a></li>
