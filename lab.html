@@ -577,6 +577,29 @@
       body { cursor: auto; }
       * { cursor: auto !important; }
     }
+
+    /* Floating controls — z-index above the lab's own layers */
+    .menu-fab {
+      position: fixed; top: 1.4rem; right: 1.6rem; z-index: 600;
+      width: 52px; height: 52px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+      background: rgba(18,22,26,0.32);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(248,240,221,0.22); border-radius: 50%;
+      cursor: pointer; transition: background 0.3s, border-color 0.3s;
+    }
+    .menu-fab:hover { background: rgba(18,22,26,0.55); border-color: rgba(248,240,221,0.45); }
+    .menu-fab span { display: block; width: 20px; height: 1.5px; background: #F8F0DD; transition: 0.3s; }
+    .home-fab {
+      position: fixed; top: 1.4rem; left: 1.6rem; z-index: 600;
+      width: 52px; height: 52px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(18,22,26,0.32);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(248,240,221,0.22); border-radius: 50%;
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .home-fab:hover { background: rgba(18,22,26,0.55); border-color: rgba(248,240,221,0.45); }
   </style>
 </head>
 <body>
@@ -587,22 +610,13 @@
   <div id="cursorRing" class="cursor-ring"></div>
 
   <!-- ── NAV ── -->
-  <nav id="navbar">
-    <a href="index.html" class="nav-logo">
-      <img src="images/DoveSketch_Cream.png?v=2" alt="The Dove Design Co." height="56" style="display:block;filter:brightness(0);opacity:0.82;">
-    </a>
-    <ul class="nav-links">
-      <li><a href="services.html">Services</a></li>
-      <li><a href="portfolio.html">Work</a></li>
-      <li><a href="process.html">Process</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="lab.html" class="active" style="color:var(--dusty-blue);">The Lab</a></li>
-      <li><a href="contact.html" class="btn-primary" style="padding:0.6rem 1.4rem;">Book a Call</a></li>
-    </ul>
-    <button class="nav-hamburger" id="menuBtn" aria-label="Open menu">
-      <span></span><span></span><span></span>
-    </button>
-  </nav>
+  <!-- Floating menu — matches the rest of the site -->
+  <a href="index.html" class="home-fab" aria-label="Home">
+    <img src="hero-video/dove-mark.png" alt="The Dove Design Co." height="30">
+  </a>
+  <button class="menu-fab" id="menuBtn" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
 
   <div class="mobile-nav" id="mobileNav">
     <button class="mobile-nav-close" id="menuClose">×</button>
@@ -840,9 +854,6 @@
     // ═══════════════════════════════════════════════════════
     // NAV
     // ═══════════════════════════════════════════════════════
-    const navbar = document.getElementById('navbar');
-    window.addEventListener('scroll', () => { navbar.classList.toggle('scrolled', window.scrollY > 50); }, { passive: true });
-
     const menuBtn   = document.getElementById('menuBtn');
     const mobileNav = document.getElementById('mobileNav');
     const menuClose = document.getElementById('menuClose');
