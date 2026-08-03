@@ -309,27 +309,97 @@
       footer { padding: 2rem 1.5rem; flex-direction: column; text-align: center; }
       .footer-links { justify-content: center; flex-wrap: wrap; gap: 1rem; }
     }
+
+    /* ─── GLASS WORLD ─── */
+    .world-bg {
+      position: fixed; inset: 0; z-index: -1;
+      background: url('images/web/headers/about.webp') center 42%/cover no-repeat #12161a;
+    }
+    .menu-fab {
+      position: fixed; top: 1.4rem; right: 1.6rem; z-index: 150;
+      width: 52px; height: 52px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+      background: rgba(18,22,26,0.32);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(248,240,221,0.22); border-radius: 50%;
+      cursor: pointer; transition: background 0.3s, border-color 0.3s;
+    }
+    .menu-fab:hover { background: rgba(18,22,26,0.55); border-color: rgba(248,240,221,0.45); }
+    .menu-fab span { display: block; width: 20px; height: 1.5px; background: #F8F0DD; transition: 0.3s; }
+    .home-fab {
+      position: fixed; top: 1.4rem; left: 1.6rem; z-index: 150;
+      width: 52px; height: 52px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(18,22,26,0.32);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(248,240,221,0.22); border-radius: 50%;
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .home-fab:hover { background: rgba(18,22,26,0.55); border-color: rgba(248,240,221,0.45); }
+
+    .page-hero {
+      background: radial-gradient(ellipse 70% 60% at 50% 45%,
+        rgba(18,22,26,0.42) 0%, rgba(18,22,26,0.16) 55%, rgba(18,22,26,0) 80%) !important;
+      min-height: 48vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+    .page-hero .section-eyebrow { color: rgba(244,237,222,0.85); letter-spacing: 0.28em; text-transform: uppercase; font-size: 0.72rem; }
+    .page-hero h1 { color: #F4EDDE; text-shadow: 0 2px 30px rgba(18,22,26,0.6); }
+    .page-hero p { color: rgba(244,237,222,0.85); text-shadow: 0 1px 16px rgba(18,22,26,0.5); }
+
+    @keyframes riseIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+    .page-hero .section-eyebrow { animation: riseIn 0.9s cubic-bezier(0.25,0.46,0.45,0.94) both; }
+    .page-hero .ornament       { animation: riseIn 0.9s cubic-bezier(0.25,0.46,0.45,0.94) 0.08s both; }
+    .page-hero h1              { animation: riseIn 0.9s cubic-bezier(0.25,0.46,0.45,0.94) 0.16s both; }
+    .page-hero p               { animation: riseIn 0.9s cubic-bezier(0.25,0.46,0.45,0.94) 0.28s both; }
+
+    #about, #disciplines, #faq {
+      background: rgba(252, 248, 238, 0.87);
+      -webkit-backdrop-filter: blur(26px) saturate(1.12);
+      backdrop-filter: blur(26px) saturate(1.12);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 28px;
+      max-width: 1240px;
+      margin: 0 auto 8vh;
+      box-shadow: 0 34px 80px -32px rgba(18, 22, 26, 0.5);
+    }
+    #cta-banner {
+      background: rgba(30, 30, 26, 0.7);
+      -webkit-backdrop-filter: blur(26px) saturate(1.1);
+      backdrop-filter: blur(26px) saturate(1.1);
+      border: 1px solid rgba(248, 240, 221, 0.16);
+      border-radius: 28px;
+      max-width: 1240px;
+      margin: 0 auto 8vh;
+      box-shadow: 0 34px 80px -32px rgba(18, 22, 26, 0.6);
+    }
+
+    footer {
+      background: rgba(30, 30, 26, 0.78);
+      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(20px);
+      flex-direction: column; text-align: center; justify-content: center;
+      gap: 1.5rem; padding: 4.5rem 2rem 3rem;
+    }
+    .footer-links { justify-content: center; flex-wrap: wrap; }
+    .footer-dove { height: 34px; opacity: 0.85; display: block; margin: 0 auto; }
+
+    @media (max-width: 768px) {
+      #about, #disciplines, #faq, #cta-banner { margin-left: 1rem; margin-right: 1rem; border-radius: 22px; }
+    }
   </style>
 </head>
 <body>
+  <div class="world-bg"></div>
 
   <!-- ── NAVIGATION ── -->
-  <nav id="navbar">
-    <a href="index.html" class="nav-logo">
-      <img src="images/DoveSketch_Cream.png?v=2" alt="The Dove Design Co." height="56" style="display:block;filter:brightness(0);opacity:0.82;">
-    </a>
-    <ul class="nav-links">
-      <li><a href="services.html">Services</a></li>
-      <li><a href="portfolio.html">Work</a></li>
-      <li><a href="process.html">Process</a></li>
-      <li><a href="about.html" class="active">About</a></li>
-      <li><a href="proof.html">The Proof</a></li>
-      <li><a href="contact.html" class="btn-primary" style="padding:0.6rem 1.4rem;">Book a Call</a></li>
-    </ul>
-    <button class="nav-hamburger" id="menuBtn" aria-label="Open menu">
-      <span></span><span></span><span></span>
-    </button>
-  </nav>
+  <!-- Floating menu — matches the landing journey -->
+  <a href="index.html" class="home-fab" aria-label="Home">
+    <img src="hero-video/dove-mark.png" alt="The Dove Design Co." height="30">
+  </a>
+  <button class="menu-fab" id="menuBtn" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
 
   <div class="mobile-nav" id="mobileNav">
     <button class="mobile-nav-close" id="menuClose">×</button>
@@ -441,6 +511,7 @@
 
   <!-- ── FOOTER ── -->
   <footer>
+    <a href="index.html"><img src="hero-video/dove-mark.png" class="footer-dove" alt=""></a>
     <a href="index.html" class="footer-logo">The Dove <span>Design</span> Co.</a>
     <ul class="footer-links">
       <li><a href="services.html">Services</a></li>
@@ -453,12 +524,6 @@
   </footer>
 
   <script>
-    // Nav scroll shrink
-    const navbar = document.getElementById('navbar');
-    window.addEventListener('scroll', () => {
-      navbar.classList.toggle('scrolled', window.scrollY > 50);
-    }, { passive: true });
-
     // Hamburger
     const menuBtn   = document.getElementById('menuBtn');
     const mobileNav = document.getElementById('mobileNav');
