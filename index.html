@@ -361,6 +361,26 @@
       white-space: nowrap;
     }
 
+    /* Cold load: hold at the title card until the journey can actually play.
+       Scrolling into unloaded frames is what made the first pass feel jerky. */
+    body.journey-loading { overflow: hidden; }
+
+    .journey-wait {
+      display: none;
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: rgba(238,232,220,0.75);
+      margin-top: 1.6rem;
+      animation: waitPulse 1.7s ease-in-out infinite;
+    }
+    body.journey-loading .journey-wait { display: block; }
+    body.journey-loading .split-sub    { opacity: 0 !important; }
+
+    @keyframes waitPulse {
+      0%, 100% { opacity: 0.25; transform: scale(0.85); }
+      50%      { opacity: 0.9;  transform: scale(1.15); }
+    }
+
     .hero-title-split .split-sub {
       font-family: 'Jost', sans-serif;
       font-weight: 400;
@@ -790,7 +810,7 @@
     }
   </style>
 </head>
-<body>
+<body class="journey-loading">
 
   <!-- ── NAVIGATION ── -->
   <!-- Floating hamburger — the hero runs full-bleed, menu slides in from the right -->
@@ -831,6 +851,7 @@
         <span id="splitLine1">The Dove</span>
         <span id="splitLine2">Design Co.</span>
         <span class="split-sub" id="splitSub">Scroll to begin</span>
+        <span class="journey-wait" aria-hidden="true"></span>
       </div>
 
       <!-- Copy beats — revealed as the journey unfolds -->
@@ -889,21 +910,30 @@
       const frames = [];
       const ready  = [];
       let firstReady = false;
+      let coarseNeeded = 0, coarseReady = 0, journeyUnlocked = false;
 
       // Frames are pre-decoded to GPU-ready bitmaps: every draw is then a
       // pure blit with zero decode work, so scrubbing never micro-stutters.
       const canBitmap = typeof createImageBitmap === 'function';
-      function loadFrame(i){
+      function loadFrame(i, isCoarse){
         const img = new Image();
+        const tally = () => {
+          if (!isCoarse) return;
+          coarseReady++;
+          // Release the journey once the coarse set is essentially in.
+          if (coarseReady >= coarseNeeded * 0.9) unlockJourney();
+        };
         img.onload = () => {
           const finish = obj => {
             frames[i] = obj;
             ready[i] = true;
             if (i === 0 && !firstReady){ firstReady = true; sizeCanvas(); draw(0); }
+            tally();
           };
           if (canBitmap) createImageBitmap(img).then(finish).catch(() => finish(img));
           else finish(img);
         };
+        img.onerror = tally;   // a missing frame must never stall the gate
         img.src = framePath(i);
       }
 
@@ -913,13 +943,30 @@
         framePath   = i => `hero-frames/${isMobile ? 'm' : 'd'}/f${String(i).padStart(3,'0')}.webp`;
         frames.length = FRAME_COUNT;
         for (let i = 0; i < FRAME_COUNT; i++) ready[i] = false;
-        // Two-pass load: every 4th frame first (scrubbable in ~a second),
-        // then the in-betweens backfill for full smoothness.
+
+        // Coarse pass first: enough frames to scrub the WHOLE journey without
+        // falling back to distant neighbours. The journey stays locked at the
+        // title card until this set is decoded — otherwise a cold first scroll
+        // renders whatever happens to have arrived, which reads as jerky.
         const step = isMobile ? 4 : 6;
-        for (let i = 0; i < FRAME_COUNT; i += step) loadFrame(i);
+        const coarse = [];
+        for (let i = 0; i < FRAME_COUNT; i += step) coarse.push(i);
+        coarseNeeded = coarse.length;
+        coarse.forEach(i => loadFrame(i, true));
+
+        // Refine in the background once the coarse set is in flight.
         setTimeout(() => {
-          for (let i = 0; i < FRAME_COUNT; i++) if (i % step) loadFrame(i);
+          for (let i = 0; i < FRAME_COUNT; i++) if (i % step) loadFrame(i, false);
         }, 700);
+
+        // Never strand the visitor: release after 9s even on a bad connection.
+        setTimeout(unlockJourney, 9000);
+      }
+
+      function unlockJourney(){
+        if (journeyUnlocked) return;
+        journeyUnlocked = true;
+        document.body.classList.remove('journey-loading');
       }
 
 
@@ -1127,7 +1174,7 @@
         splitLine1.style.transform = `translateX(-${slide}vw)`;
         splitLine2.style.transform = `translateX(${slide}vw)`;
         titleSplit.style.opacity   = Math.max(0, 1 - scrubT * 2.8);
-        splitSub.style.opacity     = Math.max(0, 1 - scrubT * 5);
+        splitSub.style.opacity     = journeyUnlocked ? Math.max(0, 1 - scrubT * 5) : 0;
 
         // Copy beats ride the scroll: in from below, out through the top
         const b1 = beatState(p, 0.14, 0.44);
