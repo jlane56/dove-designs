@@ -218,7 +218,7 @@
     /* ─── GLASS WORLD ─── */
     .world-bg {
       position: fixed; inset: 0; z-index: -1;
-      background: url('images/web/headers/process.webp') center 42%/cover no-repeat #12161a;
+      background: url('images/web/headers/process.webp') center 46%/cover no-repeat #12161a;
     }
     .menu-fab {
       position: fixed; top: 1.4rem; right: 1.6rem; z-index: 150;
@@ -243,8 +243,10 @@
     .home-fab:hover { background: rgba(18,22,26,0.55); border-color: rgba(248,240,221,0.45); }
 
     .page-hero {
-      background: radial-gradient(ellipse 70% 60% at 50% 45%,
-        rgba(18,22,26,0.42) 0%, rgba(18,22,26,0.16) 55%, rgba(18,22,26,0) 80%) !important;
+      /* Front lit scene with a pale sky, so the title needs a deeper scrim
+         than the backlit worlds on the other pages. */
+      background: radial-gradient(ellipse 85% 75% at 50% 48%,
+        rgba(18,22,26,0.62) 0%, rgba(18,22,26,0.34) 55%, rgba(18,22,26,0) 85%) !important;
       min-height: 48vh;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
     }
