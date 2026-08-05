@@ -982,20 +982,14 @@
         frames.length = FRAME_COUNT;
         for (let i = 0; i < FRAME_COUNT; i++) ready[i] = false;
 
-        // Coarse pass first: enough frames to scrub the WHOLE journey without
-        // falling back to distant neighbours. The journey stays locked at the
-        // title card until this set is decoded — otherwise a cold first scroll
-        // renders whatever happens to have arrived, which reads as jerky.
-        const step = isMobile ? 4 : 6;
-        const coarse = [];
-        for (let i = 0; i < FRAME_COUNT; i += step) coarse.push(i);
-        coarseNeeded = coarse.length;
-        coarse.forEach(i => loadFrame(i, true));
-
-        // Refine in the background once the coarse set is in flight.
-        setTimeout(() => {
-          for (let i = 0; i < FRAME_COUNT; i++) if (i % step) loadFrame(i, false);
-        }, 700);
+        // Stream in journey order, like video buffering ahead of a playhead.
+        // The gate releases once the OPENING stretch is at full density, so
+        // the first scroll is as smooth as the tenth: no coarse pass, no
+        // fallback to distant frames, and loading stays ahead of the visitor
+        // (the copy-beat holds buy it extra time).
+        const releaseAt = isMobile ? 80 : 180;
+        coarseNeeded = releaseAt;
+        for (let i = 0; i < FRAME_COUNT; i++) loadFrame(i, i < releaseAt);
 
         // Never strand the visitor: release after 9s even on a bad connection.
         setTimeout(unlockJourney, 9000);
