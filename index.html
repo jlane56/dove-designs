@@ -950,70 +950,72 @@
       let firstReady = false;
       let coarseNeeded = 0, coarseReady = 0, journeyUnlocked = false;
 
-      // TWO-QUALITY STREAMING, like video players. A lightweight full set
-      // (~8MB) loads and PRE-WARMS completely behind the loading dot, so the
-      // first scrub runs at full density with zero decode work. The sharp
-      // frames then hot-swap in behind the visitor. First-pass jank had two
-      // roots this kills: mid-journey frames arriving late on cold networks,
-      // and the one-time decode/upload cost every frame pays on first draw.
-      const canBitmap = typeof createImageBitmap === 'function';
-      let warmCtx = null;
-      function prewarm(obj){
-        // One tiny draw forces the full decode NOW instead of mid-scrub.
-        if (!warmCtx){
-          const wc = document.createElement('canvas');
-          wc.width = 64; wc.height = 36;
-          warmCtx = wc.getContext('2d', { willReadFrequently: false });
+      // LOADING, done the boring correct way. Frames stay as plain Image
+      // elements: the browser keeps them encoded (~55MB total) and manages
+      // its own decoded-image cache with eviction, instead of us hoarding
+      // gigabytes of decoded bitmaps. A small download pool (6 in flight)
+      // streams in journey order: light set first, sharp set after, so
+      // nothing ever stampedes the network or the main thread mid-scrub.
+      const POOL_SIZE = 6;
+      const loadQueue = [];
+      let inFlight = 0;
+
+      function pumpQueue(){
+        while (inFlight < POOL_SIZE && loadQueue.length){
+          const job = loadQueue.shift();
+          inFlight++;
+          const img = new Image();
+          img.onload  = () => { inFlight--; job.done(img); pumpQueue(); };
+          img.onerror = () => { inFlight--; job.done(null); pumpQueue(); };
+          img.src = job.src;
         }
-        try { warmCtx.drawImage(obj, 0, 0, 64, 36); } catch(e){}
       }
-
-      let hiPath = null, hiStarted = false;
-
-      function loadFrame(i, src, onDone){
-        const img = new Image();
-        img.onload = () => {
-          const finish = obj => {
-            prewarm(obj);
-            frames[i] = obj;
-            ready[i] = true;
-            if (i === 0 && !firstReady){ firstReady = true; sizeCanvas(); draw(0); }
-            if (onDone) onDone();
-          };
-          if (canBitmap) createImageBitmap(img).then(finish).catch(() => finish(img));
-          else finish(img);
-        };
-        img.onerror = () => { if (onDone) onDone(); };   // never stall the gate
-        img.src = src;
-      }
-
-      function startHiSwap(){
-        if (hiStarted) return;
-        hiStarted = true;
-        // Sharp frames replace the light ones in journey order, behind the visitor.
-        for (let i = 0; i < FRAME_COUNT; i++) loadFrame(i, hiPath(i), null);
+      function requestImage(src, done){
+        loadQueue.push({ src, done });
+        pumpQueue();
       }
 
       function initFrames(){
         isMobile    = Math.min(window.innerWidth, window.screen.width) < 768;
         FRAME_COUNT = isMobile ? 240 : 718;
-        const lowDir = isMobile ? 'ml' : 'dl';
-        const hiDir  = isMobile ? 'm'  : 'd';
-        const name   = i => `f${String(i).padStart(3,'0')}.webp`;
-        framePath    = i => `hero-frames/${lowDir}/${name(i)}`;
-        hiPath       = i => `hero-frames/${hiDir}/${name(i)}`;
+        const name  = i => `f${String(i).padStart(3,'0')}.webp`;
+        const lowPath = i => `hero-frames/${isMobile ? 'ml' : 'dl'}/${name(i)}`;
+        const hiPath  = i => `hero-frames/${isMobile ? 'm'  : 'd'}/${name(i)}`;
+        framePath = lowPath;
         frames.length = FRAME_COUNT;
         for (let i = 0; i < FRAME_COUNT; i++) ready[i] = false;
 
-        coarseNeeded = FRAME_COUNT;
-        const tally = () => {
-          coarseReady++;
-          if (coarseReady >= coarseNeeded * 0.97){ unlockJourney(); startHiSwap(); }
-        };
-        for (let i = 0; i < FRAME_COUNT; i++) loadFrame(i, framePath(i), tally);
+        // Gate on the opening stretch of the LIGHT set only (~2s on
+        // broadband). The rest of the light set streams far faster than
+        // anyone scrolls; the sharp set follows through the same pool.
+        const GATE_N = isMobile ? 100 : 250;
+        coarseNeeded = GATE_N;
+        let lowDone = 0;
+
+        function onLow(i, img){
+          if (img && !ready[i]){
+            frames[i] = img;
+            ready[i] = true;
+            if (i === 0 && !firstReady){ firstReady = true; sizeCanvas(); draw(0); }
+          }
+          if (i < GATE_N){
+            coarseReady++;
+            if (coarseReady >= GATE_N * 0.96) unlockJourney();
+          }
+          if (++lowDone === FRAME_COUNT){
+            // Light set complete: stream the sharp set, replacing in place.
+            for (let k = 0; k < FRAME_COUNT; k++){
+              requestImage(hiPath(k), hi => { if (hi){ frames[k] = hi; ready[k] = true; } });
+            }
+          }
+        }
+
+        for (let i = 0; i < FRAME_COUNT; i++){
+          requestImage(lowPath(i), img => onLow(i, img));
+        }
 
         // Never strand the visitor: release after 9s even on a bad connection.
-        setTimeout(() => { unlockJourney(); startHiSwap(); }, 9000);
+        setTimeout(unlockJourney, 9000);
       }
 
       function unlockJourney(){
@@ -1246,6 +1248,24 @@
 
       // One smoothed scroll value drives EVERYTHING — frames, copy, video, CTA —
       // so a chunky mouse wheel still produces one buttery, reversible motion.
+      // Decode-ahead: like a video player's read-ahead buffer. Ask the
+      // browser to decode the next ~36 frames past the playhead (async, off
+      // the render path) so no frame ever pays its decode cost mid-draw.
+      function decodeAhead(){
+        if (!FRAME_COUNT) return;
+        const cur = Math.max(0, Math.round(shownFrame));
+        const dir = targetP >= smoothP ? 1 : -1;
+        for (let k = 0; k < 36; k++){
+          const i = cur + k * dir;
+          if (i < 0 || i >= FRAME_COUNT) break;
+          const f = frames[i];
+          if (f && ready[i] && !f.__hinted && f.decode){
+            f.__hinted = true;
+            f.decode().catch(() => {});
+          }
+        }
+      }
+
       function tick(){
         lastTick = performance.now();
         // If a gate hold expired after momentum died (no more scroll events),
@@ -1253,6 +1273,7 @@
         if (gatePinned >= 0 && performance.now() - gatePinTime > GATE_HOLD_MS) onScroll();
         smoothP += (targetP - smoothP) * 0.055;
         if (Math.abs(targetP - smoothP) < 0.0004) smoothP = targetP;
+        decodeAhead();
         apply();
         requestAnimationFrame(tick);
       }
