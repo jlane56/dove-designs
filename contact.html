@@ -432,6 +432,7 @@
     <a href="index.html"><img src="hero-video/dove-mark.png" class="footer-dove" alt=""></a>
     <a href="index.html" class="footer-logo">The Dove <span>Design</span> Co.</a>
     <ul class="footer-links">
+      <li><a href="privacy.html">Privacy</a></li>
       <li><a href="services.html">Services</a></li>
       <li><a href="portfolio.html">Work</a></li>
       <li><a href="process.html">Process</a></li>
@@ -477,10 +478,7 @@
         });
 
         if (res.ok) {
-          btn.textContent = 'Message Sent ✓';
-          btn.style.background = 'var(--dusty-blue)';
-          btn.style.borderColor = 'var(--dusty-blue)';
-          form.reset();
+          window.location.href = 'thanks.html';
         } else {
           btn.textContent = 'Something went wrong. Try again.';
           btn.disabled = false;
