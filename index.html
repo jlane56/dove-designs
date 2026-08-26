@@ -960,10 +960,24 @@
       const POOL_SIZE = 6;
       const loadQueue = [];
       let inFlight = 0;
+      let playheadFrame = 0;
 
+      // Priority pull: light frames always outrank sharp ones (coverage
+      // before quality), and within a tier the frame nearest the playhead
+      // downloads first — so wherever the visitor actually is sharpens
+      // first, instead of frame 0 onward in file order.
+      function nextJob(){
+        let best = -1, bestKey = Infinity;
+        for (let j = 0; j < loadQueue.length; j++){
+          const q = loadQueue[j];
+          const key = q.tier * 1e6 + Math.abs(q.frame - playheadFrame);
+          if (key < bestKey){ bestKey = key; best = j; }
+        }
+        return loadQueue.splice(best, 1)[0];
+      }
       function pumpQueue(){
         while (inFlight < POOL_SIZE && loadQueue.length){
-          const job = loadQueue.shift();
+          const job = nextJob();
           inFlight++;
           const img = new Image();
           img.onload  = () => { inFlight--; job.done(img); pumpQueue(); };
@@ -971,8 +985,8 @@
           img.src = job.src;
         }
       }
-      function requestImage(src, done){
-        loadQueue.push({ src, done });
+      function requestImage(src, done, tier, frame){
+        loadQueue.push({ src, done, tier: tier || 0, frame: frame || 0 });
         pumpQueue();
       }
 
@@ -993,6 +1007,35 @@
         coarseNeeded = GATE_N;
         let lowDone = 0;
 
+        // The title frame is on screen from first paint and holds for
+        // seconds while the visitor reads — it must never be the blurry
+        // one. Fetch its SHARP version immediately, ahead of everything
+        // (tier -1 outranks the whole queue); one file, first in line.
+        let hi0Done = false;
+        requestImage(hiPath(0), hi => {
+          if (hi){
+            hi0Done = true;
+            frames[0] = hi;
+            ready[0] = true;
+            if (!firstReady){ firstReady = true; sizeCanvas(); }
+            draw(shownFrame);
+          }
+        }, -1, 0);
+
+        // Sharp set enqueues as soon as the journey unlocks — not after the
+        // whole light set lands. Light frames outrank it in the queue, so
+        // sharp downloads only use bandwidth the light set isn't, and they
+        // arrive nearest-the-playhead first.
+        let hiQueued = false;
+        function enqueueHiSet(){
+          if (hiQueued) return;
+          hiQueued = true;
+          for (let k = 0; k < FRAME_COUNT; k++){
+            if (k === 0 && hi0Done) continue;
+            requestImage(hiPath(k), hi => { if (hi){ frames[k] = hi; ready[k] = true; } }, 1, k);
+          }
+        }
+
         function onLow(i, img){
           if (img && !ready[i]){
             frames[i] = img;
@@ -1001,22 +1044,17 @@
           }
           if (i < GATE_N){
             coarseReady++;
-            if (coarseReady >= GATE_N * 0.96) unlockJourney();
+            if (coarseReady >= GATE_N * 0.96){ unlockJourney(); enqueueHiSet(); }
           }
-          if (++lowDone === FRAME_COUNT){
-            // Light set complete: stream the sharp set, replacing in place.
-            for (let k = 0; k < FRAME_COUNT; k++){
-              requestImage(hiPath(k), hi => { if (hi){ frames[k] = hi; ready[k] = true; } });
-            }
-          }
+          if (++lowDone === FRAME_COUNT) enqueueHiSet();
         }
 
         for (let i = 0; i < FRAME_COUNT; i++){
-          requestImage(lowPath(i), img => onLow(i, img));
+          requestImage(lowPath(i), img => onLow(i, img), 0, i);
         }
 
         // Never strand the visitor: release after 9s even on a bad connection.
-        setTimeout(unlockJourney, 9000);
+        setTimeout(() => { unlockJourney(); enqueueHiSet(); }, 9000);
       }
 
       function unlockJourney(){
@@ -1268,12 +1306,25 @@
       }
 
       function tick(){
-        lastTick = performance.now();
+        const now = performance.now();
+        // dt in 60fps-frame units, so the speed cap below is identical on
+        // 60Hz and 120Hz (ProMotion) displays.
+        const dt = Math.min(Math.max(now - lastTick, 4), 48) / 16.7;
+        lastTick = now;
         // If a gate hold expired after momentum died (no more scroll events),
         // run the release logic so the journey continues on its own.
-        if (gatePinned >= 0 && performance.now() - gatePinTime > GATE_HOLD_MS) onScroll();
-        smoothP += (targetP - smoothP) * 0.055;
+        if (gatePinned >= 0 && now - gatePinTime > GATE_HOLD_MS) onScroll();
+        // Eased chase, but with a hard speed cap: a gate release or mega-fling
+        // opens a big gap, and uncapped the exponential takes its LARGEST step
+        // on the very first frame — a visible lurch. Capped, big gaps become a
+        // steady glide that eases out as it arrives.
+        let step = (targetP - smoothP) * 0.055;
+        const maxV = 0.0045 * dt;
+        if (step >  maxV) step =  maxV;
+        if (step < -maxV) step = -maxV;
+        smoothP += step;
         if (Math.abs(targetP - smoothP) < 0.0004) smoothP = targetP;
+        playheadFrame = Math.max(0, Math.round(shownFrame));
         decodeAhead();
         apply();
         requestAnimationFrame(tick);
