@@ -1338,14 +1338,33 @@
       // first scroll event and pin the page before any input.
       if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 
+      // Arriving via a Home link from another page (#home) skips the ride:
+      // land directly on the finished landing page — water, logo, CTA —
+      // instead of replaying the journey. First-time visitors (no hash)
+      // still get the full experience from the top.
+      const skipJourney = location.hash === '#home';
+
       // Boot only once the viewport actually exists — background/prerendered
       // tabs report innerWidth 0 at eval time.
       (function boot(){
         if (window.innerWidth > 0){
-          window.scrollTo({ top: 0, behavior: 'instant' });
+          if (skipJourney){
+            unlockJourney();
+            const zone = wrapper.offsetHeight - window.innerHeight;
+            window.scrollTo({ top: zone, behavior: 'instant' });
+            prevRawP = 1; targetP = 1; smoothP = 1;
+            shownFrame = FRAME_COUNT ? FRAME_COUNT - 1 : 0;
+          } else {
+            window.scrollTo({ top: 0, behavior: 'instant' });
+          }
           initFrames();
           sizeCanvas();
-          onScroll();
+          if (skipJourney){
+            shownFrame = FRAME_COUNT - 1;
+            prevRawP = 1; targetP = 1; smoothP = 1;
+          } else {
+            onScroll();
+          }
           apply();
         } else {
           setTimeout(boot, 120);
